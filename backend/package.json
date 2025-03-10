@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend for my personal portfolio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mitvichin/Personal-Portfolio.git"
+  },
+  "author": "Ilia Mitvichin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mitvichin/Personal-Portfolio/issues"
+  },
+  "homepage": "https://github.com/Mitvichin/Personal-Portfolio#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "path": "^0.12.7"
+  }
+}
