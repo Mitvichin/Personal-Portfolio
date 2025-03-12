@@ -1,5 +1,11 @@
-export const AboutMe: React.FC = () => {
-  return <div className="">
+import { ExperienceCard } from "./experience-card/Experience-card";
+import { PersonalCard } from "./PersonalCard";
 
-  </div>;
+export const AboutMe: React.FC = () => {
+  return (
+    <>
+      <PersonalCard />
+      <ExperienceCard />
+    </>
+  );
 };
