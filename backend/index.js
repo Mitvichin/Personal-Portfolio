@@ -12,8 +12,8 @@ app.use(express.json()); // Allows parsing of JSON requests
 // Serve the static files from the React app
 
 // API endpoint
-app.get("/api/message", (req, res) => {
-  res.json({ message: "Hello from the server!" });
+app.post("/api/message", (req, res) => {
+  res.sendStatus(200);
 });
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
