@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { AboutMeTabs } from "../../../types/enums";
 import { WorkExperience } from "./WorkExperience";
 import { SideProjects } from "./SideProjects";
+import { ContanctMe } from "./ContactMe";
 
 export const TabsContent: React.FC<{ activeTab: AboutMeTabs }> = ({
   activeTab,
@@ -41,20 +42,9 @@ export const TabsContent: React.FC<{ activeTab: AboutMeTabs }> = ({
         </div>
         <div
           ref={contactMeContent}
-          className="w-full inline-block h-full bg-blue-500 whitespace-normal overflow-auto p-2"
+          className="w-full inline-block h-full whitespace-normal overflow-auto p-7 md:p-10"
         >
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus
-            qui, excepturi dolorum, veritatis dicta soluta neque a quia quis
-            consectetur rem eum placeat? Sed, harum voluptas. Aliquid,
-            similique? Libero, explicabo. Lorem ipsum dolor, sit amet
-            consectetur adipisicing elit. Assumenda quis quos id harum, ratione
-            aspernatur maxime animi deserunt quam odio culpa accusantium vitae
-            similique cum. Voluptatibus dolor tempore modi blanditiis. Lorem
-            ipsum dolor sit amet, consectetur adipisicing elit. Aliquam sequi
-            quae rem. Deleniti voluptatum error labore in sit similique tempora
-            numquam dolor vel natus, enim autem commodi quasi iusto aut.
-          </p>
+          <ContanctMe />
         </div>
       </div>
     </>
