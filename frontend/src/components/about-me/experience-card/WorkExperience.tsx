@@ -2,13 +2,13 @@ export const WorkExperience: React.FC = () => (
   <ul className="list-decimal">
     <li className="mb-5">
       <p className="font-medium">
-        TINQIN - Front-end develop
+        TINQIN - Front-end developer
         <span className="font-light"> Jun 2023 - Nov 2023</span>
       </p>
       <ul className="list-disc ml-3">
         <li>
-          Designed and implement a core component responsiable for placing and
-          visualising elemnts over pdf documents.
+          Designed and implement a core component responsible for placing and
+          visualising elements over pdf documents.
         </li>
         <li>Migrated Angular e-signing app to React.</li>
         <li>React/TypeScript/Redux</li>
@@ -17,7 +17,7 @@ export const WorkExperience: React.FC = () => (
 
     <li className="mb-5">
       <p className="font-medium">
-        Y TREE - Front-end develop
+        Y TREE - Front-end developer
         <span className="font-light"> Jun 2023 - Nov 2023</span>
       </p>
       <ul className="list-disc ml-3">
@@ -31,7 +31,7 @@ export const WorkExperience: React.FC = () => (
 
     <li className="mb-5">
       <p className="font-medium">
-        Kallidus - Front-end develop
+        Kallidus - Front-end developer
         <span className="font-light"> May 2021 - Jun 2023</span>
       </p>
       <ul className="list-disc ml-3">
