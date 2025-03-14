@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+const messageRouter = require("./routes/Message.route.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -9,12 +10,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); // Allows parsing of JSON requests
 
-// Serve the static files from the React app
-
 // API endpoint
-app.post("/api/message", (req, res) => {
-  res.sendStatus(200);
-});
+app.use("/api/message", messageRouter);
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
