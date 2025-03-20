@@ -9,6 +9,7 @@ export const Navbar: React.FC = () => {
   return (
     <div className="h-[30px] flex w-full text-center overflow-hidden align-middle shadow-sm rounded-2xl border border-gray-300">
       <NavLink
+        viewTransition
         to={routes.experience}
         className={(data) => {
           const className = getClassName(data);
@@ -20,6 +21,7 @@ export const Navbar: React.FC = () => {
         </p>
       </NavLink>
       <NavLink
+        viewTransition
         to={routes.sideProject}
         className={(data) => {
           const className = getClassName(data);
@@ -30,7 +32,7 @@ export const Navbar: React.FC = () => {
           Side Projects
         </p>
       </NavLink>
-      <NavLink to={routes.contactMe} className={getClassName}>
+      <NavLink viewTransition to={routes.contactMe} className={getClassName}>
         <p className="m-auto group-hover:scale-110 transition-all">
           Contact Me
         </p>
