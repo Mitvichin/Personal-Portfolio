@@ -1,6 +1,12 @@
 export const WorkExperience: React.FC = () => (
   <ul className="list-decimal">
-    <li className="mb-5">
+    <li
+      className="mb-5"
+      onDoubleClick={(e) => {
+        const target = e.target as HTMLElement;
+        console.log(target.innerHTML);
+      }}
+    >
       <p className="font-medium">
         TINQIN - Front-end developer
         <span className="font-light"> Jun 2023 - Nov 2023</span>
