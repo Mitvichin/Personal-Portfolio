@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect } from "react-router";
 import { PageOutlet } from "../components/nav/PageOutlet";
 import { ContanctMe } from "../pages/ContactMe";
 import { SideProjects } from "../pages/SideProjects";
@@ -13,6 +13,7 @@ export const router = createBrowserRouter([
       { path: routes.experience, Component: WorkExperience },
       { path: routes.sideProject, Component: SideProjects },
       { path: routes.contactMe, Component: ContanctMe },
+      { path: "/", loader: () => redirect(routes.experience) },
       { path: "*", element: <div> Page not found 404! </div> },
     ],
   },
