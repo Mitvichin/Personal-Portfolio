@@ -6,8 +6,9 @@ export const Navbar: React.FC = () => {
     `flex-1 flex group hover:cursor-pointer transition-all duration-500 ${
       isActive ? "bg-blue-100" : ""
     }`;
+
   return (
-    <div className="h-[30px] flex w-full text-center overflow-hidden align-middle shadow-sm rounded-2xl border border-gray-300">
+    <div className="h-[30px] flex w-full text-center overflow-hidden align-middle shadow-sm rounded-2xl border border-gray-300 text-sm md:text-base">
       <NavLink
         viewTransition
         to={routes.experience}
