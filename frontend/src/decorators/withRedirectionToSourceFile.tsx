@@ -47,6 +47,7 @@ export const withRedirectionToSourceFiles = <
           fileName
         );
 
+        console.log(fileName);
         const jsxOffset = fileContent.search("<.*>");
         let i = jsxOffset - searchString.length;
         let counter = 0;
@@ -79,7 +80,10 @@ export const withRedirectionToSourceFiles = <
     };
 
     return (
-      <WrappedComponent {...props} redirectToLineInSourceFile={redirectToLineInSourceFile} />
+      <WrappedComponent
+        {...props}
+        redirectToLineInSourceFile={redirectToLineInSourceFile}
+      />
     );
   };
 };
