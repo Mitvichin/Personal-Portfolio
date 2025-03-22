@@ -1,9 +1,12 @@
 import { GithubSearchResponse } from "../types/api/responses";
+import { GithubFile } from "../types/GithubFile";
+
+const ROOT_FOLDER_NAME = "frontend";
 
 export const downloadRepoFile = async (
   searchWord: string,
-  fileName: string
-) => {
+  filePath: string
+): Promise<GithubFile> => {
   const query = `${encodeURIComponent(
     `"${searchWord}" repo:Mitvichin/Personal-Portfolio`
   )} `;
@@ -21,7 +24,9 @@ export const downloadRepoFile = async (
 
     const data: GithubSearchResponse = await response.json();
 
-    const targetFile = data.items.find((it) => it.name === fileName + ".tsx");
+    const targetFile = data.items.find(
+      (it) => it.path === ROOT_FOLDER_NAME + filePath
+    );
 
     if (!targetFile) throw new Error("404");
 
@@ -30,7 +35,9 @@ export const downloadRepoFile = async (
       headers: { Accept: "application/vnd.github.v3.raw" },
     });
 
-    return await fileResponse.text();
+    const content = await fileResponse.text();
+
+    return { content, url: targetFile.html_url };
   } catch {
     throw new Error("404 file not found");
   }
