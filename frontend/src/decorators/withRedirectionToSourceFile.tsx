@@ -15,13 +15,14 @@ export const withRedirectionToSourceFiles = <
       const target = e.target as HTMLElement;
       const wordSelection = window.getSelection();
       const searchString = wordSelection?.toString().trim() || "";
+      const wordSelectionOffset = wordSelection?.anchorOffset || 0;
+
+      target.id = "temp-search-id";
       const parentIndex = e.currentTarget.innerHTML.indexOf(target.id);
       const sentanceIndexStart =
         e.currentTarget.innerHTML.indexOf(">", parentIndex) + 1;
-      const wordSelectionOffset = wordSelection?.anchorOffset || 0;
       const targetWordIndex = sentanceIndexStart + wordSelectionOffset;
 
-      target.id = "temp-search-id";
       let currentIndex = -1;
       const searchWordIndexes = [];
 
