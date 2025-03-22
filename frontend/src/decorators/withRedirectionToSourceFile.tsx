@@ -1,4 +1,4 @@
-import { downloadRepoFile } from "../services.ts/github";
+import { downloadRepoFile } from "../services/github";
 import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
 
 const getCorrectOccurrenceOfString = (

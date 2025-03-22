@@ -1,20 +1,28 @@
+import { useState } from "react";
 import { withRedirectionToSourceFiles } from "../decorators/withRedirectionToSourceFile";
+import { sendMessage } from "../services/contact-me";
 import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
 export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget).entries();
       const data = Object.fromEntries(formData);
 
-      fetch("/api/message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }).then((data) => console.log(data));
+      try {
+        setIsLoading(true);
+        await sendMessage(data);
+        (e.target as HTMLFormElement).reset();
+      } catch {
+        alert("Sending a message failed");
+      } finally {
+        setTimeout(() => setIsLoading(false), 1000);
+      }
     };
 
     return (
@@ -97,6 +105,8 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
         >
           Submit
         </button>
+
+        {isLoading && <div className="float-end align-middle">Loading</div>}
       </form>
     );
   });
