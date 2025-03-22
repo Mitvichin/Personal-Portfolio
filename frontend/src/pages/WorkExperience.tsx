@@ -12,13 +12,7 @@ export const WorkExperience: React.FC<WithRedirectionToSourceFileProps> =
           redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
         }
       >
-        <li
-          className="mb-5"
-          onDoubleClick={(e) => {
-            const target = e.target as HTMLElement;
-            console.log(target.innerHTML);
-          }}
-        >
+        <li className="mb-5">
           <p className="font-medium">
             TINQIN - Front-end developer
             <span className="font-light"> Jun 2023 - Nov 2023</span>
