@@ -41,13 +41,13 @@ export const withRedirectionToSourceFiles = <
 
       const wordCount = indexes.length ? indexes.length : -1;
 
+      console.log(fileName);
       try {
         const { content: fileContent, url } = await downloadRepoFile(
           searchString,
           fileName
         );
 
-        console.log(fileName);
         const jsxOffset = fileContent.search("<.*>");
         let i = jsxOffset - searchString.length;
         let counter = 0;
