@@ -4,11 +4,13 @@ import { WithRedirectionToSourceFileProps } from "../../types/WithRedirectionToS
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
 export const PersonalCard: React.FC<WithRedirectionToSourceFileProps> =
-  withRedirectionToSourceFiles(({ onDoubleClick }) => {
+  withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     return (
       <div
         className="flex w-full md:w-4/6 h-2/6 sm:h-1/4  justify-center place-items-center bg-white rounded-xl overflow-hidden shadow-xl p-4 gap-4 lg:gap-8 flex-col lg:flex-row max-w-4xl"
-        onDoubleClick={(e) => onDoubleClick?.(e, CURRENT_FILE_PATH)}
+        onDoubleClick={(e) =>
+          redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
+        }
       >
         <div className="flex-1 md:flex-1  flex place-items-center">
           <img

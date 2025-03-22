@@ -7,7 +7,7 @@ export const withRedirectionToSourceFiles = <
   WrappedComponent: React.FC<P>
 ) => {
   return (props: P) => {
-    const doubleClick = async (
+    const redirectToLineInSourceFile = async (
       e: React.MouseEvent<HTMLElement>,
       fileName: string
     ) => {
@@ -78,6 +78,8 @@ export const withRedirectionToSourceFiles = <
       }
     };
 
-    return <WrappedComponent {...props} onDoubleClick={doubleClick} />;
+    return (
+      <WrappedComponent {...props} redirectToLineInSourceFile={redirectToLineInSourceFile} />
+    );
   };
 };

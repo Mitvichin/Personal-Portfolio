@@ -4,7 +4,7 @@ import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSour
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
 export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
-  withRedirectionToSourceFiles(({ onDoubleClick }) => {
+  withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget).entries();
@@ -21,7 +21,9 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
       <form
         className="h-full"
         onSubmit={handleSubmit}
-        onDoubleClick={(e) => onDoubleClick?.(e, CURRENT_FILE_PATH)}
+        onDoubleClick={(e) =>
+          redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
+        }
       >
         <div className="grid gap-6 mb-6 md:grid-cols-2">
           <div>

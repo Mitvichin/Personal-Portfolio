@@ -4,11 +4,13 @@ import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSour
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
 export const WorkExperience: React.FC<WithRedirectionToSourceFileProps> =
-  withRedirectionToSourceFiles(({ onDoubleClick }) => {
+  withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     return (
       <ul
         className="list-decimal"
-        onDoubleClick={(e) => onDoubleClick?.(e, CURRENT_FILE_PATH)}
+        onDoubleClick={(e) =>
+          redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
+        }
       >
         <li
           className="mb-5"

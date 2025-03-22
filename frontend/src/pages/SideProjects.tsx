@@ -4,10 +4,10 @@ import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSour
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
 export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
-  withRedirectionToSourceFiles(({ onDoubleClick }) => (
+  withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => (
     <div
       className="flex w-full h-full flex-col"
-      onDoubleClick={(e) => onDoubleClick?.(e, CURRENT_FILE_PATH)}
+      onDoubleClick={(e) => redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)}
     >
       <ul className="list-decimal flex-1">
         <li className="mb-5">

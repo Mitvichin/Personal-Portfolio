@@ -1,3 +1,3 @@
 export type WithRedirectionToSourceFileProps = {
-  onDoubleClick?: (e: React.MouseEvent, filePath: string) => void;
+  redirectToLineInSourceFile?: (e: React.MouseEvent, filePath: string) => void;
 };
