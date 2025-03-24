@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const messageRouter = require("./routes/Message.route.js");
+const gridRouter = require("./routes/Grid.route.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +13,7 @@ app.use(express.json()); // Allows parsing of JSON requests
 
 // API endpoint
 app.use("/api/message", messageRouter);
+app.use("/api/grid", gridRouter);
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
