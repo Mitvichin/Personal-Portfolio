@@ -7,7 +7,7 @@ export const WorkExperience: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     return (
       <ul
-        className="list-decimal"
+        className="list-decimal text-[14px] sm:text-base"
         onDoubleClick={(e) =>
           redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
         }

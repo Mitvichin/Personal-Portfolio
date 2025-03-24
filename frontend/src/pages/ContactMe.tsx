@@ -2,12 +2,20 @@ import { useState } from "react";
 import { withRedirectionToSourceFiles } from "../decorators/withRedirectionToSourceFile";
 import { sendMessage } from "../services/contact-me";
 import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
+import { toast } from "react-toastify";
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
+const initialErrorState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  message: "",
+};
 
 export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState(initialErrorState);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -18,16 +26,19 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
         setIsLoading(true);
         await sendMessage(data);
         (e.target as HTMLFormElement).reset();
-      } catch {
-        alert("Sending a message failed");
+        toast.success("Your message was sent successfully!");
+        setErrors(initialErrorState);
+      } catch (err: unknown) {
+        setErrors(err as typeof errors);
+        toast.error("Sending your message failed. Please try again!");
       } finally {
-        setTimeout(() => setIsLoading(false), 1000);
+        setTimeout(() => setIsLoading(false), 100);
       }
     };
 
     return (
       <form
-        className="h-full"
+        className="h-full text-[14px] sm:text-base"
         onSubmit={handleSubmit}
         onDoubleClick={(e) =>
           redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
@@ -49,6 +60,11 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
               placeholder="John"
               required
             />
+            {errors.firstName && (
+              <p className="text-[12px] font-medium text-red-400">
+                Field {errors.firstName}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -65,6 +81,11 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
               placeholder="Doe"
               required
             />
+            {errors.lastName && (
+              <p className="text-[12px] font-medium text-red-400">
+                Field {errors.lastName}
+              </p>
+            )}
           </div>
         </div>
         <div className="mb-6">
@@ -82,6 +103,11 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
             placeholder="john.doe@company.com"
             required
           />
+          {errors.email && (
+            <p className="text-[12px] font-medium text-red-400">
+              {errors.email}
+            </p>
+          )}
         </div>
         <div className="mb-6">
           <label
@@ -97,6 +123,11 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
             placeholder="Message to Ilia Mitvichin"
             required
           />
+          {errors.message && (
+            <p className="text-[12px] font-medium text-red-400">
+              Field {errors.message}
+            </p>
+          )}
         </div>
 
         <button

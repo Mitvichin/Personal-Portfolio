@@ -1,5 +1,6 @@
 import { downloadRepoFile } from "../services/github";
 import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
+import { toast } from "react-toastify";
 
 const getCorrectOccurrenceOfString = (
   e: React.MouseEvent<HTMLElement>,
@@ -98,7 +99,7 @@ const redirectToLineInSourceFile = async (
 
     window.open(`${url}#L${lineInSource}`, `_newtab-#L${lineInSource}`);
   } catch {
-    alert("404 Could not find a match for the clicked word.");
+    toast.error("Could not find a match for the clicked word.");
   }
 };
 
