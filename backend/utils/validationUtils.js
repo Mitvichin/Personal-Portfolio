@@ -28,7 +28,7 @@ const validateMessage = ({ firstName, lastName, email, message }) => {
 
   if (!isEmail(email)) {
     isInvalid = true;
-    errorObject.email = "invalid email format";
+    errorObject.email = "Invalid email format";
   }
 
   if (message.length > 1024) {
