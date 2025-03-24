@@ -1,5 +1,5 @@
 const Message = require("../models/messageModel");
-const validateInput = require("../utils/validationUtils");
+const { validateInput } = require("../utils/validationUtils");
 
 const messageController = {
   async createMessage(req, res) {
@@ -25,7 +25,7 @@ const messageController = {
     }
   },
 
-  async getUsers(req, res) {
+  async getMessages(req, res) {
     try {
       const messeges = await Message.getMessages();
       res.status(200).json(messeges);

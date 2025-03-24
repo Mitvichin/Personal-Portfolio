@@ -4,6 +4,6 @@ const messageController = require("../controllers/messageController");
 const router = express.Router();
 
 router.post("/", messageController.createMessage);
-router.get("/", messageController.getUsers);
+router.get("/", messageController.getMessages);
 
 module.exports = router;
