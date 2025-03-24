@@ -7,7 +7,7 @@ const isEmail = (email) => {
   return false;
 };
 
-const validateInput = ({ firstName, lastName, email, message }) => {
+const validateMessage = ({ firstName, lastName, email, message }) => {
   const errorObject = {
     firstName: "",
     lastName: "",
@@ -39,4 +39,33 @@ const validateInput = ({ firstName, lastName, email, message }) => {
   return [errorObject, isInvalid];
 };
 
-module.exports = validateInput;
+const validateGrid = (grid) => {
+  const isArray = Array.isArray(grid);
+  const rows = grid.length;
+  const cols = grid[0]?.length;
+  const errorObject = {
+    grid: "",
+  };
+
+  if (isArray && !Array.isArray(grid[0])) {
+    errorObject.grid = "Grid is in wrong format";
+    return [errorObject, true];
+  }
+
+  if (rows * cols > 2056) {
+    errorObject.grid = "Grid execeeds 2056 length";
+    return [errorObject, true];
+  }
+
+  if (rows * cols === 0) {
+    errorObject.grid = "Grid is empty";
+    return [errorObject, true];
+  }
+
+  return [errorObject, false];
+};
+
+module.exports = {
+  validateMessage,
+  validateGrid,
+};
