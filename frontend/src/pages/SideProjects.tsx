@@ -6,7 +6,7 @@ const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => (
     <div
-      className="flex w-full h-full flex-col"
+      className="flex w-full h-full flex-col text-[14px] sm:text-base"
       onDoubleClick={(e) => redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)}
     >
       <ul className="list-decimal flex-1">

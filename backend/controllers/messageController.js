@@ -1,9 +1,9 @@
 const Message = require("../models/messageModel");
-const { validateInput } = require("../utils/validationUtils");
+const { validateMessage } = require("../utils/validationUtils");
 
 const messageController = {
   async createMessage(req, res) {
-    let [errors, isInvalid] = validateInput(req.body);
+    let [errors, isInvalid] = validateMessage(req.body);
 
     if (isInvalid) {
       res.status(400).json(errors);
