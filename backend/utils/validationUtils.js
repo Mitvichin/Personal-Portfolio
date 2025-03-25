@@ -44,21 +44,21 @@ const validateGrid = (grid) => {
   const rows = grid.length;
   const cols = grid[0]?.length;
   const errorObject = {
-    grid: "",
+    message: "",
   };
 
   if (isArray && !Array.isArray(grid[0])) {
-    errorObject.grid = "Grid is in wrong format";
+    errorObject.message = "Grid is in wrong format";
     return [errorObject, true];
   }
 
   if (rows * cols > 2056) {
-    errorObject.grid = "Grid execeeds 2056 length";
+    errorObject.message = "Grid execeeds 2056 length";
     return [errorObject, true];
   }
 
   if (rows * cols === 0) {
-    errorObject.grid = "Grid is empty";
+    errorObject.message = "Grid is empty";
     return [errorObject, true];
   }
 
