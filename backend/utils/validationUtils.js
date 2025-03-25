@@ -21,9 +21,19 @@ const validateMessage = ({ firstName, lastName, email, message }) => {
     errorObject.firstName = "execeeds 100 chars";
   }
 
+  if (firstName.length < 2) {
+    isInvalid = true;
+    errorObject.firstName = "is below 2 chars";
+  }
+
   if (lastName.length > 100) {
     isInvalid = true;
     errorObject.lastName = "execeeds 100 chars";
+  }
+
+  if (lastName.length < 2) {
+    isInvalid = true;
+    errorObject.lastName = "is below 2 chars";
   }
 
   if (!isEmail(email)) {
@@ -34,6 +44,11 @@ const validateMessage = ({ firstName, lastName, email, message }) => {
   if (message.length > 1024) {
     isInvalid = true;
     errorObject.message = "execeeds 1024 chars";
+  }
+
+  if (lastName.length < 2) {
+    isInvalid = true;
+    errorObject.message = "is below 2 chars";
   }
 
   return [errorObject, isInvalid];
