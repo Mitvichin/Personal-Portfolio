@@ -1,19 +1,19 @@
-export const sendMessage = (body: { [k: string]: FormDataEntryValue }) => {
-  return new Promise((res, rej) => {
-    fetch("/api/message", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          rej(await response.json());
-        }
+import { ContactMe } from "../types/ContactMe";
+import { appFetch } from "../utils/appFetch";
 
-        res(await response.json());
-      })
-      .catch(() => {
-        throw new Error("Sending your message failed! Please try again later!");
-      });
-  });
+export const sendMessage = async (data: ContactMe) => {
+  try {
+    const res = await appFetch("/api/message", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    return res.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+
+    throw new Error("Something went wrong! Try again later!");
+  }
 };
