@@ -1,13 +1,14 @@
 const User = require("../models/authModel");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { validateUser } = require("../utils/validationUtils");
+const { validateUser, validateLogin } = require("../utils/validationUtils");
 const dbErrorsMap = require("../utils/dbErrorsMap");
 const backendErrorsMap = require("../utils/errorNames");
+const { JWT_TOKEN_NAME } = require("../utils/constants");
 
-const messageController = {
+const authController = {
   async register(req, res) {
-    let [errors, isInvalid] = validateUser(req.body);
+    const [errors, isInvalid] = validateUser(req.body);
 
     if (isInvalid) {
       res.status(400).json(errors);
@@ -41,12 +42,22 @@ const messageController = {
   },
 
   async login(req, res) {
-    try {
-      const body = req.body;
-      const { id, firstName, lastName, email, password } =
-        await User.getUserByEmail(body.email);
+    const body = req.body;
+    const [errors, isInvalid] = validateLogin(req.body);
 
-      if (await bcryptjs.compare(body.password, password)) {
+    if (isInvalid) {
+      res.status(400).json(errors);
+      return;
+    }
+
+    try {
+      const dbResult = await User.getUserByEmail(body.email);
+
+      if (
+        dbResult &&
+        (await bcryptjs.compare(body.password, dbResult.password))
+      ) {
+        const { id, email, firstName, lastName } = dbResult;
         const token = jwt.sign(
           { id, email, firstName, lastName },
           process.env.JWT_SECRET,
@@ -55,9 +66,9 @@ const messageController = {
           }
         );
 
-        res.cookie("token", token, {
+        res.cookie(JWT_TOKEN_NAME, token, {
           httpOnly: true,
-          secure: false,
+          secure: process.env.SECURE_JWT === "false" ? false : true,
           sameSite: "strict",
         });
 
@@ -73,7 +84,7 @@ const messageController = {
   },
 
   async logout(_, res) {
-    res.clearCookie("token");
+    res.clearCookie(JWT_TOKEN_NAME);
     res.status(204).send();
   },
 
@@ -98,4 +109,4 @@ const messageController = {
   },
 };
 
-module.exports = messageController;
+module.exports = authController;

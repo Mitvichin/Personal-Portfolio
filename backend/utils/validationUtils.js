@@ -124,6 +124,30 @@ const validateUser = ({ firstName, lastName, email, password }) => {
     errorObject.lastName = "is below 4 chars";
   }
 
+  return [errorObject, isInvalid];
+};
+
+const validateLogin = ({ email, password }) => {
+  const errorObject = {
+    email: "",
+    password: "",
+  };
+  let isInvalid = false;
+
+  if (!isEmail(email)) {
+    isInvalid = true;
+    errorObject.email = "Invalid email format";
+  }
+
+  if (password.length > 100) {
+    isInvalid = true;
+    errorObject.lastName = "execeeds 100 chars";
+  }
+
+  if (password.length < 4) {
+    isInvalid = true;
+    errorObject.lastName = "is below 4 chars";
+  }
 
   return [errorObject, isInvalid];
 };
@@ -132,4 +156,5 @@ module.exports = {
   validateMessage,
   validateGrid,
   validateUser,
+  validateLogin,
 };
