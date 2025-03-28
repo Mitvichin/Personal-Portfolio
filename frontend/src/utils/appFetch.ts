@@ -1,3 +1,6 @@
+import { BackendError } from "../types/api/BackendError";
+import { backendErrorsMap } from "./backendErrorsMap";
+
 export const appFetch = async (
   url: string,
   init: RequestInit
@@ -13,6 +16,11 @@ export const appFetch = async (
 
     if (!res.ok) {
       if (res.status === 400) {
+        const error: BackendError = await res.json();
+        if (error.message && error.key) {
+          throw new Error(backendErrorsMap[error.message]?.(error.key));
+        }
+
         throw new Error("Invalid input!");
       }
 

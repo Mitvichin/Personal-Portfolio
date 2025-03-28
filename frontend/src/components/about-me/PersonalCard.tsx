@@ -12,8 +12,12 @@ export const PersonalCard: React.FC<WithRedirectionToSourceFileProps> =
           redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
         }
       >
-        <div className="flex-1 max-h-19 sm:max-h-25 lg:max-h-42">
-          <img className="max-h-[95%] rounded-xl" src="/me.jpg" alt="me" />
+        <div className="flex-1 flex">
+          <img
+            className="object-contain max-h-[150px] rounded-xl"
+            src="/me.jpg"
+            alt="me"
+          />
         </div>
         <div className="flex-4 flex place-items-start lg:place-items-center">
           <p className="text-sm text-[14px] sm:text-base lg:text-xl font-medium">

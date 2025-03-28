@@ -1,11 +1,12 @@
-import { Home } from "./pages/Home";
+import { RouterProvider } from "react-router";
 import { Bounce, ToastContainer } from "react-toastify";
+import { router } from "./router";
 
 function App() {
   return (
     <>
-      <div className="px-5 bg-gray-100 flex justify-center">
-        <Home />
+      <div className="px-5 bg-gray-100 flex justify-start flex-col min-h-[100vh]">
+        <RouterProvider router={router} />
       </div>
       <ToastContainer
         position="bottom-right"
