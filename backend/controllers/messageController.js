@@ -1,4 +1,5 @@
 const Message = require("../models/messageModel");
+const backendErrorsMap = require("../utils/errorNames");
 const { validateMessage } = require("../utils/validationUtils");
 
 const messageController = {
@@ -21,7 +22,7 @@ const messageController = {
       res.status(201).json(newMessage);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
 
@@ -31,7 +32,7 @@ const messageController = {
       res.status(200).json(messeges);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
 };

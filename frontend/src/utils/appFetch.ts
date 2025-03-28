@@ -1,3 +1,6 @@
+import { BackendError } from "../types/api/BackendError";
+import { backendErrorsMap } from "./backendErrorsMap";
+
 export const appFetch = async (
   url: string,
   init: RequestInit
@@ -12,12 +15,11 @@ export const appFetch = async (
     const res = await fetch(url, { ...init, headers });
 
     if (!res.ok) {
-      if (res.status === 400) {
-        throw new Error("Invalid input!");
-      }
-
-      if (res.status === 429) {
-        throw new Error("You have send too many requests. Try again later!");
+      if (res.status >= 400 && res.status <= 499) {
+        const error: BackendError = await res.json();
+        if (error.message) {
+          throw new Error(backendErrorsMap[error.message]?.(error.key));
+        }
       }
 
       throw new Error("Something went wrong! Try again later!");

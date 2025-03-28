@@ -46,7 +46,7 @@ const validateMessage = ({ firstName, lastName, email, message }) => {
     errorObject.message = "execeeds 1024 chars";
   }
 
-  if (lastName.length < 2) {
+  if (message.length < 2) {
     isInvalid = true;
     errorObject.message = "is below 2 chars";
   }
@@ -80,7 +80,81 @@ const validateGrid = (grid) => {
   return [errorObject, false];
 };
 
+const validateUser = ({ firstName, lastName, email, password }) => {
+  const errorObject = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  };
+  let isInvalid = false;
+
+  if (firstName.length > 100) {
+    isInvalid = true;
+    errorObject.firstName = "execeeds 100 chars";
+  }
+
+  if (firstName.length < 2) {
+    isInvalid = true;
+    errorObject.firstName = "is below 2 chars";
+  }
+
+  if (lastName.length > 100) {
+    isInvalid = true;
+    errorObject.lastName = "execeeds 100 chars";
+  }
+
+  if (lastName.length < 2) {
+    isInvalid = true;
+    errorObject.lastName = "is below 2 chars";
+  }
+
+  if (!isEmail(email)) {
+    isInvalid = true;
+    errorObject.email = "Invalid email format";
+  }
+
+  if (password.length > 100) {
+    isInvalid = true;
+    errorObject.lastName = "execeeds 100 chars";
+  }
+
+  if (password.length < 4) {
+    isInvalid = true;
+    errorObject.lastName = "is below 4 chars";
+  }
+
+  return [errorObject, isInvalid];
+};
+
+const validateLogin = ({ email, password }) => {
+  const errorObject = {
+    email: "",
+    password: "",
+  };
+  let isInvalid = false;
+
+  if (!isEmail(email)) {
+    isInvalid = true;
+    errorObject.email = "Invalid email format";
+  }
+
+  if (password.length > 100) {
+    isInvalid = true;
+    errorObject.lastName = "execeeds 100 chars";
+  }
+
+  if (password.length < 4) {
+    isInvalid = true;
+    errorObject.lastName = "is below 4 chars";
+  }
+
+  return [errorObject, isInvalid];
+};
+
 module.exports = {
   validateMessage,
   validateGrid,
+  validateUser,
+  validateLogin,
 };

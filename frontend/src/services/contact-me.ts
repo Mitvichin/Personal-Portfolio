@@ -1,7 +1,7 @@
-import { ContactMe } from "../types/ContactMe";
+import { ContactMeForm } from "../types/ContactMeForm";
 import { appFetch } from "../utils/appFetch";
 
-export const sendMessage = async (data: ContactMe) => {
+export const sendMessage = async (data: ContactMeForm) => {
   try {
     const res = await appFetch("/api/message", {
       method: "POST",

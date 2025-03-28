@@ -3,7 +3,7 @@ const pool = require("../config/db");
 const Message = {
   async createMessage(firstName, lastName, email, message) {
     const { rows } = await pool.query(
-      "INSERT INTO messages (firstName, lastName,email,message) VALUES ($1, $2, $3, $4) RETURNING *",
+      `INSERT INTO messages ("firstName", "lastName",email,message) VALUES ($1, $2, $3, $4) RETURNING *`,
       [firstName, lastName, email, message]
     );
 

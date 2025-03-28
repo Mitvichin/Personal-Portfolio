@@ -1,4 +1,5 @@
 const Grid = require("../models/gridModel");
+const backendErrorsMap = require("../utils/errorNames");
 const { validateGrid } = require("../utils/validationUtils");
 
 const gridController = {
@@ -17,7 +18,7 @@ const gridController = {
       res.status(201).json(newGrid);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
 };
