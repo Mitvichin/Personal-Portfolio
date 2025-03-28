@@ -7,4 +7,5 @@ export const backendErrorsMap = {
   ACCESS_DENIED: () => "In order to perform this action, you need to log in!",
   RATE_LIMITED: () => "You have send too many requests. Try again later!",
   INTERNAL_SERVER_ERROR: () => "Something went wrong, please try again later!",
+  UNAUTHENTICATED: () => "Please, authenticate!",
 };

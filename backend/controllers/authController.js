@@ -48,7 +48,7 @@ const messageController = {
 
       if (await bcryptjs.compare(body.password, password)) {
         const token = jwt.sign(
-          { id: id, username: email },
+          { id, email, firstName, lastName },
           process.env.JWT_SECRET,
           {
             expiresIn: "1m",
@@ -75,6 +75,26 @@ const messageController = {
   async logout(_, res) {
     res.clearCookie("token");
     res.status(204).send();
+  },
+
+  async verifyAuthentication(req, res) {
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: backendErrorsMap.UNAUTHENTICATED });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res
+          .status(403)
+          .json({ message: backendErrorsMap.UNAUTHENTICATED });
+      }
+
+      res.json(user);
+    });
   },
 };
 

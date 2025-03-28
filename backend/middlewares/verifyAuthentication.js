@@ -3,6 +3,7 @@ const backendErrorsMap = require("../utils/errorNames");
 
 const verifyAuthentication = (req, res, next) => {
   const token = req.cookies.token;
+
   if (!token)
     return res.status(401).json({ message: backendErrorsMap.ACCESS_DENIED });
 

@@ -11,6 +11,7 @@ import { login } from "../services/auth";
 import { useNavigate } from "react-router";
 import { routes } from "../router";
 import { LoginForm } from "../types/LoginForm";
+import { useUserContext } from "../providers/user/UserContext";
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: LoginForm = {
@@ -21,6 +22,7 @@ const intialFormState: LoginForm = {
 export const Login: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const navigate = useNavigate();
+    const { setUser } = useUserContext();
     const debouceId = useRef<NodeJS.Timeout>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<LoginForm>(intialFormState);
@@ -54,9 +56,12 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
 
       try {
         setIsLoading(true);
-        await login(formData);
+
+        const user = await login(formData);
+        setUser(user);
         setErrors(intialFormState);
         setFormData(intialFormState);
+
         navigate(`/${routes.experience}`);
       } catch (err: unknown) {
         if (err instanceof Error) {
