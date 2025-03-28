@@ -37,6 +37,20 @@ export const login = async (data: LoginForm): Promise<User> => {
   }
 };
 
+export const logout = async (): Promise<void> => {
+  try {
+    await appFetch("/api/auth/logout", {
+      method: "GET",
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+
+    throw new Error("Something went wrong! Try again later!");
+  }
+};
+
 export const verifyAuth = async (): Promise<User> => {
   try {
     const res = await appFetch("/api/auth/verify-authentication", {

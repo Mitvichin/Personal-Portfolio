@@ -2,10 +2,22 @@ import { useNavigate } from "react-router";
 import { Button } from "../Button";
 import { routes } from "../../router";
 import { useUserContext } from "../../providers/user/UserContext";
+import { logout } from "../../services/auth";
+import { toast } from "react-toastify";
 
 export const AuthNav: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useUserContext();
+  const { user, deleteUser } = useUserContext();
+
+  const onLogout = async () => {
+    try {
+      await logout();
+      deleteUser();
+    } catch (error) {
+      console.log(error);
+      toast.error("Logout failed!");
+    }
+  };
 
   console.log(user);
   return (
@@ -16,7 +28,7 @@ export const AuthNav: React.FC = () => {
           <Button
             text="Log out"
             className="px-2 py-1 bg-gray-200 hover:bg-gray-300"
-            onClick={() => navigate(`/${routes.login}`)}
+            onClick={onLogout}
           />
         </>
       ) : (
