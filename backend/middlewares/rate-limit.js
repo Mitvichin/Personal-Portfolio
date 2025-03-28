@@ -1,5 +1,6 @@
 const { Ratelimit } = require("@upstash/ratelimit");
 const { Redis } = require("@upstash/redis");
+const backendErrorsMap = require("../utils/errorNames");
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
@@ -17,9 +18,7 @@ async function rateLimitMiddleware(req, res, next) {
   const { success } = await ratelimit.limit(ip);
 
   if (!success) {
-    return res
-      .status(429)
-      .json({ message: "Too many requests. Try again later." });
+    return res.status(429).json({ message: backendErrorsMap.RATE_LIMITED });
   }
 
   next();
