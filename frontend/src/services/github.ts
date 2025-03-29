@@ -1,4 +1,5 @@
 import { GithubSearchResponse } from "../types/api/responses";
+import { AppError } from "../types/AppError";
 import { GithubFile } from "../types/GithubFile";
 
 const ROOT_FOLDER_NAME = "frontend";
@@ -39,6 +40,6 @@ export const downloadRepoFile = async (
 
     return { content, url: targetFile.html_url };
   } catch {
-    throw new Error("404 file not found");
+    throw new AppError(404, "Not found!");
   }
 };

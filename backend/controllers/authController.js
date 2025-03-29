@@ -8,10 +8,10 @@ const { JWT_TOKEN_NAME } = require("../utils/constants");
 
 const authController = {
   async register(req, res) {
-    const [errors, isInvalid] = validateUser(req.body);
+    const isInvalid = validateUser(req.body);
 
     if (isInvalid) {
-      res.status(400).json(errors);
+      res.status(400).json({ message: backendErrorsMap.INVALID_INPUT });
       return;
     }
 
@@ -43,10 +43,10 @@ const authController = {
 
   async login(req, res) {
     const body = req.body;
-    const [errors, isInvalid] = validateLogin(req.body);
+    const isInvalid = validateLogin(req.body);
 
     if (isInvalid) {
-      res.status(400).json(errors);
+      res.status(400).json({ message: backendErrorsMap.INVALID_INPUT });
       return;
     }
 

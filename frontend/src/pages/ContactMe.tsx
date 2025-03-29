@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { withRedirectionToSourceFiles } from "../decorators/withRedirectionToSourceFile";
-import { sendMessage } from "../services/contact-me";
+import { useContactMeService } from "../services/contact-me";
 import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
 import { toast } from "react-toastify";
 import { ContactMeForm } from "../types/ContactMeForm";
@@ -9,6 +9,7 @@ import {
   validateFormData,
 } from "../utils/validation";
 import { Button } from "../components/Button";
+import { AppError } from "../types/AppError";
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: ContactMeForm = {
@@ -20,6 +21,7 @@ const intialFormState: ContactMeForm = {
 
 export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
+    const { sendMessage } = useContactMeService();
     const debouceId = useRef<NodeJS.Timeout>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<ContactMeForm>(intialFormState);
@@ -61,7 +63,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
         setIsFormValid(true);
         toast.success("Your message was sent successfully!");
       } catch (err: unknown) {
-        if (err instanceof Error) {
+        if (err instanceof AppError) {
           toast.error(err.message);
           return;
         }

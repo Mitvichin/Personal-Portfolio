@@ -8,9 +8,10 @@ import {
 } from "../utils/validation";
 import { Button } from "../components/Button";
 import { RegisterForm } from "../types/RegisterForm";
-import { register } from "../services/auth";
 import { useNavigate } from "react-router";
 import { routes } from "../router";
+import { useAuthService } from "../services/auth";
+import { AppError } from "../types/AppError";
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: RegisterForm = {
@@ -22,6 +23,7 @@ const intialFormState: RegisterForm = {
 
 export const Register: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
+    const { register } = useAuthService();
     const navigate = useNavigate();
     const debouceId = useRef<NodeJS.Timeout>(undefined);
     const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +64,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
         toast.success("Your registration was successfull!");
         navigate(`/${routes.login}`);
       } catch (err: unknown) {
-        if (err instanceof Error) {
+        if (err instanceof AppError) {
           toast.error(err.message);
           return;
         }
