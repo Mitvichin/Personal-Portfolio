@@ -1,12 +1,13 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { UserContext } from "./UserContext";
 import { User } from "../../types/User";
-import { verifyAuth } from "../../services/auth";
+import { useAuthService } from "../../services/auth";
 
 export const UserProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const { verifyAuth } = useAuthService();
   const [user, setUser] = useState<User | null>(null);
 
-  const deleteUser = () => setUser(null);
+  const deleteUser = useMemo(() => () => setUser(null), []);
 
   useEffect(() => {
     const verifyAth = async () => {
@@ -19,7 +20,7 @@ export const UserProvider: React.FC<PropsWithChildren> = ({ children }) => {
     };
 
     verifyAth();
-  }, []);
+  }, [verifyAuth]);
 
   return (
     <UserContext.Provider value={{ user, setUser, deleteUser }}>

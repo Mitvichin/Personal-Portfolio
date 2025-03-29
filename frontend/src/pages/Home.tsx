@@ -1,4 +1,4 @@
-import { AboutMe } from "../components";
+import { AboutMe } from "../components/about-me/AboutMe";
 import { AuthNav } from "../components/nav/AuthNav";
 import { PageOutlet } from "../components/nav/PageOutlet";
 

@@ -7,11 +7,12 @@ import {
   validateFormData,
 } from "../utils/validation";
 import { Button } from "../components/Button";
-import { login } from "../services/auth";
+import { useAuthService } from "../services/auth";
 import { useNavigate } from "react-router";
 import { routes } from "../router";
 import { LoginForm } from "../types/LoginForm";
 import { useUserContext } from "../providers/user/UserContext";
+import { AppError } from "../types/AppError";
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: LoginForm = {
@@ -21,6 +22,7 @@ const intialFormState: LoginForm = {
 
 export const Login: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
+    const { login } = useAuthService();
     const navigate = useNavigate();
     const { setUser } = useUserContext();
     const debouceId = useRef<NodeJS.Timeout>(undefined);
@@ -64,7 +66,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
 
         navigate(`/${routes.experience}`);
       } catch (err: unknown) {
-        if (err instanceof Error) {
+        if (err instanceof AppError) {
           toast.error(err.message);
           return;
         }
@@ -77,7 +79,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
 
     return (
       <div className="w-full py-2 min-h-screen flex flex-col place-items-center justify-center gap-4">
-        <p className="text-xl md:text-2xl font-medium">Register</p>
+        <p className="text-xl md:text-2xl font-medium">Log in</p>
         <form
           className="flex-0 text-[14px] w-3/4 md:w-[2/4] max-w-[400px] sm:text-base flex flex-col gap-6 justify-center border-3 border-dotted p-4 rounded-2xl bg-white shadow-xl"
           onDoubleClick={(e) =>
@@ -137,7 +139,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
               isDisabled={!isFormValid}
               onClick={handleSubmit}
               className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
-              text="Submit"
+              text="Log in"
             />
             {isLoading && <div className="float-end align-middle">Loading</div>}
           </div>

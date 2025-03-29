@@ -4,10 +4,9 @@ const { validateMessage } = require("../utils/validationUtils");
 
 const messageController = {
   async createMessage(req, res) {
-    let [errors, isInvalid] = validateMessage(req.body);
-
+    let isInvalid = validateMessage(req.body);
     if (isInvalid) {
-      res.status(400).json(errors);
+      res.status(400).json({ message: backendErrorsMap.INVALID_INPUT });
       return;
     }
 
