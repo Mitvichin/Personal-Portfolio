@@ -2,10 +2,12 @@ import { useNavigate } from "react-router";
 import { Button } from "../Button";
 import { routes } from "../../router";
 import { useUserContext } from "../../providers/user/UserContext";
-import { logout } from "../../services/auth";
+import { useAuthService } from "../../services/auth";
 import { toast } from "react-toastify";
+import { AppError } from "../../types/AppError";
 
 export const AuthNav: React.FC = () => {
+  const { logout } = useAuthService();
   const navigate = useNavigate();
   const { user, deleteUser } = useUserContext();
 
@@ -14,12 +16,14 @@ export const AuthNav: React.FC = () => {
       await logout();
       deleteUser();
     } catch (error) {
-      console.log(error);
+      if (error instanceof AppError) {
+        toast.error(error.message);
+        return;
+      }
       toast.error("Logout failed!");
     }
   };
 
-  console.log(user);
   return (
     <div className="h-[10%] p-1 bg-gray-100 flex sm:justify-end gap-3 md:gap-6 focus:outline-none ">
       {user ? (
