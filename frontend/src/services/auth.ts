@@ -48,12 +48,6 @@ export const useAuthService = () => {
         method: "GET",
       });
 
-      const res2 = await appFetch("/api/auth/env", {
-        method: "GET",
-      });
-
-      console.log(await res2.json());
-
       return res.json();
     },
     [appFetch]
