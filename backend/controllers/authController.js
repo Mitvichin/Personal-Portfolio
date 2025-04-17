@@ -1,6 +1,7 @@
 const User = require("../models/authModel");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const csrf = require("../config/csrf");
 const { validateUser, validateLogin } = require("../utils/validationUtils");
 const dbErrorsMap = require("../utils/dbErrorsMap");
 const backendErrorsMap = require("../utils/errorNames");
@@ -106,6 +107,11 @@ const authController = {
 
       res.json(user);
     });
+  },
+
+  async getCSRF(req, res) {
+    const csrfToken = csrf.generateToken(req, res);
+    res.json({ csrfToken });
   },
 };
 
