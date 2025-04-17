@@ -42,5 +42,16 @@ export const useAuthService = () => {
     [appFetch]
   );
 
-  return { register, login, logout, verifyAuth };
+  const getCSRF = useMemo(
+    () => async (): Promise<{ csrfToken: string }> => {
+      const res = await appFetch("/api/auth/csrf-token", {
+        method: "GET",
+      });
+
+      return res.json();
+    },
+    [appFetch]
+  );
+
+  return { register, login, logout, verifyAuth, getCSRF };
 };
