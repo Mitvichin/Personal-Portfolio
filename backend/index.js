@@ -1,3 +1,4 @@
+const { API_BASE_URL } = require("./utils/constants.js");
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -6,6 +7,8 @@ const gridRouter = require("./routes/Grid.route.js");
 const authRouter = require("./routes/Auth.route.js");
 const rateLimitMiddleware = require("./middlewares/rate-limit.js");
 const cookieParser = require("cookie-parser");
+const csrf = require("./config/csrf.js");
+const csrfErrorHandler = require("./middlewares/csrfErrorHandler.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,12 +17,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); // Allows parsing of JSON requests.
 app.use(cookieParser());
-app.use("/api", rateLimitMiddleware); // Rate limitting
+app.use(API_BASE_URL, rateLimitMiddleware); // Rate limitting
+app.use(csrf.doubleCsrfProtection); // csrf protection
+app.use(csrfErrorHandler);
 
 // API endpoint
-app.use("/api/message", messageRouter);
-app.use("/api/grid", gridRouter);
-app.use("/api/auth", authRouter);
+app.use(`${API_BASE_URL}/message`, messageRouter);
+app.use(`${API_BASE_URL}/grid`, gridRouter);
+app.use(`${API_BASE_URL}/auth`, authRouter);
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 

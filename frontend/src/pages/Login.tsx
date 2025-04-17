@@ -11,7 +11,7 @@ import { useAuthService } from "../services/auth";
 import { useNavigate } from "react-router";
 import { routes } from "../router";
 import { LoginForm } from "../types/LoginForm";
-import { useUserContext } from "../providers/user/UserContext";
+import { useAuthContext } from "../providers/auth/AuthContext";
 import { AppError } from "../types/AppError";
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
@@ -24,7 +24,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const { login } = useAuthService();
     const navigate = useNavigate();
-    const { setUser } = useUserContext();
+    const { setUser } = useAuthContext();
     const debouceId = useRef<NodeJS.Timeout>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<LoginForm>(intialFormState);

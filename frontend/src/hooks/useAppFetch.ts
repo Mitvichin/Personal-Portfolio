@@ -4,11 +4,12 @@ import {
   backendErrorsMap,
   backendErrorsNames,
 } from "../utils/backendErrorsMap";
-import { useUserContext } from "../providers/user/UserContext";
+import { useAuthContext } from "../providers/auth/AuthContext";
 import { AppError } from "../types/AppError";
+import { csrfProtectedMethods } from "../config";
 
 export const useAppFetch = () => {
-  const { deleteUser } = useUserContext();
+  const { deleteUser, csrfToken } = useAuthContext();
 
   const appFetch = useMemo(
     () =>
@@ -19,8 +20,17 @@ export const useAppFetch = () => {
           headers.set("Content-Type", "application/json");
         }
 
+        if (csrfProtectedMethods[init.method || ""]) {
+          console.log(csrfToken);
+          headers.set("x-csrf-token", csrfToken);
+        }
+
         try {
-          const res = await fetch(url, { ...init, headers });
+          const res = await fetch(url, {
+            ...init,
+            headers,
+            credentials: "include",
+          });
           if (!res.ok) {
             if (res.status >= 400 && res.status <= 499) {
               const error: BackendError = await res.json();
@@ -50,7 +60,7 @@ export const useAppFetch = () => {
           throw new AppError(500, "Something went wrong! Try again later!");
         }
       },
-    [deleteUser]
+    [csrfToken, deleteUser]
   );
 
   return appFetch;

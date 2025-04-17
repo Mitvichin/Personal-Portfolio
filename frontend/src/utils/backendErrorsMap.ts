@@ -8,6 +8,7 @@ export const backendErrorsMap = {
   INTERNAL_SERVER_ERROR: () => "Something went wrong, please try again later!",
   UNAUTHENTICATED: () => "Please, login!",
   INVALID_INPUT: () => "Invalid input, please try again!",
+  ACTION_FORBIDDEN: () => "This acction is currently forbidden!",
 };
 
 export const backendErrorsNames = {
@@ -17,4 +18,5 @@ export const backendErrorsNames = {
   INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
   UNAUTHENTICATED: "UNAUTHENTICATED",
   INVALID_INPUT: "INVALID_INPUT",
+  ACTION_FORBIDDEN: "ACTION_FORBIDDEN",
 };

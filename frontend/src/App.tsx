@@ -1,12 +1,12 @@
 import { RouterProvider } from "react-router";
 import { Bounce, ToastContainer } from "react-toastify";
 import { router } from "./router";
-import { UserProvider } from "./providers/user/UserProvider";
+import { AuthProvider } from "./providers/auth/AuthProvider";
 
 function App() {
   return (
     <>
-      <UserProvider>
+      <AuthProvider>
         <div className="px-5 bg-gray-100 flex justify-start flex-col min-h-[100vh]">
           <RouterProvider router={router} />
         </div>
@@ -23,7 +23,7 @@ function App() {
           theme="light"
           transition={Bounce}
         />
-      </UserProvider>
+      </AuthProvider>
     </>
   );
 }

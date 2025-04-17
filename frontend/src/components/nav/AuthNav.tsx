@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { Button } from "../Button";
 import { routes } from "../../router";
-import { useUserContext } from "../../providers/user/UserContext";
+import { useAuthContext } from "../../providers/auth/AuthContext";
 import { useAuthService } from "../../services/auth";
 import { toast } from "react-toastify";
 import { AppError } from "../../types/AppError";
@@ -9,7 +9,7 @@ import { AppError } from "../../types/AppError";
 export const AuthNav: React.FC = () => {
   const { logout } = useAuthService();
   const navigate = useNavigate();
-  const { user, deleteUser } = useUserContext();
+  const { user, deleteUser } = useAuthContext();
 
   const onLogout = async () => {
     try {
