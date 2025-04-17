@@ -1,7 +1,8 @@
 const { API_BASE_URL } = require("./utils/constants.js");
 const express = require("express");
 const path = require("path");
-const cors = require("cors");
+
+const helmet = require("helmet");
 const messageRouter = require("./routes/Message.route.js");
 const gridRouter = require("./routes/Grid.route.js");
 const authRouter = require("./routes/Auth.route.js");
@@ -14,7 +15,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+
+app.use(helmet());
 app.use(express.json()); // Allows parsing of JSON requests.
 app.use(cookieParser());
 app.use(API_BASE_URL, rateLimitMiddleware); // Rate limitting
