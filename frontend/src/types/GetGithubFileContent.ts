@@ -1,4 +1,4 @@
-import { GetFileContentResponse } from "./api/responses";
+import { GetFileContentResponse } from './api/responses';
 
 export type GetGithubFileContent = ({
   searchWord,

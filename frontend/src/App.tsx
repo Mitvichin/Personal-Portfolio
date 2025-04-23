@@ -1,7 +1,7 @@
-import { RouterProvider } from "react-router";
-import { Bounce, ToastContainer } from "react-toastify";
-import { router } from "./router";
-import { AuthProvider } from "./providers/auth/AuthProvider";
+import { RouterProvider } from 'react-router';
+import { Bounce, ToastContainer } from 'react-toastify';
+import { router } from './router';
+import { AuthProvider } from './providers/auth/AuthProvider';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         </div>
         <ToastContainer
           position="bottom-right"
-          aria-label={"notification"}
+          aria-label={'notification'}
           autoClose={2000}
           hideProgressBar={false}
           newestOnTop={false}

@@ -1,24 +1,24 @@
-import { useRef, useState } from "react";
-import { withRedirectionToSourceFiles } from "../decorators/withRedirectionToSourceFile";
-import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
-import { toast } from "react-toastify";
+import { useRef, useState } from 'react';
+import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
+import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
+import { toast } from 'react-toastify';
 import {
   registerFormFieldValidation,
   validateFormData,
-} from "../utils/validation";
-import { Button } from "../components/Button";
-import { RegisterForm } from "../types/RegisterForm";
-import { useNavigate } from "react-router";
-import { routes } from "../router";
-import { useAuthService } from "../services/auth";
-import { AppError } from "../types/AppError";
+} from '../utils/validation';
+import { Button } from '../components/Button';
+import { RegisterForm } from '../types/RegisterForm';
+import { useNavigate } from 'react-router';
+import { routes } from '../router';
+import { useAuthService } from '../services/auth';
+import { AppError } from '../types/AppError';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: RegisterForm = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
 };
 
 export const Register: React.FC<WithRedirectionToSourceFileProps> =
@@ -41,7 +41,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
           setErrors((prev) => ({ ...prev, [key]: errMsg }));
         }, 350);
       } else {
-        setErrors((prev) => ({ ...prev, [key]: "" }));
+        setErrors((prev) => ({ ...prev, [key]: '' }));
       }
 
       setFormData((prev) => {
@@ -61,7 +61,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
         await register(formData);
         setErrors(intialFormState);
         setFormData(intialFormState);
-        toast.success("Your registration was successfull!");
+        toast.success('Your registration was successfull!');
         navigate(`/${routes.login}`);
       } catch (err: unknown) {
         if (err instanceof AppError) {
@@ -69,7 +69,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
           return;
         }
 
-        toast.error("Registration failed. Please try again!");
+        toast.error('Registration failed. Please try again!');
       } finally {
         setIsLoading(false);
       }
@@ -94,7 +94,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   First name <span className="text-red-500">*</span>
                 </label>
                 <input
-                  onChange={(e) => updateFormState("firstName", e.target.value)}
+                  onChange={(e) => updateFormState('firstName', e.target.value)}
                   value={formData.firstName}
                   name="firstName"
                   type="text"
@@ -117,7 +117,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   Last name<span className="text-red-500">*</span>
                 </label>
                 <input
-                  onChange={(e) => updateFormState("lastName", e.target.value)}
+                  onChange={(e) => updateFormState('lastName', e.target.value)}
                   value={formData.lastName}
                   type="text"
                   id="lastName"
@@ -141,7 +141,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                 Email address <span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => updateFormState("email", e.target.value)}
+                onChange={(e) => updateFormState('email', e.target.value)}
                 value={formData.email}
                 type="email"
                 id="email"
@@ -165,7 +165,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
               </label>
               <input
                 value={formData.password}
-                onChange={(e) => updateFormState("password", e.target.value)}
+                onChange={(e) => updateFormState('password', e.target.value)}
                 id="password"
                 name="password"
                 type="password"

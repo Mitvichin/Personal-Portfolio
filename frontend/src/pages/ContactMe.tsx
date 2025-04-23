@@ -1,22 +1,22 @@
-import { useRef, useState } from "react";
-import { withRedirectionToSourceFiles } from "../decorators/withRedirectionToSourceFile";
-import { useContactMeService } from "../services/contact-me";
-import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
-import { toast } from "react-toastify";
-import { ContactMeForm } from "../types/ContactMeForm";
+import { useRef, useState } from 'react';
+import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
+import { useContactMeService } from '../services/contact-me';
+import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
+import { toast } from 'react-toastify';
+import { ContactMeForm } from '../types/ContactMeForm';
 import {
   contactMeFormFieldValidation,
   validateFormData,
-} from "../utils/validation";
-import { Button } from "../components/Button";
-import { AppError } from "../types/AppError";
+} from '../utils/validation';
+import { Button } from '../components/Button';
+import { AppError } from '../types/AppError';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: ContactMeForm = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  message: "",
+  firstName: '',
+  lastName: '',
+  email: '',
+  message: '',
 };
 
 export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
@@ -38,14 +38,14 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
           setErrors((prev) => ({ ...prev, [key]: errMsg }));
         }, 350);
       } else {
-        setErrors((prev) => ({ ...prev, [key]: "" }));
+        setErrors((prev) => ({ ...prev, [key]: '' }));
       }
 
       setFormData((prev) => {
         const newState = { ...prev, [key]: value };
 
         setIsFormValid(
-          validateFormData(newState, contactMeFormFieldValidation)
+          validateFormData(newState, contactMeFormFieldValidation),
         );
 
         return newState;
@@ -61,14 +61,14 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
         setErrors(intialFormState);
         setFormData(intialFormState);
         setIsFormValid(true);
-        toast.success("Your message was sent successfully!");
+        toast.success('Your message was sent successfully!');
       } catch (err: unknown) {
         if (err instanceof AppError) {
           toast.error(err.message);
           return;
         }
 
-        toast.error("Sending your message failed. Please try again!");
+        toast.error('Sending your message failed. Please try again!');
       } finally {
         setIsLoading(false);
       }
@@ -91,7 +91,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 First name <span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => updateFormState("firstName", e.target.value)}
+                onChange={(e) => updateFormState('firstName', e.target.value)}
                 value={formData.firstName}
                 name="firstName"
                 type="text"
@@ -114,7 +114,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 Last name<span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => updateFormState("lastName", e.target.value)}
+                onChange={(e) => updateFormState('lastName', e.target.value)}
                 value={formData.lastName}
                 type="text"
                 id="lastName"
@@ -138,7 +138,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
               Email address <span className="text-red-500">*</span>
             </label>
             <input
-              onChange={(e) => updateFormState("email", e.target.value)}
+              onChange={(e) => updateFormState('email', e.target.value)}
               value={formData.email}
               type="email"
               id="email"
@@ -162,7 +162,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
             </label>
             <textarea
               value={formData.message}
-              onChange={(e) => updateFormState("message", e.target.value)}
+              onChange={(e) => updateFormState('message', e.target.value)}
               id="message"
               name="message"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none h-50 max-h-[150px]"

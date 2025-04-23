@@ -1,6 +1,6 @@
-import { useAppFetch } from "../hooks/useAppFetch";
-import { GetFileContentResponse } from "../types/api/responses";
-import { BASE_API_ULR } from "../utils/constants";
+import { useAppFetch } from '../hooks/useAppFetch';
+import { GetFileContentResponse } from '../types/api/responses';
+import { BASE_API_ULR } from '../utils/constants';
 
 export const useGithubService = () => {
   const appFetch = useAppFetch();
@@ -18,9 +18,10 @@ export const useGithubService = () => {
     const res = await appFetch(
       `${BASE_API_ULR}/github/get-file-content?${params.toString()}`,
       {
-        method: "GET",
-      }
+        method: 'GET',
+      },
     );
+
     return res.json();
   };
 

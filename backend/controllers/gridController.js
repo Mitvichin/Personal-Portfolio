@@ -1,6 +1,6 @@
-const Grid = require("../models/gridModel");
-const backendErrorsMap = require("../utils/errorNames");
-const { validateGrid } = require("../utils/validationUtils");
+const Grid = require('../models/gridModel');
+const backendErrorsMap = require('../utils/errorNames');
+const { validateGrid } = require('../utils/validationUtils');
 
 const gridController = {
   async createGrid(req, res) {

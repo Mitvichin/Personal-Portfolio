@@ -1,6 +1,6 @@
-const Message = require("../models/messageModel");
-const backendErrorsMap = require("../utils/errorNames");
-const { validateMessage } = require("../utils/validationUtils");
+const Message = require('../models/messageModel');
+const backendErrorsMap = require('../utils/errorNames');
+const { validateMessage } = require('../utils/validationUtils');
 
 const messageController = {
   async createMessage(req, res) {
@@ -16,7 +16,7 @@ const messageController = {
         firstName,
         lastName,
         email,
-        message
+        message,
       );
       res.status(201).json(newMessage);
     } catch (error) {
