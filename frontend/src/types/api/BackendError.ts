@@ -1,4 +1,4 @@
-import { backendErrorsMap } from "../../utils/backendErrorsMap";
+import { backendErrorsMap } from '../../utils/backendErrorsMap';
 
 export type BackendError = {
   message: keyof typeof backendErrorsMap;

@@ -1,9 +1,9 @@
-import { createContext, useContext } from "react";
-import { AuthContextProps } from "../../types/AuthContextProps";
+import { createContext, useContext } from 'react';
+import { AuthContextProps } from '../../types/AuthContextProps';
 
 export const AuthContext = createContext<AuthContextProps>({
   user: null,
-  csrfToken: "",
+  csrfToken: '',
   setUser: () => {},
   deleteUser: () => {},
 });

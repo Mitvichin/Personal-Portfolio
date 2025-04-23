@@ -1,23 +1,23 @@
-import { useRef, useState } from "react";
-import { withRedirectionToSourceFiles } from "../decorators/withRedirectionToSourceFile";
-import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
-import { toast } from "react-toastify";
+import { useRef, useState } from 'react';
+import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
+import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
+import { toast } from 'react-toastify';
 import {
   loginFormFieldValidation,
   validateFormData,
-} from "../utils/validation";
-import { Button } from "../components/Button";
-import { useAuthService } from "../services/auth";
-import { useNavigate } from "react-router";
-import { routes } from "../router";
-import { LoginForm } from "../types/LoginForm";
-import { useAuthContext } from "../providers/auth/AuthContext";
-import { AppError } from "../types/AppError";
+} from '../utils/validation';
+import { Button } from '../components/Button';
+import { useAuthService } from '../services/auth';
+import { useNavigate } from 'react-router';
+import { routes } from '../router';
+import { LoginForm } from '../types/LoginForm';
+import { useAuthContext } from '../providers/auth/AuthContext';
+import { AppError } from '../types/AppError';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: LoginForm = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 export const Login: React.FC<WithRedirectionToSourceFileProps> =
@@ -41,7 +41,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
           setErrors((prev) => ({ ...prev, [key]: errMsg }));
         }, 350);
       } else {
-        setErrors((prev) => ({ ...prev, [key]: "" }));
+        setErrors((prev) => ({ ...prev, [key]: '' }));
       }
 
       setFormData((prev) => {
@@ -71,7 +71,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
           return;
         }
 
-        toast.error("Login failed. Please try again!");
+        toast.error('Login failed. Please try again!');
       } finally {
         setIsLoading(false);
       }
@@ -95,7 +95,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
                 Email address <span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => updateFormState("email", e.target.value)}
+                onChange={(e) => updateFormState('email', e.target.value)}
                 value={formData.email}
                 type="email"
                 id="email"
@@ -119,7 +119,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
               </label>
               <input
                 value={formData.password}
-                onChange={(e) => updateFormState("password", e.target.value)}
+                onChange={(e) => updateFormState('password', e.target.value)}
                 id="password"
                 name="password"
                 type="password"

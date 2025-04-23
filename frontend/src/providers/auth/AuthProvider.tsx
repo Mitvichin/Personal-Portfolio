@@ -1,12 +1,12 @@
-import { PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { AuthContext } from "./AuthContext";
-import { User } from "../../types/User";
-import { useAuthService } from "../../services/auth";
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { AuthContext } from './AuthContext';
+import { User } from '../../types/User';
+import { useAuthService } from '../../services/auth';
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { verifyAuth, getCSRF } = useAuthService();
   const [user, setUser] = useState<User | null>(null);
-  const [csrfToken, setCSRFToken] = useState("");
+  const [csrfToken, setCSRFToken] = useState('');
 
   const deleteUser = useMemo(() => () => setUser(null), []);
 
@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         const data = await getCSRF();
         setCSRFToken(data.csrfToken);
       } catch {
-        console.error("CSRF token retrieval failed");
+        console.error('CSRF token retrieval failed');
       }
     };
 
