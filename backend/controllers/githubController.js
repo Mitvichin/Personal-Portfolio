@@ -1,5 +1,5 @@
-const backendErrorsMap = require("../utils/errorNames");
-const ROOT_FOLDER_NAME = "frontend";
+const backendErrorsMap = require('../utils/errorNames');
+const ROOT_FOLDER_NAME = 'frontend';
 
 const githubController = {
   async getFileContent(req, res) {
@@ -13,7 +13,7 @@ const githubController = {
     }
 
     const query = `${encodeURIComponent(
-      `"${searchWord}" repo:Mitvichin/Personal-Portfolio`
+      `"${searchWord}" repo:Mitvichin/Personal-Portfolio`,
     )} `;
 
     try {
@@ -22,15 +22,15 @@ const githubController = {
         {
           headers: {
             Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
-            Accept: "application/vnd.github.text-match+json",
+            Accept: 'application/vnd.github.text-match+json',
           },
-        }
+        },
       );
 
       const data = await response.json();
 
       const targetFile = data.items.find(
-        (it) => it.path === ROOT_FOLDER_NAME + filePath
+        (it) => it.path === ROOT_FOLDER_NAME + filePath,
       );
 
       if (!targetFile) {
@@ -40,7 +40,7 @@ const githubController = {
 
       const fileUrl = targetFile?.url;
       const fileResponse = await fetch(fileUrl, {
-        headers: { Accept: "application/vnd.github.v3.raw" },
+        headers: { Accept: 'application/vnd.github.v3.raw' },
       });
 
       const content = await fileResponse.text();

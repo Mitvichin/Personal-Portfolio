@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require('../config/db');
 
 const createTables = async () => {
   const tables = [
@@ -25,9 +25,9 @@ const createTables = async () => {
 
   try {
     for (let table of tables) await pool.query(table);
-    console.log("✅ Tables created successfully!");
+    console.log('✅ Tables created successfully!');
   } catch (error) {
-    console.error("❌ Error creating tables:", error);
+    console.error('❌ Error creating tables:', error);
   } finally {
     pool.end();
   }
