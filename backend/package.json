@@ -4,6 +4,7 @@
   "description": "Backend for my personal portfolio",
   "main": "index.js",
   "scripts": {
+    "postinstall": "cd ../frontend && npm install && npm run build",
     "start": "node index.js ",
     "dev": "nodemon index.js ",
     "lint": "eslint .",
