@@ -1,5 +1,5 @@
-import { Navbar } from "./Navbar";
-import { PageContainer } from "./PageContainer";
+import { Navbar } from './Navbar';
+import { PageContainer } from './PageContainer';
 
 export const PageOutlet: React.FC = () => {
   return (

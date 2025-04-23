@@ -1,5 +1,5 @@
-import { withRedirectionToSourceFiles } from "../decorators/withRedirectionToSourceFile";
-import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
+import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
+import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
@@ -15,15 +15,15 @@ export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
             Crossword generator -
             <span className="font-normal">
               Tool that can generate crosswords when provided comma separated
-              words. You can check it{" "}
+              words. You can check it{' '}
               <a
                 className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 href="https://crossword-generator-brown.vercel.app/"
                 target="_blank"
               >
-                here{" "}
+                here{' '}
               </a>
-              and its repository{" "}
+              and its repository{' '}
               <a
                 className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 href="https://github.com/Mitvichin/SortingVisualiser"
@@ -31,14 +31,14 @@ export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
               >
                 here.
               </a>
-              You can also use{" "}
+              You can also use{' '}
               <a
                 className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 href="https://codebeautify.org/random-word-generator"
                 target="_blank"
               >
                 this word generator
-              </a>{" "}
+              </a>{' '}
               to generate comma separated words.
             </span>
           </p>
@@ -48,7 +48,7 @@ export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
             Sorting Visualise -
             <span className="font-normal">
               Visualises how different sorting algorithms work. You can check
-              its repository{" "}
+              its repository{' '}
               <a
                 className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 href="https://github.com/Mitvichin/SortingVisualiser"

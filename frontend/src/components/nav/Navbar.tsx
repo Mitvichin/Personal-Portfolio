@@ -1,10 +1,10 @@
-import { NavLink, NavLinkRenderProps } from "react-router";
-import { routes } from "../../router";
+import { NavLink, NavLinkRenderProps } from 'react-router';
+import { routes } from '../../router';
 
 export const Navbar: React.FC = () => {
   const getClassName = ({ isActive }: NavLinkRenderProps) =>
     `flex-1 flex group hover:cursor-pointer transition-all duration-500 ${
-      isActive ? "bg-blue-100" : ""
+      isActive ? 'bg-blue-100' : ''
     }`;
 
   return (

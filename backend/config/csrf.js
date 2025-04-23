@@ -1,14 +1,14 @@
-const { doubleCsrf } = require("csrf-csrf");
+const { doubleCsrf } = require('csrf-csrf');
 
 const doubleCsrfOptions = {
-  getSecret: () => process.env.CSRF_SECRET || "default_secret",
-  cookieName: "csrf_token",
+  getSecret: () => process.env.CSRF_SECRET || 'default_secret',
+  cookieName: 'csrf_token',
   cookieOptions: {
     httpOnly: true,
-    sameSite: "Strict",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: 'Strict',
+    secure: process.env.NODE_ENV === 'production',
   },
-  getTokenFromRequest: (req) => req.headers["x-csrf-token"],
+  getTokenFromRequest: (req) => req.headers['x-csrf-token'],
 };
 
 module.exports = doubleCsrf(doubleCsrfOptions);

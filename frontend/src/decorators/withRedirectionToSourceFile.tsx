@@ -1,21 +1,21 @@
-import { useGithubService } from "../services/github";
-import { AppError } from "../types/AppError";
-import { GetGithubFileContent } from "../types/GetGithubFileContent";
-import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
-import { toast } from "react-toastify";
+import { useGithubService } from '../services/github';
+import { AppError } from '../types/AppError';
+import { GetGithubFileContent } from '../types/GetGithubFileContent';
+import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
+import { toast } from 'react-toastify';
 
 const getCorrectOccurrenceOfString = (
   e: React.MouseEvent<Element>,
-  wordSelection: Selection | null
+  wordSelection: Selection | null,
 ) => {
   const target = e.target as HTMLElement;
-  const searchString = wordSelection?.toString().trim() || "";
+  const searchString = wordSelection?.toString().trim() || '';
   const wordSelectionOffset = wordSelection?.anchorOffset || 0;
 
-  target.id = "temp-search-id";
+  target.id = 'temp-search-id';
   const parentIndex = e.currentTarget.innerHTML.indexOf(target.id);
   const sentanceIndexStart =
-    e.currentTarget.innerHTML.indexOf(">", parentIndex) + 1;
+    e.currentTarget.innerHTML.indexOf('>', parentIndex) + 1;
   const targetWordIndex = sentanceIndexStart + wordSelectionOffset;
 
   let currentIndex = -1;
@@ -25,14 +25,14 @@ const getCorrectOccurrenceOfString = (
   while (
     (currentIndex = e.currentTarget.innerHTML.indexOf(
       searchString,
-      currentIndex + 1
+      currentIndex + 1,
     )) !== -1
   ) {
     searchWordIndexes.push(currentIndex);
     if (currentIndex === targetWordIndex) break;
   }
 
-  target.id = "";
+  target.id = '';
 
   return searchWordIndexes.length ? searchWordIndexes.length : -1;
 };
@@ -40,9 +40,9 @@ const getCorrectOccurrenceOfString = (
 const getIndexOfStringInSourceFile = (
   fileContent: string,
   searchString: string,
-  wordCount: number
+  wordCount: number,
 ): number => {
-  const jsxOffset = fileContent.search("<.*>");
+  const jsxOffset = fileContent.search('<.*>');
   let i = jsxOffset - searchString.length;
   let counter = 0;
 
@@ -64,7 +64,7 @@ const getLineInSourceFile = (fileContent: string, stringIndex: number) => {
   let newLinesCount = 0;
   let i = -1;
 
-  while ((i = fileContent.indexOf("\n", i + 1)) >= 0) {
+  while ((i = fileContent.indexOf('\n', i + 1)) >= 0) {
     if (i >= stringIndex) break;
     newLinesCount++;
   }
@@ -75,13 +75,13 @@ const getLineInSourceFile = (fileContent: string, stringIndex: number) => {
 const redirectToLineInSourceFile = async (
   e: React.MouseEvent<Element>,
   filePath: string,
-  fetchDocument: GetGithubFileContent
+  fetchDocument: GetGithubFileContent,
 ) => {
   e.stopPropagation();
   const stringSelection = window.getSelection();
-  const searchWord = stringSelection?.toString().trim() || "";
+  const searchWord = stringSelection?.toString().trim() || '';
   const stringCount = getCorrectOccurrenceOfString(e, stringSelection);
-  const notFoundMsg = "Could not find a match for the clicked word.";
+  const notFoundMsg = 'Could not find a match for the clicked word.';
 
   try {
     const { content: fileContent, url } = await fetchDocument({
@@ -92,12 +92,12 @@ const redirectToLineInSourceFile = async (
     const stringIndexInSourceFile = getIndexOfStringInSourceFile(
       fileContent,
       searchWord,
-      stringCount
+      stringCount,
     );
 
     const lineInSource = getLineInSourceFile(
       fileContent,
-      stringIndexInSourceFile
+      stringIndexInSourceFile,
     );
 
     window.open(`${url}#L${lineInSource}`, `_newtab-#L${lineInSource}`);
@@ -117,9 +117,9 @@ const redirectToLineInSourceFile = async (
 };
 
 export const withRedirectionToSourceFiles = <
-  P extends WithRedirectionToSourceFileProps
+  P extends WithRedirectionToSourceFileProps,
 >(
-  WrappedComponent: React.FC<P>
+  WrappedComponent: React.FC<P>,
 ) => {
   return (props: P) => {
     const { getFileContent } = useGithubService();

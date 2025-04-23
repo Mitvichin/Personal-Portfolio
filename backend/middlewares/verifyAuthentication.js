@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const backendErrorsMap = require("../utils/errorNames");
-const { JWT_TOKEN_NAME } = require("../utils/constants");
+const jwt = require('jsonwebtoken');
+const backendErrorsMap = require('../utils/errorNames');
+const { JWT_TOKEN_NAME } = require('../utils/constants');
 
 const verifyAuthentication = (req, res, next) => {
   const token = req.cookies[JWT_TOKEN_NAME];

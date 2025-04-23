@@ -1,5 +1,5 @@
-import { withRedirectionToSourceFiles } from "../../decorators/withRedirectionToSourceFile";
-import { WithRedirectionToSourceFileProps } from "../../types/WithRedirectionToSourceFileProps";
+import { withRedirectionToSourceFiles } from '../../decorators/withRedirectionToSourceFile';
+import { WithRedirectionToSourceFileProps } from '../../types/WithRedirectionToSourceFileProps';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 

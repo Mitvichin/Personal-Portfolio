@@ -1,17 +1,17 @@
-const { API_BASE_URL } = require("./utils/constants.js");
-const backendErrorsMap = require("./utils/errorNames");
-const express = require("express");
-const path = require("path");
+const { API_BASE_URL } = require('./utils/constants.js');
+const backendErrorsMap = require('./utils/errorNames');
+const express = require('express');
+const path = require('path');
 
-const helmet = require("helmet");
-const messageRouter = require("./routes/Message.route.js");
-const gridRouter = require("./routes/Grid.route.js");
-const authRouter = require("./routes/Auth.route.js");
-const githubRouter = require("./routes/Github.route.js");
-const rateLimitMiddleware = require("./middlewares/rate-limit.js");
-const cookieParser = require("cookie-parser");
-const csrf = require("./config/csrf.js");
-const csrfErrorHandler = require("./middlewares/csrfErrorHandler.js");
+const helmet = require('helmet');
+const messageRouter = require('./routes/Message.route.js');
+const gridRouter = require('./routes/Grid.route.js');
+const authRouter = require('./routes/Auth.route.js');
+const githubRouter = require('./routes/Github.route.js');
+const rateLimitMiddleware = require('./middlewares/rate-limit.js');
+const cookieParser = require('cookie-parser');
+const csrf = require('./config/csrf.js');
+const csrfErrorHandler = require('./middlewares/csrfErrorHandler.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -35,14 +35,14 @@ app.use(`${API_BASE_URL}/*`, (req, res) => {
   return;
 });
 
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Handle requests by serving index.html for all routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 
 // Start the server
 app.listen(PORT, () => {
-  console.log("Server is running on port " + PORT);
+  console.log('Server is running on port ' + PORT);
 });

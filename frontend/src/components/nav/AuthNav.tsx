@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router";
-import { Button } from "../Button";
-import { routes } from "../../router";
-import { useAuthContext } from "../../providers/auth/AuthContext";
-import { useAuthService } from "../../services/auth";
-import { toast } from "react-toastify";
-import { AppError } from "../../types/AppError";
+import { useNavigate } from 'react-router';
+import { Button } from '../Button';
+import { routes } from '../../router';
+import { useAuthContext } from '../../providers/auth/AuthContext';
+import { useAuthService } from '../../services/auth';
+import { toast } from 'react-toastify';
+import { AppError } from '../../types/AppError';
 
 export const AuthNav: React.FC = () => {
   const { logout } = useAuthService();
@@ -20,7 +20,7 @@ export const AuthNav: React.FC = () => {
         toast.error(error.message);
         return;
       }
-      toast.error("Logout failed!");
+      toast.error('Logout failed!');
     }
   };
 
