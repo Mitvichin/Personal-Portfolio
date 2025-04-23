@@ -9,6 +9,9 @@ export const backendErrorsMap = {
   UNAUTHENTICATED: () => "Please, login!",
   INVALID_INPUT: () => "Invalid input, please try again!",
   ACTION_FORBIDDEN: () => "This acction is currently forbidden!",
+  INVALID_QUERY_PARAMETERS: () =>
+    "Something went wrong, please try again later!",
+  NOT_FOUND: () => "Resource not found!",
 };
 
 export const backendErrorsNames = {
@@ -19,4 +22,6 @@ export const backendErrorsNames = {
   UNAUTHENTICATED: "UNAUTHENTICATED",
   INVALID_INPUT: "INVALID_INPUT",
   ACTION_FORBIDDEN: "ACTION_FORBIDDEN",
+  INVALID_QUERY_PARAMETERS: "INVALID_QUERY_PARAMETERS",
+  NOT_FOUND: "NOT_FOUND",
 };

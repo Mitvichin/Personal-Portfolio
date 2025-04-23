@@ -1,45 +1,28 @@
-import { GithubSearchResponse } from "../types/api/responses";
-import { AppError } from "../types/AppError";
-import { GithubFile } from "../types/GithubFile";
+import { useAppFetch } from "../hooks/useAppFetch";
+import { GetFileContentResponse } from "../types/api/responses";
+import { BASE_API_ULR } from "../utils/constants";
 
-const ROOT_FOLDER_NAME = "frontend";
+export const useGithubService = () => {
+  const appFetch = useAppFetch();
 
-export const downloadRepoFile = async (
-  searchWord: string,
-  filePath: string
-): Promise<GithubFile> => {
-  const query = `${encodeURIComponent(
-    `"${searchWord}" repo:Mitvichin/Personal-Portfolio`
-  )} `;
-
-  try {
-    const response = await fetch(
-      `https://api.github.com/search/code?q=${query}&type=text`,
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_GITHUB_ACCESS_TOKEN}`,
-          Accept: "application/vnd.github.text-match+json",
-        },
-      }
-    );
-
-    const data: GithubSearchResponse = await response.json();
-
-    const targetFile = data.items.find(
-      (it) => it.path === ROOT_FOLDER_NAME + filePath
-    );
-
-    if (!targetFile) throw new Error("404");
-
-    const fileUrl = targetFile?.url;
-    const fileResponse = await fetch(fileUrl, {
-      headers: { Accept: "application/vnd.github.v3.raw" },
+  const getFileContent = async (data: {
+    searchWord: string;
+    filePath: string;
+  }): Promise<GetFileContentResponse> => {
+    const { searchWord, filePath } = data;
+    const params = new URLSearchParams({
+      searchWord,
+      filePath,
     });
 
-    const content = await fileResponse.text();
+    const res = await appFetch(
+      `${BASE_API_ULR}/github/get-file-content?${params.toString()}`,
+      {
+        method: "GET",
+      }
+    );
+    return res.json();
+  };
 
-    return { content, url: targetFile.html_url };
-  } catch {
-    throw new AppError(404, "Not found!");
-  }
+  return { getFileContent };
 };
