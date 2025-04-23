@@ -1,9 +1,11 @@
-import { downloadRepoFile } from "../services/github";
+import { useGithubService } from "../services/github";
+import { AppError } from "../types/AppError";
+import { GetGithubFileContent } from "../types/GetGithubFileContent";
 import { WithRedirectionToSourceFileProps } from "../types/WithRedirectionToSourceFileProps";
 import { toast } from "react-toastify";
 
 const getCorrectOccurrenceOfString = (
-  e: React.MouseEvent<HTMLElement>,
+  e: React.MouseEvent<Element>,
   wordSelection: Selection | null
 ) => {
   const target = e.target as HTMLElement;
@@ -71,24 +73,25 @@ const getLineInSourceFile = (fileContent: string, stringIndex: number) => {
 };
 
 const redirectToLineInSourceFile = async (
-  e: React.MouseEvent<HTMLElement>,
-  fileName: string
+  e: React.MouseEvent<Element>,
+  filePath: string,
+  fetchDocument: GetGithubFileContent
 ) => {
   e.stopPropagation();
   const stringSelection = window.getSelection();
-  const searchString = stringSelection?.toString().trim() || "";
-
+  const searchWord = stringSelection?.toString().trim() || "";
   const stringCount = getCorrectOccurrenceOfString(e, stringSelection);
+  const notFoundMsg = "Could not find a match for the clicked word.";
 
   try {
-    const { content: fileContent, url } = await downloadRepoFile(
-      searchString,
-      fileName
-    );
+    const { content: fileContent, url } = await fetchDocument({
+      searchWord,
+      filePath,
+    });
 
     const stringIndexInSourceFile = getIndexOfStringInSourceFile(
       fileContent,
-      searchString,
+      searchWord,
       stringCount
     );
 
@@ -98,8 +101,18 @@ const redirectToLineInSourceFile = async (
     );
 
     window.open(`${url}#L${lineInSource}`, `_newtab-#L${lineInSource}`);
-  } catch {
-    toast.error("Could not find a match for the clicked word.");
+  } catch (err) {
+    if (err instanceof AppError) {
+      if (err.code === 404) {
+        toast.error(notFoundMsg);
+      } else {
+        toast.error(err.message);
+      }
+
+      return;
+    }
+
+    toast.error(notFoundMsg);
   }
 };
 
@@ -109,10 +122,13 @@ export const withRedirectionToSourceFiles = <
   WrappedComponent: React.FC<P>
 ) => {
   return (props: P) => {
+    const { getFileContent } = useGithubService();
     return (
       <WrappedComponent
         {...props}
-        redirectToLineInSourceFile={redirectToLineInSourceFile}
+        redirectToLineInSourceFile={(e, fileName) =>
+          redirectToLineInSourceFile(e, fileName, getFileContent)
+        }
       />
     );
   };

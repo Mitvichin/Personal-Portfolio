@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const messageRouter = require("./routes/Message.route.js");
 const gridRouter = require("./routes/Grid.route.js");
 const authRouter = require("./routes/Auth.route.js");
+const githubRouter = require("./routes/Github.route.js");
 const rateLimitMiddleware = require("./middlewares/rate-limit.js");
 const cookieParser = require("cookie-parser");
 const csrf = require("./config/csrf.js");
@@ -27,6 +28,7 @@ app.use(csrfErrorHandler);
 app.use(`${API_BASE_URL}/message`, messageRouter);
 app.use(`${API_BASE_URL}/grid`, gridRouter);
 app.use(`${API_BASE_URL}/auth`, authRouter);
+app.use(`${API_BASE_URL}/github`, githubRouter);
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
