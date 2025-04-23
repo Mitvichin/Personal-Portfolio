@@ -6,6 +6,9 @@
       "use": "@vercel/node"
     }
   ],
+  "hooks": {
+    "build": "npm run lint-and-format"
+  },
   "routes": [
     {
       "src": "/(.*)",
