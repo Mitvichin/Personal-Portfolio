@@ -1,4 +1,5 @@
 const { API_BASE_URL } = require("./utils/constants.js");
+const backendErrorsMap = require("./utils/errorNames");
 const express = require("express");
 const path = require("path");
 
@@ -29,6 +30,10 @@ app.use(`${API_BASE_URL}/message`, messageRouter);
 app.use(`${API_BASE_URL}/grid`, gridRouter);
 app.use(`${API_BASE_URL}/auth`, authRouter);
 app.use(`${API_BASE_URL}/github`, githubRouter);
+app.use(`${API_BASE_URL}/*`, (req, res) => {
+  res.status(404).json({ message: backendErrorsMap.NOT_FOUND });
+  return;
+});
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
