@@ -16,7 +16,7 @@ const intialFormState: ContactMeForm = {
   firstName: '',
   lastName: '',
   email: '',
-  message: "",
+  message: '',
 };
 
 export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
