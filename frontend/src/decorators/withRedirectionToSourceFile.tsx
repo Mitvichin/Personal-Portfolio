@@ -55,7 +55,7 @@ const getIndexOfStringInSourceFile = (
     }
   }
 
-  if (i === -1) throw Error("404 Word not found");
+  if (i === -1) throw new AppError(404, 'Not found');
 
   return i;
 };

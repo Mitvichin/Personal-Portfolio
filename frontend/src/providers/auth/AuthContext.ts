@@ -7,4 +7,5 @@ export const AuthContext = createContext<AuthContextProps>({
   setUser: () => {},
   deleteUser: () => {},
 });
+
 export const useAuthContext = () => useContext(AuthContext);

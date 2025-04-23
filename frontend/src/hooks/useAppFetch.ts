@@ -10,6 +10,7 @@ import { csrfProtectedMethods } from "../config";
 
 export const useAppFetch = () => {
   const { deleteUser, csrfToken } = useAuthContext();
+  const unknownErrorMsg = "Something went wrong! Try again later!";
 
   const appFetch = useMemo(
     () =>
@@ -21,7 +22,6 @@ export const useAppFetch = () => {
         }
 
         if (csrfProtectedMethods[init.method || ""]) {
-          console.log(csrfToken);
           headers.set("x-csrf-token", csrfToken);
         }
 
@@ -45,10 +45,7 @@ export const useAppFetch = () => {
               );
             }
 
-            throw new AppError(
-              res.status,
-              "Something went wrong! Try again later!"
-            );
+            throw new AppError(res.status, unknownErrorMsg);
           }
 
           return res;
@@ -57,7 +54,7 @@ export const useAppFetch = () => {
             throw error;
           }
 
-          throw new AppError(500, "Something went wrong! Try again later!");
+          throw new AppError(500, unknownErrorMsg);
         }
       },
     [csrfToken, deleteUser]

@@ -21,6 +21,7 @@ export const useGithubService = () => {
         method: "GET",
       }
     );
+
     return res.json();
   };
 
