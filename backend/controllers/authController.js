@@ -5,7 +5,17 @@ const csrf = require('../config/csrf');
 const { validateUser, validateLogin } = require('../utils/validationUtils');
 const dbErrorsMap = require('../utils/dbErrorsMap');
 const backendErrorsMap = require('../utils/errorNames');
-const { JWT_TOKEN_NAME } = require('../utils/constants');
+const {
+  JWT_TOKEN_NAME,
+  JWT_REFRESH_TOKEN_NAME,
+} = require('../utils/constants');
+
+const authCookiesOptions = {
+  httpOnly: true,
+  sameSite: 'Strict',
+  secure: process.env.NODE_ENV === 'production',
+  maxAge: 3600000,
+};
 
 const authController = {
   async register(req, res) {
@@ -59,7 +69,8 @@ const authController = {
         (await bcryptjs.compare(body.password, dbResult.password))
       ) {
         const { id, email, firstName, lastName } = dbResult;
-        const token = jwt.sign(
+
+        const authToken = jwt.sign(
           { id, email, firstName, lastName },
           process.env.JWT_SECRET,
           {
@@ -67,11 +78,21 @@ const authController = {
           },
         );
 
-        res.cookie(JWT_TOKEN_NAME, token, {
-          httpOnly: true,
-          secure: process.env.SECURE_JWT === 'false' ? false : true,
-          sameSite: 'strict',
-        });
+        const authRefreshToken = jwt.sign(
+          { id, email, firstName, lastName },
+          process.env.JWT_REFRESH_SECRET,
+          {
+            expiresIn: '5m',
+          },
+        );
+
+        res.cookie(JWT_TOKEN_NAME, authToken, authCookiesOptions);
+
+        res.cookie(
+          JWT_REFRESH_TOKEN_NAME,
+          authRefreshToken,
+          authCookiesOptions,
+        );
 
         res.status(200).json({ id, firstName, lastName, email });
         return;
@@ -86,11 +107,12 @@ const authController = {
 
   async logout(_, res) {
     res.clearCookie(JWT_TOKEN_NAME);
+    res.clearCookie(JWT_REFRESH_TOKEN_NAME);
     res.status(204).send();
   },
 
   async verifyAuthentication(req, res) {
-    const token = req.cookies.token;
+    const token = req.cookies[JWT_TOKEN_NAME];
 
     if (!token) {
       return res
@@ -109,9 +131,45 @@ const authController = {
     });
   },
 
+  async refreshAuthToken(req, res) {
+    const refreshToken = req.cookies[JWT_REFRESH_TOKEN_NAME];
+
+    if (!refreshToken) {
+      return res
+        .status(401)
+        .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
+    }
+
+    jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET,
+      (err, { id, email, firstName, lastName } = {}) => {
+        if (err || !id || !email || !firstName || !lastName) {
+          return res
+            .status(401)
+            .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
+        }
+
+        const newAccessToken = jwt.sign(
+          { id, email, firstName, lastName },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: '10m',
+          },
+        );
+
+        res.cookie(JWT_TOKEN_NAME, newAccessToken, authCookiesOptions);
+
+        return res.status(200).json();
+      },
+    );
+  },
+
   async getCSRF(req, res) {
-    const csrfToken = csrf.generateToken(req, res);
-    res.json({ csrfToken });
+    try {
+      const csrfToken = csrf.generateToken(req, res);
+      return res.json({ csrfToken });
+    } catch (error) {}
   },
 };
 

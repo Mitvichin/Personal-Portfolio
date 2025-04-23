@@ -8,5 +8,6 @@ router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 router.get('/verify-authentication', authController.verifyAuthentication);
 router.get('/csrf-token', authController.getCSRF);
+router.get('/refresh', authController.refreshAuthToken);
 
 module.exports = router;
