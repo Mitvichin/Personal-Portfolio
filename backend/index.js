@@ -35,11 +35,11 @@ app.use(`${API_BASE_URL}/*`, (req, res) => {
   return;
 });
 
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle requests by serving index.html for all routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Start the server
