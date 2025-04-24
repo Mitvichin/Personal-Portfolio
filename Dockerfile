@@ -1,6 +1,10 @@
 # --------- Stage 1: Build frontend ----------
     FROM node:20.10.0 AS builder
 
+    ARG VITE_API_BASE_URL
+
+    ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
     WORKDIR /app
     
     # Copy and install frontend deps
