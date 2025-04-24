@@ -39,6 +39,6 @@ jobs:
           -d '{
                 "branch": "main",
                 "docker": {
-                  "image": "mitvichin/personal-portfolio"
+                  "image": "mitvichin/personal-portfolio:latest"
                 }
               }'
