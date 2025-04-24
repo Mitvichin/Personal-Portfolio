@@ -33,11 +33,12 @@ jobs:
     steps:
       - name: Deploy to Render
         run: |
-          curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deployments \
-          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-                "docker": {
-                  "image": "mitvichin/personal-portfolio:latest"
-                }
-              }'
+          curl --request POST \
+          --url https://api.render.com/v1/services/srv-d054g4pr0fns73d28r6g/deploys \
+          --header 'accept: application/json' \
+          --header 'content-type: application/json' \
+          --data '
+          {
+            "clearCache": "do_not_clear"
+          }
+          '
