@@ -1,13 +1,38 @@
-name: Deploy to Docker Hub and Render
+name: DEV Deploy to Docker Hub and Render
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
-  build-and-push:
+  lint-dev:
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+
+      - name: Install FE dependencies
+        run: cd frontend && npm ci
+
+      - name: Install BE dependencies
+        run: cd backend && npm ci
+
+      - name: Run FE linter
+        run: cd frontend && npm run lint
+
+      - name: Run BE linter and format
+        run: cd backend && npm run lint
+
+  build-and-push-dev:
+    runs-on: ubuntu-latest
+    needs: lint-dev
 
     steps:
       - name: Checkout code
@@ -26,17 +51,17 @@ jobs:
         run: |
           docker build \
             --build-arg VITE_API_BASE_URL=/api \
-            -t mitvichin/personal-portfolio:latest .
-          docker push mitvichin/personal-portfolio:latest
+            -t mitvichin/personal-portfolio:develop .
+          docker push mitvichin/personal-portfolio:develop
 
-  deploy-to-render:
+  deploy-to-render-dev:
     runs-on: ubuntu-latest
-    needs: build-and-push
+    needs: build-and-push-dev
     steps:
       - name: Deploy to Render
         run: |
           curl --request POST \
-          --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
+          --url https://api.render.com/v1/services/${{ secrets.RENDER_DEV_SERVICE_ID }}/deploys \
           --header 'accept: application/json' \
           --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
           --header 'content-type: application/json' \
