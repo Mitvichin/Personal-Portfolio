@@ -26,7 +26,7 @@ export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
               and its repository{' '}
               <a
                 className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                href="https://github.com/Mitvichin/SortingVisualiser"
+                href="https://github.com/Mitvichin/Crossword-generator"
                 target="_blank"
               >
                 here.
