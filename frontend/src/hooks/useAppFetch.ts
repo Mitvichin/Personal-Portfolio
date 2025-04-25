@@ -38,7 +38,7 @@ export const useAppFetch = () => {
 
         if (!res.ok) {
           if (res.status >= 400 && res.status <= 499) {
-            const error: BackendError = await res.json() ;
+            const error: BackendError = await res.json();
 
             if (error.message === backendErrorsNames.UNAUTHENTICATED) {
               if (!hasRetried) {
