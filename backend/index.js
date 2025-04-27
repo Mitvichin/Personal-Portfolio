@@ -2,8 +2,9 @@ const { API_BASE_URL } = require('./utils/constants.js');
 const backendErrorsMap = require('./utils/errorNames');
 const express = require('express');
 const path = require('path');
-
 const helmet = require('helmet');
+const cors = require('cors');
+const corsConfig = require('./config/cors.js');
 const messageRouter = require('./routes/Message.route.js');
 const gridRouter = require('./routes/Grid.route.js');
 const authRouter = require('./routes/Auth.route.js');
@@ -17,8 +18,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-
 app.use(helmet());
+app.use(cors(corsConfig));
 app.use(cookieParser());
 app.use(express.json()); // Allows parsing of JSON requests.
 app.use(API_BASE_URL, rateLimitMiddleware); // Rate limitting
