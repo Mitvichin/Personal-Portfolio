@@ -71,7 +71,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('firstName')}
                 type="text"
                 id="firstName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`bg-gray-50 border border-gray-300 ${errors.firstName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="John"
               />
               {errors.firstName && (
@@ -91,7 +91,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('lastName')}
                 type="text"
                 id="lastName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`bg-gray-50 border border-gray-300 ${errors.lastName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Doe"
               />
               {errors.lastName && (
@@ -112,7 +112,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
               {...register('email')}
               type="email"
               id="email"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className={`bg-gray-50 border border-gray-300 ${errors.email?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 `}
               placeholder="john.doe@company.com"
             />
             {errors.email && (
@@ -124,14 +124,14 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
           <div>
             <label
               htmlFor="message"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Message<span className="text-red-500">*</span>
             </label>
             <textarea
               {...register('message')}
               id="message"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none h-50 max-h-[150px]"
+              className={`bg-gray-50 border border-gray-300 ${errors.message?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 resize-none h-50 max-h-[150px] `}
               placeholder="Message to Ilia Mitvichin"
             />
             {errors.message && (

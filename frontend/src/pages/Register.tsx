@@ -77,12 +77,12 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   {...register('firstName')}
                   type="text"
                   id="firstName"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className={`bg-gray-50 border border-gray-300 ${errors.firstName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                   placeholder="John"
                 />
                 {errors.firstName && (
                   <p className="text-[12px] font-medium text-red-400 py-1">
-                    Field {errors.firstName.message}
+                    {errors.firstName.message}
                   </p>
                 )}
               </div>
@@ -97,12 +97,12 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   {...register('lastName')}
                   type="text"
                   id="lastName"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className={`bg-gray-50 border border-gray-300 ${errors.lastName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                   placeholder="Doe"
                 />
                 {errors.lastName && (
                   <p className="text-[12px] font-medium text-red-400 py-1">
-                    Field {errors.lastName.message}
+                    {errors.lastName.message}
                   </p>
                 )}
               </div>
@@ -118,7 +118,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('email')}
                 type="email"
                 id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`bg-gray-50 border border-gray-300 ${errors.email?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="john.doe@company.com"
                 required
               />
@@ -139,12 +139,12 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('password')}
                 id="password"
                 type="password"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`bg-gray-50 border border-gray-300 ${errors.password?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Password"
               />
               {errors.password && (
                 <p className="text-[12px] font-medium text-red-400 py-1">
-                  Field {errors.password.message}
+                  {errors.password.message}
                 </p>
               )}
             </div>
