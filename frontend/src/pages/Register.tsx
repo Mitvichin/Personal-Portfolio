@@ -32,11 +32,12 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
       formState: { errors, isValid: isFormValid },
     } = useForm<RegisterForm>({
       defaultValues: intialFormState,
-      mode: 'onBlur',
+      mode: 'onChange',
       resolver: zodResolver(registerFormSchema),
     });
 
     const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
+      console.log(data);
       try {
         setIsLoading(true);
         await registerUser(data);
@@ -151,7 +152,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
           <div className="flex flex-row justify-between">
             <Button
               isDisabled={!isFormValid}
-              onClick={() => handleSubmit(onSubmit)}
+              onClick={handleSubmit(onSubmit)}
               className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
               text="Submit"
             />

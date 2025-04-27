@@ -32,7 +32,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
       formState: { errors, isValid: isFormValid },
     } = useForm<LoginForm>({
       defaultValues: intialFormState,
-      mode: 'onBlur',
+      mode: 'onChange',
       resolver: zodResolver(loginFormSchema),
     });
 
@@ -111,7 +111,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
           <div className="flex flex-row justify-between">
             <Button
               isDisabled={!isFormValid}
-              onClick={() => handleSubmit(onSubmit)}
+              onClick={handleSubmit(onSubmit)}
               className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
               text="Log in"
             />
