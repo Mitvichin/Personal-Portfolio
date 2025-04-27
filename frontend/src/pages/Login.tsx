@@ -1,11 +1,8 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 import { toast } from 'react-toastify';
-import {
-  loginFormFieldValidation,
-  validateFormData,
-} from '../utils/validation';
+import { loginFormSchema } from '../utils/validation';
 import { Button } from '../components/Button';
 import { useAuthService } from '../services/auth';
 import { useNavigate } from 'react-router';
@@ -13,6 +10,8 @@ import { routes } from '../router';
 import { LoginForm } from '../types/LoginForm';
 import { useAuthContext } from '../providers/auth/AuthContext';
 import { AppError } from '../types/AppError';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: LoginForm = {
@@ -25,45 +24,24 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
     const { login } = useAuthService();
     const navigate = useNavigate();
     const { setUser } = useAuthContext();
-    const debouceId = useRef<NodeJS.Timeout>(undefined);
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<LoginForm>(intialFormState);
-    const [formData, setFormData] = useState<LoginForm>(intialFormState);
-    const [isFormValid, setIsFormValid] = useState(false);
 
-    const updateFormState = (key: keyof LoginForm, value: string) => {
-      const { isValid, errMsg } = loginFormFieldValidation[key](value);
+    const {
+      register,
+      handleSubmit,
+      formState: { errors, isValid: isFormValid },
+    } = useForm<LoginForm>({
+      defaultValues: intialFormState,
+      mode: 'onBlur',
+      resolver: zodResolver(loginFormSchema),
+    });
 
-      clearTimeout(debouceId.current);
-
-      if (!isValid) {
-        debouceId.current = setTimeout(() => {
-          setErrors((prev) => ({ ...prev, [key]: errMsg }));
-        }, 350);
-      } else {
-        setErrors((prev) => ({ ...prev, [key]: '' }));
-      }
-
-      setFormData((prev) => {
-        const newState = { ...prev, [key]: value };
-
-        setIsFormValid(validateFormData(newState, loginFormFieldValidation));
-
-        return newState;
-      });
-    };
-
-    const handleSubmit = async (e: React.MouseEvent) => {
-      e.preventDefault();
-
+    const onSubmit: SubmitHandler<LoginForm> = async (data) => {
       try {
         setIsLoading(true);
 
-        const user = await login(formData);
+        const user = await login(data);
         setUser(user);
-        setErrors(intialFormState);
-        setFormData(intialFormState);
-
         navigate(`/${routes.experience}`);
       } catch (err: unknown) {
         if (err instanceof AppError) {
@@ -95,18 +73,15 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
                 Email address <span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => updateFormState('email', e.target.value)}
-                value={formData.email}
+                {...register('email')}
                 type="email"
                 id="email"
-                name="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="john.doe@company.com"
-                required
+                placeholder="your@email.com"
               />
               {errors.email && (
-                <p className="text-[12px] font-medium text-red-400">
-                  {errors.email}
+                <p className="text-[12px] font-medium text-red-400 py-1">
+                  {errors.email.message}
                 </p>
               )}
             </div>
@@ -118,8 +93,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
                 Password<span className="text-red-500">*</span>
               </label>
               <input
-                value={formData.password}
-                onChange={(e) => updateFormState('password', e.target.value)}
+                {...register('password')}
                 id="password"
                 name="password"
                 type="password"
@@ -128,8 +102,8 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
                 required
               />
               {errors.password && (
-                <p className="text-[12px] font-medium text-red-400">
-                  Field {errors.password}
+                <p className="text-[12px] font-medium text-red-400 py-1">
+                  Field {errors.password.message}
                 </p>
               )}
             </div>
@@ -137,7 +111,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
           <div className="flex flex-row justify-between">
             <Button
               isDisabled={!isFormValid}
-              onClick={handleSubmit}
+              onClick={() => handleSubmit(onSubmit)}
               className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
               text="Log in"
             />
