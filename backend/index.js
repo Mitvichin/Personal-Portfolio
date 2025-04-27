@@ -23,14 +23,13 @@ app.use(cors(corsConfig));
 app.use(cookieParser());
 app.use(express.json()); // Allows parsing of JSON requests.
 app.use(API_BASE_URL, rateLimitMiddleware); // Rate limitting
-app.use(csrf.doubleCsrfProtection); // csrf protection
 app.use(csrfErrorHandler);
 
 // API endpoint
-app.use(`${API_BASE_URL}/message`, messageRouter);
+app.use(`${API_BASE_URL}/message`, csrf.doubleCsrfProtection, messageRouter);
 app.use(`${API_BASE_URL}/grid`, gridRouter);
-app.use(`${API_BASE_URL}/auth`, authRouter);
-app.use(`${API_BASE_URL}/github`, githubRouter);
+app.use(`${API_BASE_URL}/auth`, csrf.doubleCsrfProtection, authRouter);
+app.use(`${API_BASE_URL}/github`, csrf.doubleCsrfProtection, githubRouter);
 app.use(`${API_BASE_URL}/*`, (req, res) => {
   res.status(404).json({ message: backendErrorsMap.NOT_FOUND });
   return;
