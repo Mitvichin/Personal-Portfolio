@@ -1,17 +1,16 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 import { toast } from 'react-toastify';
-import {
-  registerFormFieldValidation,
-  validateFormData,
-} from '../utils/validation';
+import { registerFormSchema } from '../utils/validation';
 import { Button } from '../components/Button';
 import { RegisterForm } from '../types/RegisterForm';
 import { useNavigate } from 'react-router';
 import { routes } from '../router';
 import { useAuthService } from '../services/auth';
 import { AppError } from '../types/AppError';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: RegisterForm = {
@@ -23,44 +22,25 @@ const intialFormState: RegisterForm = {
 
 export const Register: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
-    const { register } = useAuthService();
+    const { registerUser } = useAuthService();
     const navigate = useNavigate();
-    const debouceId = useRef<NodeJS.Timeout>(undefined);
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState<RegisterForm>(intialFormState);
-    const [formData, setFormData] = useState<RegisterForm>(intialFormState);
-    const [isFormValid, setIsFormValid] = useState(false);
 
-    const updateFormState = (key: keyof RegisterForm, value: string) => {
-      const { isValid, errMsg } = registerFormFieldValidation[key](value);
+    const {
+      register,
+      handleSubmit,
+      formState: { errors, isValid: isFormValid },
+    } = useForm<RegisterForm>({
+      defaultValues: intialFormState,
+      mode: 'onChange',
+      resolver: zodResolver(registerFormSchema),
+    });
 
-      clearTimeout(debouceId.current);
-
-      if (!isValid) {
-        debouceId.current = setTimeout(() => {
-          setErrors((prev) => ({ ...prev, [key]: errMsg }));
-        }, 350);
-      } else {
-        setErrors((prev) => ({ ...prev, [key]: '' }));
-      }
-
-      setFormData((prev) => {
-        const newState = { ...prev, [key]: value };
-
-        setIsFormValid(validateFormData(newState, registerFormFieldValidation));
-
-        return newState;
-      });
-    };
-
-    const handleSubmit = async (e: React.MouseEvent) => {
-      e.preventDefault();
-
+    const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
+      console.log(data);
       try {
         setIsLoading(true);
-        await register(formData);
-        setErrors(intialFormState);
-        setFormData(intialFormState);
+        await registerUser(data);
         toast.success('Your registration was successfull!');
         navigate(`/${routes.login}`);
       } catch (err: unknown) {
@@ -94,18 +74,15 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   First name <span className="text-red-500">*</span>
                 </label>
                 <input
-                  onChange={(e) => updateFormState('firstName', e.target.value)}
-                  value={formData.firstName}
-                  name="firstName"
+                  {...register('firstName')}
                   type="text"
                   id="firstName"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className={`bg-gray-50 border border-gray-300 ${errors.firstName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                   placeholder="John"
-                  required
                 />
                 {errors.firstName && (
-                  <p className="text-[12px] font-medium text-red-400">
-                    Field {errors.firstName}
+                  <p className="text-[12px] font-medium text-red-400 py-1">
+                    {errors.firstName.message}
                   </p>
                 )}
               </div>
@@ -117,18 +94,15 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   Last name<span className="text-red-500">*</span>
                 </label>
                 <input
-                  onChange={(e) => updateFormState('lastName', e.target.value)}
-                  value={formData.lastName}
+                  {...register('lastName')}
                   type="text"
                   id="lastName"
-                  name="lastName"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className={`bg-gray-50 border border-gray-300 ${errors.lastName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                   placeholder="Doe"
-                  required
                 />
                 {errors.lastName && (
-                  <p className="text-[12px] font-medium text-red-400">
-                    Field {errors.lastName}
+                  <p className="text-[12px] font-medium text-red-400 py-1">
+                    {errors.lastName.message}
                   </p>
                 )}
               </div>
@@ -141,18 +115,16 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                 Email address <span className="text-red-500">*</span>
               </label>
               <input
-                onChange={(e) => updateFormState('email', e.target.value)}
-                value={formData.email}
+                {...register('email')}
                 type="email"
                 id="email"
-                name="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`bg-gray-50 border border-gray-300 ${errors.email?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="john.doe@company.com"
                 required
               />
               {errors.email && (
-                <p className="text-[12px] font-medium text-red-400">
-                  {errors.email}
+                <p className="text-[12px] font-medium text-red-400 py-1">
+                  {errors.email.message}
                 </p>
               )}
             </div>
@@ -164,18 +136,15 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                 Password<span className="text-red-500">*</span>
               </label>
               <input
-                value={formData.password}
-                onChange={(e) => updateFormState('password', e.target.value)}
+                {...register('password')}
                 id="password"
-                name="password"
                 type="password"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className={`bg-gray-50 border border-gray-300 ${errors.password?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Password"
-                required
               />
               {errors.password && (
-                <p className="text-[12px] font-medium text-red-400">
-                  Field {errors.password}
+                <p className="text-[12px] font-medium text-red-400 py-1">
+                  {errors.password.message}
                 </p>
               )}
             </div>
@@ -183,7 +152,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
           <div className="flex flex-row justify-between">
             <Button
               isDisabled={!isFormValid}
-              onClick={handleSubmit}
+              onClick={handleSubmit(onSubmit)}
               className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
               text="Submit"
             />

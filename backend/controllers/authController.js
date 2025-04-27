@@ -2,7 +2,7 @@ const User = require('../models/authModel');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const csrf = require('../config/csrf');
-const { validateUser, validateLogin } = require('../utils/validationUtils');
+const { isUserValid, isLoginValid } = require('../utils/validationUtils');
 const dbErrorsMap = require('../utils/dbErrorsMap');
 const backendErrorsMap = require('../utils/errorNames');
 const {
@@ -19,9 +19,9 @@ const authCookiesOptions = {
 
 const authController = {
   async register(req, res) {
-    const isInvalid = validateUser(req.body);
+    const isValid = isUserValid(req.body);
 
-    if (isInvalid) {
+    if (!isValid) {
       res.status(400).json({ message: backendErrorsMap.INVALID_INPUT });
       return;
     }
@@ -54,9 +54,9 @@ const authController = {
 
   async login(req, res) {
     const body = req.body;
-    const isInvalid = validateLogin(req.body);
+    const isValid = isLoginValid(req.body);
 
-    if (isInvalid) {
+    if (!isValid) {
       res.status(400).json({ message: backendErrorsMap.INVALID_INPUT });
       return;
     }

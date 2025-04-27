@@ -1,13 +1,13 @@
 const Grid = require('../models/gridModel');
 const backendErrorsMap = require('../utils/errorNames');
-const { validateGrid } = require('../utils/validationUtils');
+const { isGridValid } = require('../utils/validationUtils');
 
 const gridController = {
   async createGrid(req, res) {
     let { grid } = req.body;
-    let isInvalid = validateGrid(grid);
+    let isValid = isGridValid(grid);
 
-    if (isInvalid) {
+    if (!isValid) {
       res.status(400).json({ message: backendErrorsMap.INVALID_INPUT });
       return;
     }

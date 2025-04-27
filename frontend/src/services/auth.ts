@@ -8,7 +8,7 @@ import { BASE_API_ULR } from '../utils/constants';
 export const useAuthService = () => {
   const appFetch = useAppFetch();
 
-  const register = async (data: RegisterForm): Promise<void> => {
+  const registerUser = async (data: RegisterForm): Promise<void> => {
     const res = await appFetch(`${BASE_API_ULR}/auth/register`, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -54,5 +54,5 @@ export const useAuthService = () => {
     [appFetch],
   );
 
-  return { register, login, logout, verifyAuth, getCSRF };
+  return { registerUser, login, logout, verifyAuth, getCSRF };
 };
