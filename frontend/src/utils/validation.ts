@@ -1,78 +1,50 @@
-import { ContactMeForm } from '../types/ContactMeForm';
-import { LoginForm } from '../types/LoginForm';
-import { RegisterForm } from '../types/RegisterForm';
-import { StringValidationResult } from '../types/utils/StringValidationResult';
+import { z } from 'zod';
 
-export const isEmail = (email: string): boolean => {
-  const emailFormat = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-  if (email !== '' && email.match(emailFormat)) {
-    return true;
-  }
+const getMinLengthValidationMsg = (min: number, field: string) =>
+  `${field} must be at least ${min} charactes.`;
+const getMaxLengthValidationMsg = (max: number, field: string) =>
+  `${field} cannot exceed ${max} characters.`;
 
-  return false;
-};
+const emailZodSchema = z
+  .string()
+  .email({ message: 'Please provide a valid email address.' })
+  .min(1, { message: 'Email is required.' });
 
-export const validateFormData = <T extends Record<string, string>>(
-  data: T,
-  validationMap: Record<keyof T, (value: string) => StringValidationResult>,
-): boolean => {
-  for (const k in data) {
-    const key = k as keyof T;
-    const { isValid } = validationMap[key](data[key]);
+const firstNameValidation = z
+  .string()
+  .min(2, { message: getMinLengthValidationMsg(2, 'First name') })
+  .max(100, { message: getMaxLengthValidationMsg(100, 'First name') });
 
-    if (!isValid) return false;
-  }
+const lastNameValidation = z
+  .string()
+  .min(2, { message: getMinLengthValidationMsg(2, 'Last name') })
+  .max(100, { message: getMaxLengthValidationMsg(100, 'Last name') });
 
-  return true;
-};
+const passwordValidation = z
+  .string()
+  .min(4, { message: getMinLengthValidationMsg(4, 'Password') })
+  .max(100, { message: getMaxLengthValidationMsg(100, 'Password') });
 
-export const validateStringLength = (
-  val: string,
-  min: number,
-  max: number,
-  name: string,
-): StringValidationResult => {
-  if (val.length < min)
-    return { isValid: false, errMsg: `${name} is too short` };
-  if (val.length > max)
-    return { isValid: false, errMsg: `${name} is too long` };
+const messageValidation = z
+  .string()
+  .min(2, { message: getMinLengthValidationMsg(2, 'Message') })
+  .max(1024, { message: getMaxLengthValidationMsg(1024, 'Message') });
 
-  return { isValid: true, errMsg: '' };
-};
+export const contactMeFormSchema = z.object({
+  firstName: firstNameValidation,
+  lastName: lastNameValidation,
+  email: emailZodSchema,
+  message: messageValidation,
+});
 
-export const contactMeFormFieldValidation: Record<
-  keyof ContactMeForm,
-  (value: string) => StringValidationResult
-> = {
-  firstName: (val) => validateStringLength(val, 2, 100, 'First name'),
-  lastName: (val) => validateStringLength(val, 2, 100, 'Last name'),
-  email: (val) =>
-    isEmail(val)
-      ? { isValid: true }
-      : { isValid: false, errMsg: 'Invalid email' },
-  message: (val) => validateStringLength(val, 2, 1024, 'Message'),
-};
+export const registerFormSchema = z.object({
+  firstName: firstNameValidation,
+  lastName: lastNameValidation,
+  email: emailZodSchema,
+  password: passwordValidation,
+});
 
-export const registerFormFieldValidation: Record<
-  keyof RegisterForm,
-  (value: string) => StringValidationResult
-> = {
-  firstName: (val) => validateStringLength(val, 2, 100, 'First name'),
-  lastName: (val) => validateStringLength(val, 2, 100, 'Last name'),
-  email: (val) =>
-    isEmail(val)
-      ? { isValid: true }
-      : { isValid: false, errMsg: 'Invalid email' },
-  password: (val) => validateStringLength(val, 4, 100, 'Password'),
-};
-
-export const loginFormFieldValidation: Record<
-  keyof LoginForm,
-  (value: string) => StringValidationResult
-> = {
-  email: (val) =>
-    isEmail(val)
-      ? { isValid: true }
-      : { isValid: false, errMsg: 'Invalid email' },
-  password: (val) => validateStringLength(val, 4, 100, 'Password'),
-};
+export const loginFormSchema = z.object({
+  password: passwordValidation,
+  email: emailZodSchema,
+});
