@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <AuthProvider>
-        <div className="px-5 bg-gray-100 flex justify-start flex-col min-h-[100vh]">
+        <div className="px-5 flex justify-start flex-col">
           <RouterProvider router={router} />
         </div>
         <ToastContainer
