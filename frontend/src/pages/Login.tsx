@@ -112,8 +112,9 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
               isDisabled={!isFormValid}
               onClick={handleSubmit(onSubmit)}
               className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
-              text="Log in"
-            />
+            >
+              Log in
+            </Button>
             {isLoading && <div className="float-end align-middle">Loading</div>}
           </div>
         </form>

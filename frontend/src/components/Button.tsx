@@ -1,7 +1,8 @@
+import { PropsWithChildren } from 'react';
 import { ButtonProps } from '../types/ButtonProps';
 
-export const Button: React.FC<ButtonProps> = ({
-  text,
+export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
+  children,
   type = 'button',
   onClick,
   isDisabled = false,
@@ -17,7 +18,7 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       className={className}
     >
-      {text}
+      {children}
     </button>
   );
 };
