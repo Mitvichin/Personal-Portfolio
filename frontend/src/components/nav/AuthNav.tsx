@@ -30,23 +30,26 @@ export const AuthNav: React.FC = () => {
         <>
           <p className="p-1 self-center">{`Hello, ${user.firstName} ${user.lastName}!`}</p>
           <Button
-            text="Log out"
             className="px-2 py-1 bg-gray-200 hover:bg-gray-300"
             onClick={onLogout}
-          />
+          >
+            Log out
+          </Button>
         </>
       ) : (
         <>
           <Button
-            text="Log in"
             className="px-2 py-1 bg-gray-200 hover:bg-gray-300"
             onClick={() => navigate(`/${routes.login}`)}
-          />
+          >
+            Log in
+          </Button>
           <Button
-            text="Register"
             className="px-2 py-1 bg-gray-200 hover:bg-gray-300"
             onClick={() => navigate(`/${routes.register}`)}
-          />
+          >
+            Register
+          </Button>
         </>
       )}
     </div>
