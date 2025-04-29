@@ -27,9 +27,20 @@ const messageController = {
   },
 
   async getMessages(req, res) {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
     try {
-      const messeges = await Message.getMessages();
-      res.status(200).json(messeges);
+      const { messages, total } = await Message.getMessages(page, limit);
+      res.status(200).json({
+        messages,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });

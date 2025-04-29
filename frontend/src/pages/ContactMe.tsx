@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
-import { useContactMeService } from '../services/contact-me';
+import { useMessageService } from '../services/message';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 import { toast } from 'react-toastify';
 import { ContactMeForm } from '../types/ContactMeForm';
@@ -21,7 +21,7 @@ const intialFormState: ContactMeForm = {
 
 export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
-    const { sendMessage } = useContactMeService();
+    const { sendMessage } = useMessageService();
     const [isLoading, setIsLoading] = useState(false);
 
     const {
