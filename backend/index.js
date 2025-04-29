@@ -21,8 +21,8 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(cors(corsConfig));
 app.use(cookieParser());
-app.use(express.json()); // Allows parsing of JSON requests.
-app.use(API_BASE_URL, rateLimitMiddleware); // Rate limitting
+app.use(express.json());
+app.use(API_BASE_URL, rateLimitMiddleware);
 app.use(csrfErrorHandler);
 
 // API endpoint
