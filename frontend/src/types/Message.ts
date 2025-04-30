@@ -1,4 +1,4 @@
-export type ContactMeForm = {
+export type Message = {
   firstName: string;
   lastName: string;
   email: string;

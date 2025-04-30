@@ -57,25 +57,19 @@ export const Sidebar: React.FC = () => {
           {user ? (
             <>
               <p className="p-1 self-center hidden md:block font-medium">{`Hello, ${user.firstName} ${user.lastName}!`}</p>
-              <Button
-                className="px-2 py-1 bg-gray-200 hover:bg-gray-300 mt-auto"
-                onClick={onLogout}
-              >
+              <Button onClick={() => navigate(`/${routes.messages}`)}>
+                Messages
+              </Button>
+              <Button className="mt-auto" onClick={onLogout}>
                 Log out
               </Button>
             </>
           ) : (
             <>
-              <Button
-                className="px-2 py-1 border-1 border-gray-200 shadow-md hover:scale-110"
-                onClick={() => navigate(`/${routes.login}`)}
-              >
+              <Button onClick={() => navigate(`/${routes.login}`)}>
                 Log in
               </Button>
-              <Button
-                className="px-2 py-1 border-1 border-gray-200 shadow-md hover:scale-110"
-                onClick={() => navigate(`/${routes.register}`)}
-              >
+              <Button onClick={() => navigate(`/${routes.register}`)}>
                 Register
               </Button>
             </>
