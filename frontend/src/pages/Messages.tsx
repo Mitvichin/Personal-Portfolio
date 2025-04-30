@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table } from '../components/message-table/MessageTableTable';
+import { MessageTable } from '../components/message-table/MessageTable';
 import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
 import { useMessageService } from '../services/message';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
@@ -8,17 +8,20 @@ import { AppError } from '../types/AppError';
 import { toast } from 'react-toastify';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
+const MESSAGE_PER_PAGE_LIMIT = 5;
 
 export const Messages: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const { getMessages } = useMessageService();
     const [messages, setMessages] = useState<Message[]>([]);
+    const [totalPages, setTotaPages] = useState<number>(1);
 
     const loadMessages = useCallback(
       async (page: number, limit: number) => {
         try {
-          const { messages } = await getMessages(page, limit);
+          const { messages, totalPages } = await getMessages(page, limit);
           setMessages(messages);
+          setTotaPages(totalPages);
         } catch (err: unknown) {
           if (err instanceof AppError) {
             toast.error(err.message);
@@ -32,7 +35,7 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
     );
 
     useEffect(() => {
-      loadMessages(1, 2);
+      loadMessages(1, MESSAGE_PER_PAGE_LIMIT);
     }, [loadMessages]);
 
     return (
@@ -42,9 +45,10 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
           redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
         }
       >
-        <Table
+        <MessageTable
           messages={messages}
-          onPageChange={(page) => loadMessages(page, 2)}
+          onPageChange={(page) => loadMessages(page, MESSAGE_PER_PAGE_LIMIT)}
+          totalPages={totalPages}
         />
       </div>
     );
