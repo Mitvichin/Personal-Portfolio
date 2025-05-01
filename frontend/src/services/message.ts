@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useAppFetch } from '../hooks/useAppFetch';
-import { Message } from '../types/Message';
+import { ContactMeForm, Message } from '../types/Message';
 import { BASE_API_ULR } from '../utils/constants';
 import { MessageResponse } from '../types/api/MessagesResponse';
 
 export const useMessageService = () => {
   const appFetch = useAppFetch();
 
-  const sendMessage = async (data: Message): Promise<void> => {
+  const sendMessage = async (data: ContactMeForm): Promise<void> => {
     const res = await appFetch(`${BASE_API_ULR}/message`, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -32,8 +32,6 @@ export const useMessageService = () => {
         messages,
         pagination: { totalPages },
       }: MessageResponse = await res.json();
-
-      console.log(totalPages);
 
       return { messages, totalPages };
     },
