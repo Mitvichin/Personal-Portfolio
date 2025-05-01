@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <AuthProvider>
-        <div className="px-5 flex justify-start flex-col">
+        <div className="px-5 flex justify-start flex-col max-w-[1200px] m-auto">
           <RouterProvider router={router} />
         </div>
         <ToastContainer

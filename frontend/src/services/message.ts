@@ -20,7 +20,7 @@ export const useMessageService = () => {
     async (
       page: number,
       limit: number,
-    ): Promise<{ messages: Message[]; totalPages: number }> => {
+    ): Promise<{ messages: Message[]; totalPages: number; limit: number }> => {
       const res = await appFetch(
         `${BASE_API_ULR}/message?page=${page}&limit=${limit}`,
         {
@@ -33,7 +33,7 @@ export const useMessageService = () => {
         pagination: { totalPages },
       }: MessageResponse = await res.json();
 
-      return { messages, totalPages };
+      return { messages, totalPages, limit };
     },
     [appFetch],
   );

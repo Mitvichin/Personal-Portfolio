@@ -1,4 +1,5 @@
 export const routes = {
+  home: 'home',
   experience: 'experience',
   sideProject: 'side-projects',
   contactMe: 'contact-me',

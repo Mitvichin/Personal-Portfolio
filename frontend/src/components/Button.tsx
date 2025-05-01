@@ -1,5 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { ButtonProps } from '../types/ButtonProps';
+import { GET_BUTTON_CLASS_NAME } from './constants';
+import { LoadingSpinner } from './LoadingSpinner';
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   children,
@@ -7,9 +9,9 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   onClick,
   isDisabled = false,
   className: classNameProp = '',
+  isLoading = false,
 }) => {
-  const className =
-    `focus:outline-none font-medium rounded-lg text-sm text-center disabled:bg-gray-400  hover:cursor-pointer hover:disabled:cursor-default px-2 py-1 border-1 border-gray-200 shadow-md hover:scale-110 disabled:hover:scale-100 ${classNameProp}`.trim();
+  const className = GET_BUTTON_CLASS_NAME(classNameProp);
 
   return (
     <button
@@ -18,7 +20,10 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
       onClick={onClick}
       className={className}
     >
-      {children}
+      {isLoading ? (
+        <LoadingSpinner className="absolute left-[50%] top-[50%] translate-[-50%]" />
+      ) : null}
+      <span className={`${isLoading ? 'opacity-0' : ''}`}>{children}</span>
     </button>
   );
 };
