@@ -22,7 +22,7 @@ export const Sidebar: React.FC = () => {
     });
 
   const alwaysAvailablePages = [
-    <AppNavLink onClick={closeMenu} to={`/${routes.home}`}>
+    <AppNavLink key="home" onClick={closeMenu} to={`/${routes.home}`}>
       Home
     </AppNavLink>,
   ];

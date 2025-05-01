@@ -107,7 +107,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('password')}
                 id="password"
                 type="password"
-                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.email?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.password?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Password"
                 required
               />
