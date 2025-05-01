@@ -18,7 +18,9 @@ const Message = {
       [limit, offset],
     );
 
-    const countResult = await pool.query(`SELECT COUNT(*) AS total FROM users`);
+    const countResult = await pool.query(
+      `SELECT COUNT(*) AS total FROM messages`,
+    );
     const total = parseInt(countResult.rows[0].total);
 
     return { messages: rows, total };
