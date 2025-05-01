@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { loginFormSchema } from '../utils/validation';
 import { Button } from '../components/Button';
 import { useAuthService } from '../services/auth';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { routes } from '../router';
 import { LoginForm } from '../types/LoginForm';
 import { useAuthContext } from '../providers/auth/AuthContext';
@@ -21,10 +21,16 @@ const intialFormState: LoginForm = {
 
 export const Login: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
-    const { login } = useAuthService();
+    const location = useLocation();
     const navigate = useNavigate();
+
+    const { login } = useAuthService();
     const { setUser } = useAuthContext();
+
     const [isLoading, setIsLoading] = useState(false);
+
+    const redirectTo =
+      location.state?.from?.pathname || `/${routes.experience}`;
 
     const {
       register,
@@ -42,7 +48,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
 
         const user = await login(data);
         setUser(user);
-        navigate(`/${routes.experience}`);
+        navigate(redirectTo, { replace: true });
       } catch (err: unknown) {
         if (err instanceof AppError) {
           toast.error(err.message);

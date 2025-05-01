@@ -7,19 +7,9 @@ import { Register } from '../pages/Register';
 import { Home } from '../pages/Home';
 import { Login } from '../pages/Login';
 import { Messages } from '../pages/Messages';
+import { AuthGuard } from './route-guards/AuthGuard';
 
 export const router = createBrowserRouter([
-  {
-    path: '/',
-    Component: Home,
-    children: [
-      { path: routes.experience, Component: WorkExperience },
-      { path: routes.sideProject, Component: SideProjects },
-      { path: routes.contactMe, Component: ContanctMe },
-      { path: '/', loader: () => redirect(routes.experience) },
-      { path: '*', element: <div> Page not found 404! </div> },
-    ],
-  },
   {
     path: routes.register,
     Component: Register,
@@ -30,6 +20,19 @@ export const router = createBrowserRouter([
   },
   {
     path: routes.messages,
-    Component: Messages,
+    Component: AuthGuard,
+    children: [{ path: '', Component: Messages }],
+  },
+
+  {
+    path: '/',
+    Component: Home,
+    children: [
+      { path: routes.experience, Component: WorkExperience },
+      { path: routes.sideProject, Component: SideProjects },
+      { path: routes.contactMe, Component: ContanctMe },
+      { path: '/', loader: () => redirect(routes.experience) },
+      { path: '*', element: <div> Page not found 404! </div> },
+    ],
   },
 ]);
