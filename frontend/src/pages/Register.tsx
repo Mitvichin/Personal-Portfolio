@@ -64,7 +64,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
       >
         <p className="text-xl md:text-2xl font-medium">Register</p>
         <form
-          className="flex-0 text-[14px] w-full md:w-[2/4] max-w-[400px] sm:text-base flex flex-col gap-6 justify-center border-3 border-dotted p-4 rounded-2xl bg-white shadow-xl"
+          className="flex-0 text-[14px] w-full md:w-[2/4] max-w-[400px] sm:text-base flex flex-col gap-6 justify-center border-3 border-dotted p-4 rounded-2xl bg-white shadow-md"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-3 md:gap-6">

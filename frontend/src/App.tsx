@@ -2,12 +2,16 @@ import { RouterProvider } from 'react-router';
 import { Bounce, ToastContainer } from 'react-toastify';
 import { router } from './router';
 import { AuthProvider } from './providers/auth/AuthProvider';
+import { APP_CONTAINER_ID } from './utils/constants';
 
 function App() {
   return (
     <>
       <AuthProvider>
-        <div className="px-5 flex justify-start flex-col max-w-[1200px] m-auto">
+        <div
+          id={APP_CONTAINER_ID}
+          className="px-5 flex justify-start flex-col max-w-[1200px] m-auto"
+        >
           <RouterProvider router={router} />
         </div>
         <ToastContainer

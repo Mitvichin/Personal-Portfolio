@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { ButtonProps } from '../types/ButtonProps';
-import { GET_BUTTON_CLASS_NAME } from './constants';
 import { LoadingSpinner } from './LoadingSpinner';
+import { GET_BUTTON_CLASS_NAME } from '../utils/constants';
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   children,
