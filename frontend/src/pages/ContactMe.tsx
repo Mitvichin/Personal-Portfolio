@@ -71,7 +71,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('firstName')}
                 type="text"
                 id="firstName"
-                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.firstName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.firstName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="John"
               />
               {errors.firstName && (
@@ -91,7 +91,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('lastName')}
                 type="text"
                 id="lastName"
-                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.lastName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.lastName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Doe"
               />
               {errors.lastName && (
@@ -112,7 +112,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
               {...register('email')}
               type="email"
               id="email"
-              className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.email?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 `}
+              className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.email?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 `}
               placeholder="john.doe@company.com"
             />
             {errors.email && (
@@ -131,7 +131,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
             <textarea
               {...register('message')}
               id="message"
-              className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.message?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 resize-none h-50 max-h-[150px] `}
+              className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.message?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 resize-none h-50 max-h-[150px] `}
               placeholder="Message to Ilia Mitvichin"
             />
             {errors.message && (
