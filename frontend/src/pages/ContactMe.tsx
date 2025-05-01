@@ -3,7 +3,7 @@ import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSou
 import { useMessageService } from '../services/message';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 import { toast } from 'react-toastify';
-import { ContactMeForm } from '../types/ContactMeForm';
+import { Message } from '../types/Message';
 
 import { Button } from '../components/Button';
 import { AppError } from '../types/AppError';
@@ -12,7 +12,7 @@ import { contactMeFormSchema } from '../utils/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
-const intialFormState: ContactMeForm = {
+const intialFormState: Message = {
   firstName: '',
   lastName: '',
   email: '',
@@ -28,13 +28,13 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
       register,
       handleSubmit,
       formState: { errors, isValid: isFormValid },
-    } = useForm<ContactMeForm>({
+    } = useForm<Message>({
       defaultValues: intialFormState,
       mode: 'onChange',
       resolver: zodResolver(contactMeFormSchema),
     });
 
-    const onSubmit: SubmitHandler<ContactMeForm> = async (data) => {
+    const onSubmit: SubmitHandler<Message> = async (data) => {
       try {
         setIsLoading(true);
         await sendMessage(data);

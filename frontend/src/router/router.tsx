@@ -6,6 +6,7 @@ import { routes } from './routes';
 import { Register } from '../pages/Register';
 import { Home } from '../pages/Home';
 import { Login } from '../pages/Login';
+import { Messages } from '../pages/Messages';
 
 export const router = createBrowserRouter([
   {
@@ -26,5 +27,9 @@ export const router = createBrowserRouter([
   {
     path: routes.login,
     Component: Login,
+  },
+  {
+    path: routes.messages,
+    Component: Messages,
   },
 ]);

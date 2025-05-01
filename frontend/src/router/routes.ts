@@ -4,4 +4,5 @@ export const routes = {
   contactMe: 'contact-me',
   register: 'register',
   login: 'login',
+  messages: 'messages',
 };
