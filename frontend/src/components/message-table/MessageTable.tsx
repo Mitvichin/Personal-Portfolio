@@ -1,6 +1,11 @@
+import { useState } from 'react';
 import { TableProps } from '../../types/TableProps';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { Modal } from '../Modal';
 import { Pagination } from '../Pagination';
+import { Message } from '../../types/Message';
+import { MessageDetails } from './MessageDetails';
+import { MessageRow } from './MessageRow';
 
 const addFillerRows = (messagesLength: number, limit: number) => {
   if (messagesLength < limit) {
@@ -23,6 +28,17 @@ const addFillerRows = (messagesLength: number, limit: number) => {
   }
 };
 
+const noMessages = (
+  <tr>
+    <td
+      colSpan={4}
+      className="px-6 py-4 text-center text-sm font-medium text-gray-800"
+    >
+      <p>You don't have any messages yet!</p>
+    </td>
+  </tr>
+);
+
 export const MessageTable: React.FC<TableProps> = ({
   messages: messagesProps,
   onPageChange,
@@ -30,43 +46,22 @@ export const MessageTable: React.FC<TableProps> = ({
   limit,
   isLoading = true,
 }) => {
-  const noMessages = (
-    <tr>
-      <td
-        colSpan={4}
-        className="px-6 py-4 text-center text-sm font-medium text-gray-800"
-      >
-        <p>You don't have any messages yet!</p>
-      </td>
-    </tr>
-  );
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
+  const onModalClose = () => {
+    setIsModalOpened(false);
+
+    setTimeout(() => setSelectedMessage(null), 200);
+  };
+
+  const onRowClick = (message: Message) => {
+    setSelectedMessage(message);
+    setIsModalOpened(true);
+  };
 
   const messages = messagesProps.map((it) => (
-    <tr
-      key={it.id}
-      className="border-b-1 border-gray-200 w-full hover:bg-gray-50"
-    >
-      <td className="px-6 py-4 text-sm font-medium text-gray-800">
-        <p className="whitespace-nowrap overflow-hidden text-ellipsis">
-          {it.email}
-        </p>
-      </td>
-      <td className="hidden sm:table-cell px-6 py-4 text-sm text-gray-800">
-        <p className="whitespace-nowrap overflow-hidden text-ellipsis">
-          {it.firstName}
-        </p>
-      </td>
-      <td className="hidden sm:table-cell px-6 py-4 text-sm text-gray-800">
-        <p className="whitespace-nowrap overflow-hidden text-ellipsis">
-          {it.lastName}
-        </p>
-      </td>
-      <td className="hidden xs:table-cell px-6 py-4 text-sm text-gray-800">
-        <p className="whitespace-nowrap overflow-hidden text-ellipsis">
-          {it.message}
-        </p>
-      </td>
-    </tr>
+    <MessageRow key={it.id} message={it} onRowClick={onRowClick} />
   ));
 
   const content = messages.length > 0 ? messages : noMessages;
@@ -76,6 +71,13 @@ export const MessageTable: React.FC<TableProps> = ({
 
   return (
     <div className="flex flex-col w-full md:w-6/7">
+      <Modal
+        title="Message Details"
+        isOpened={isModalOpened}
+        onClose={onModalClose}
+      >
+        {selectedMessage && <MessageDetails message={selectedMessage} />}
+      </Modal>
       <div className="p-1.5 w-full inline-block align-middle">
         <p className="text-xl font-medium mb-1">
           Messages
@@ -83,7 +85,7 @@ export const MessageTable: React.FC<TableProps> = ({
             <LoadingSpinner className="text-blue-600! ml-2 size-3! border-2!" />
           )}
         </p>
-        <div className="border border-gray-200 rounded-lg max-w-full overflow-auto bg-white shadow-xl">
+        <div className="border border-gray-200 rounded-lg max-w-full overflow-auto bg-white shadow-md">
           <table className="w-full table-fixed">
             <thead>
               <tr>

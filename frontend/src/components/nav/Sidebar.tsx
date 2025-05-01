@@ -4,8 +4,8 @@ import { useAuthContext } from '../../providers/auth/AuthContext';
 import { useAuthService } from '../../services/auth';
 import { toast } from 'react-toastify';
 import { AppError } from '../../types/AppError';
-import BurgerIcon from '../../../public/burger-menu-icon.svg?react';
-import LeftArrowIcon from '../../../public/left-arrow.svg?react';
+import BurgerIcon from '../../assets/burger-menu-icon.svg?react';
+import LeftArrowIcon from '../../assets/left-arrow.svg?react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { AppNavLink } from '../AppNavLink';
@@ -42,10 +42,10 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="p-1.5 sticky top-1 bg-white left-0.5 width-[100%] mt-2 rounded-xl shadow-xl mb-1 flex justify-between md:shadow-none md:rounded-none md:absolute md:width-auto md:bg-transparent md:mt-0">
+    <div className="p-1.5 sticky top-1 bg-white left-0.5 width-[100%] mt-2 rounded-xl shadow-md mb-1 flex justify-between md:shadow-none md:rounded-none md:absolute md:width-auto md:bg-transparent md:mt-0">
       <Button
         onClick={() => setIsMenuOpened((prev) => !prev)}
-        className="px-2 py-1 md:border-1 bg-white md:border-gray-200 md:shadow-xl hover:scale-110"
+        className="px-2 py-1 md:border-1 bg-white md:border-gray-200 md:shadow-md hover:scale-110"
       >
         <BurgerIcon className="w-6 h-6" />
       </Button>

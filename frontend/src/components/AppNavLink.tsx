@@ -1,5 +1,5 @@
 import { NavLink, NavLinkProps } from 'react-router';
-import { GET_BUTTON_CLASS_NAME } from './constants';
+import { GET_BUTTON_CLASS_NAME } from '../utils/constants';
 
 export const AppNavLink: React.FC<
   Omit<NavLinkProps, 'className' | 'viewTransition'> & { className?: string }
@@ -11,7 +11,7 @@ export const AppNavLink: React.FC<
       viewTransition
       {...props}
       className={({ isActive }) =>
-        `${className} ${isActive ? 'border-y-blue-600 border-x-blue-600' : ''} p-5 `
+        `${className} ${isActive ? 'border-y-blue-600 border-x-blue-600' : ''}`
       }
     >
       {children}
