@@ -42,7 +42,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
         setIsLoading(true);
         await registerUser(data);
         toast.success('Your registration was successfull!');
-        navigate(`/${routes.login}`);
+        navigate(`/${routes.login}`, { viewTransition: true });
       } catch (err: unknown) {
         if (err instanceof AppError) {
           toast.error(err.message);
@@ -56,16 +56,19 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
     };
 
     return (
-      <div className="w-full py-2 min-h-screen flex flex-col place-items-center justify-center gap-4">
+      <div
+        className="w-full py-2 min-h-screen flex flex-col place-items-center justify-center gap-4"
+        onDoubleClick={(e) =>
+          redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
+        }
+      >
         <p className="text-xl md:text-2xl font-medium">Register</p>
         <form
-          className="flex-0 text-[14px] w-3/4 md:w-[2/4] max-w-[400px] sm:text-base flex flex-col gap-6 justify-center border-3 border-dotted p-4 rounded-2xl bg-white shadow-xl"
-          onDoubleClick={(e) =>
-            redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
-          }
+          className="flex-0 text-[14px] w-full md:w-[2/4] max-w-[400px] sm:text-base flex flex-col gap-6 justify-center border-3 border-dotted p-4 rounded-2xl bg-white shadow-xl"
+          onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-3 md:gap-6">
-            <div className="grid gap-3 md:gap-6  md:grid-cols-2">
+            <div className="grid gap-3 md:gap-6 md:grid-cols-2">
               <div>
                 <label
                   htmlFor="firstName"
@@ -77,7 +80,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   {...register('firstName')}
                   type="text"
                   id="firstName"
-                  className={`bg-gray-50 border border-gray-300 ${errors.firstName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                  className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.firstName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                   placeholder="John"
                 />
                 {errors.firstName && (
@@ -97,7 +100,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                   {...register('lastName')}
                   type="text"
                   id="lastName"
-                  className={`bg-gray-50 border border-gray-300 ${errors.lastName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                  className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.lastName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                   placeholder="Doe"
                 />
                 {errors.lastName && (
@@ -118,7 +121,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('email')}
                 type="email"
                 id="email"
-                className={`bg-gray-50 border border-gray-300 ${errors.email?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.email?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="john.doe@company.com"
                 required
               />
@@ -139,7 +142,7 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('password')}
                 id="password"
                 type="password"
-                className={`bg-gray-50 border border-gray-300 ${errors.password?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.password?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Password"
               />
               {errors.password && (
@@ -152,12 +155,12 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
           <div className="flex flex-row justify-between">
             <Button
               isDisabled={!isFormValid}
-              onClick={handleSubmit(onSubmit)}
-              className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
+              isLoading={isLoading}
+              type="submit"
+              className="self-start px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-300"
             >
               Submit
             </Button>
-            {isLoading && <div className="float-end align-middle">Loading</div>}
           </div>
         </form>
       </div>

@@ -14,11 +14,13 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const { getMessages } = useMessageService();
     const [messages, setMessages] = useState<Message[]>([]);
-    const [totalPages, setTotaPages] = useState<number>(1);
+    const [totalPages, setTotaPages] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
 
     const loadMessages = useCallback(
       async (page: number, limit: number) => {
         try {
+          setIsLoading(true);
           const { messages, totalPages } = await getMessages(page, limit);
           setMessages(messages);
           setTotaPages(totalPages);
@@ -29,6 +31,8 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
           }
 
           toast.error('Loading messages failes!');
+        } finally {
+          setIsLoading(false);
         }
       },
       [getMessages],
@@ -40,7 +44,7 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
 
     return (
       <div
-        className="w-full py-2 min-h-screen flex flex-col items-center "
+        className="w-full py-2 min-h-screen flex flex-col items-center justify-center "
         onDoubleClick={(e) =>
           redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
         }
@@ -49,6 +53,8 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
           messages={messages}
           onPageChange={(page) => loadMessages(page, MESSAGE_PER_PAGE_LIMIT)}
           totalPages={totalPages}
+          limit={MESSAGE_PER_PAGE_LIMIT}
+          isLoading={isLoading}
         />
       </div>
     );

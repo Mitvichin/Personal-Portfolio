@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router';
 import { Button } from '../Button';
 import { routes } from '../../router';
 import { useAuthContext } from '../../providers/auth/AuthContext';
@@ -9,18 +8,30 @@ import BurgerIcon from '../../../public/burger-menu-icon.svg?react';
 import LeftArrowIcon from '../../../public/left-arrow.svg?react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
+import { AppNavLink } from '../AppNavLink';
 
 export const Sidebar: React.FC = () => {
   const { logout } = useAuthService();
-  const navigate = useNavigate();
   const { user, deleteUser } = useAuthContext();
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
+
+  const closeMenu = () =>
+    setTimeout(() => {
+      setIsMenuOpened(false);
+    });
+
+  const alwaysAvailablePages = [
+    <AppNavLink onClick={closeMenu} to={`/${routes.home}`}>
+      Home
+    </AppNavLink>,
+  ];
 
   const onLogout = async () => {
     try {
       await logout();
       deleteUser();
+      closeMenu();
     } catch (error) {
       if (error instanceof AppError) {
         toast.error(error.message);
@@ -31,12 +42,12 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="p-1 bg-white left-0.5 width-[100%] mt-2 rounded-xl shadow-xl mb-1 flex justify-between md:shadow-none md:rounded-none md:absolute md:width-auto md:bg-transparent md:mt-0">
+    <div className="p-1.5 sticky top-1 bg-white left-0.5 width-[100%] mt-2 rounded-xl shadow-xl mb-1 flex justify-between md:shadow-none md:rounded-none md:absolute md:width-auto md:bg-transparent md:mt-0">
       <Button
         onClick={() => setIsMenuOpened((prev) => !prev)}
         className="px-2 py-1 md:border-1 bg-white md:border-gray-200 md:shadow-xl hover:scale-110"
       >
-        <BurgerIcon width={24} height={24} />
+        <BurgerIcon className="w-6 h-6" />
       </Button>
 
       {user && (
@@ -57,21 +68,24 @@ export const Sidebar: React.FC = () => {
           {user ? (
             <>
               <p className="p-1 self-center hidden md:block font-medium">{`Hello, ${user.firstName} ${user.lastName}!`}</p>
-              <Button onClick={() => navigate(`/${routes.messages}`)}>
+              {alwaysAvailablePages}
+              <AppNavLink onClick={closeMenu} to={`/${routes.messages}`}>
                 Messages
-              </Button>
+              </AppNavLink>
+
               <Button className="mt-auto" onClick={onLogout}>
                 Log out
               </Button>
             </>
           ) : (
             <>
-              <Button onClick={() => navigate(`/${routes.login}`)}>
+              {alwaysAvailablePages}
+              <AppNavLink onClick={closeMenu} to={`/${routes.login}`}>
                 Log in
-              </Button>
-              <Button onClick={() => navigate(`/${routes.register}`)}>
+              </AppNavLink>
+              <AppNavLink onClick={closeMenu} to={`/${routes.register}`}>
                 Register
-              </Button>
+              </AppNavLink>
             </>
           )}
         </div>,

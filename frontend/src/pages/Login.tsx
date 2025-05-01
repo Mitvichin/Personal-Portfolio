@@ -30,7 +30,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
     const [isLoading, setIsLoading] = useState(false);
 
     const redirectTo =
-      location.state?.from?.pathname || `/${routes.experience}`;
+      location.state?.from?.pathname || `/${routes.home}/${routes.experience}`;
 
     const {
       register,
@@ -43,12 +43,14 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
     });
 
     const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+      if (isLoading) return;
+
       try {
         setIsLoading(true);
 
         const user = await login(data);
         setUser(user);
-        navigate(redirectTo, { replace: true });
+        navigate(redirectTo, { replace: true, viewTransition: true });
       } catch (err: unknown) {
         if (err instanceof AppError) {
           toast.error(err.message);
@@ -62,13 +64,16 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
     };
 
     return (
-      <div className="w-full py-2 min-h-screen flex flex-col place-items-center justify-center gap-4">
+      <div
+        className="w-full py-2 min-h-screen flex flex-col place-items-center justify-center gap-4"
+        onDoubleClick={(e) =>
+          redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
+        }
+      >
         <p className="text-xl md:text-2xl font-medium">Log in</p>
         <form
-          className="flex-0 text-[14px] w-3/4 md:w-[2/4] max-w-[400px] sm:text-base flex flex-col gap-6 justify-center border-3 border-dotted p-4 rounded-2xl bg-white shadow-xl"
-          onDoubleClick={(e) =>
-            redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
-          }
+          className="flex-0 text-[14px] w-full md:w-[2/4] max-w-[400px] sm:text-base flex flex-col gap-6 justify-center border-3 border-dotted p-4 rounded-2xl bg-white shadow-xl"
+          onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-3 md:gap-6">
             <div>
@@ -82,7 +87,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('email')}
                 type="email"
                 id="email"
-                className={`bg-gray-50 border border-gray-300 ${errors.email?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.email?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="your@email.com"
               />
               {errors.email && (
@@ -102,7 +107,7 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('password')}
                 id="password"
                 type="password"
-                className={`bg-gray-50 border border-gray-300 ${errors.password?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-gray-50 border border-gray-300 focus-visible:outline-blue-600 ${errors.email?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Password"
                 required
               />
@@ -116,12 +121,12 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
           <div className="flex flex-row justify-between">
             <Button
               isDisabled={!isFormValid}
-              onClick={handleSubmit(onSubmit)}
-              className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
+              type="submit"
+              isLoading={isLoading}
+              className="self-start px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-300"
             >
               Log in
             </Button>
-            {isLoading && <div className="float-end align-middle">Loading</div>}
           </div>
         </form>
       </div>

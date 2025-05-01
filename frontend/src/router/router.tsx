@@ -8,31 +8,56 @@ import { Home } from '../pages/Home';
 import { Login } from '../pages/Login';
 import { Messages } from '../pages/Messages';
 import { AuthGuard } from './route-guards/AuthGuard';
+import { SidebarLayout } from '../components/layouts/SidebarLayout';
 
 export const router = createBrowserRouter([
   {
-    path: routes.register,
-    Component: Register,
+    path: '/',
+    Component: SidebarLayout,
+    children: [
+      {
+        path: '/home',
+        Component: Home,
+        children: [
+          { path: routes.experience, Component: WorkExperience },
+          { path: routes.sideProject, Component: SideProjects },
+          { path: routes.contactMe, Component: ContanctMe },
+          {
+            path: '',
+            loader: () => redirect(`${routes.experience}`),
+          },
+          { path: '*', element: <div> Page not found 404! </div> },
+        ],
+      },
+      {
+        path: routes.register,
+        Component: Register,
+      },
+      {
+        path: routes.login,
+        Component: Login,
+      },
+      {
+        path: '/',
+        loader: () => redirect(`/${routes.home}/${routes.experience}`),
+      },
+    ],
   },
-  {
-    path: routes.login,
-    Component: Login,
-  },
+  // Auth protected routes
   {
     path: routes.messages,
     Component: AuthGuard,
-    children: [{ path: '', Component: Messages }],
+    children: [
+      {
+        path: '',
+        Component: SidebarLayout,
+        children: [{ path: '', Component: Messages }],
+      },
+    ],
   },
 
   {
-    path: '/',
-    Component: Home,
-    children: [
-      { path: routes.experience, Component: WorkExperience },
-      { path: routes.sideProject, Component: SideProjects },
-      { path: routes.contactMe, Component: ContanctMe },
-      { path: '/', loader: () => redirect(routes.experience) },
-      { path: '*', element: <div> Page not found 404! </div> },
-    ],
+    path: '*',
+    loader: () => redirect(`/${routes.home}/${routes.experience}`),
   },
 ]);
