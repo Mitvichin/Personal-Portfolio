@@ -32,6 +32,7 @@ export const Sidebar: React.FC = () => {
       await logout();
       deleteUser();
       closeMenu();
+      toast.success('Logout success!');
     } catch (error) {
       if (error instanceof AppError) {
         toast.error(error.message);
