@@ -11,6 +11,7 @@ import { AuthGuard } from './route-guards/AuthGuard';
 import { SidebarLayout } from '../components/layouts/SidebarLayout';
 import { GlobalErorrBoundry } from '../pages/error-pages/GlobalErorrBoundry';
 import { NotFound } from '../pages/error-pages/NotFound';
+import { Forbidden } from '../pages/error-pages/Forbidden';
 
 export const router = createBrowserRouter([
   {
@@ -57,11 +58,15 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: '/forbidden',
+        Component: Forbidden,
+      },
+      // catch all
+      {
+        path: '*',
+        Component: NotFound,
+      },
     ],
-  },
-  // catch all
-  {
-    path: '*',
-    Component: NotFound,
   },
 ]);
