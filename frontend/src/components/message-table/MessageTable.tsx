@@ -7,6 +7,7 @@ import { Message } from '../../types/Message';
 import { MessageDetails } from './MessageDetails';
 import { MessageRow } from './MessageRow';
 import { Button } from '../Button';
+import { HasRole } from '../../decorators/HasRole';
 
 const addFillerRows = (messagesLength: number, limit: number) => {
   if (messagesLength < limit) {
@@ -87,13 +88,15 @@ export const MessageTable: React.FC<TableProps> = ({
   const content = messageElements.length > 0 ? messageElements : noMessages;
 
   const deleteBtn = (
-    <Button
-      isLoading={isDeleteLoading}
-      onClick={() => onMessageDelete(selectedMessage?.id || '')}
-      className="text-white bg-red-400"
-    >
-      Delete
-    </Button>
+    <HasRole roles={['admin']}>
+      <Button
+        isLoading={isDeleteLoading}
+        onClick={() => onMessageDelete(selectedMessage?.id || '')}
+        className="text-white bg-red-400"
+      >
+        Delete
+      </Button>
+    </HasRole>
   );
 
   useEffect(() => {
