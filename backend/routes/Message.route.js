@@ -7,5 +7,6 @@ const router = express.Router();
 router.use(verifyAuthentication);
 router.post('/', messageController.createMessage);
 router.get('/', messageController.getMessages);
+router.delete('/', messageController.deleteMessage);
 
 module.exports = router;
