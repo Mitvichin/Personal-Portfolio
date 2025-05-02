@@ -38,5 +38,16 @@ export const useMessageService = () => {
     [appFetch],
   );
 
-  return { sendMessage, getMessages };
+  const deleteMessage = async (
+    id: string,
+  ): Promise<{ messages: Message[]; totalPages: number; limit: number }> => {
+    const res = await appFetch(`${BASE_API_ULR}/message`, {
+      method: 'DELETE',
+      body: JSON.stringify({ id }),
+    });
+
+    return res.json();
+  };
+
+  return { sendMessage, getMessages, deleteMessage };
 };

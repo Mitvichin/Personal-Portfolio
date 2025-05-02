@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TableProps } from '../../types/TableProps';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { Modal } from '../Modal';
@@ -6,6 +6,7 @@ import { Pagination } from '../Pagination';
 import { Message } from '../../types/Message';
 import { MessageDetails } from './MessageDetails';
 import { MessageRow } from './MessageRow';
+import { Button } from '../Button';
 
 const addFillerRows = (messagesLength: number, limit: number) => {
   if (messagesLength < limit) {
@@ -42,12 +43,15 @@ const noMessages = (
 export const MessageTable: React.FC<TableProps> = ({
   messages: messagesProps,
   onPageChange,
+  onMessageDelete: onMessageDeleteProps,
   totalPages,
   limit,
   isLoading = true,
 }) => {
+  const [messages, setMessages] = useState<Message[]>(messagesProps);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const onModalClose = () => {
     setIsModalOpened(false);
@@ -60,13 +64,43 @@ export const MessageTable: React.FC<TableProps> = ({
     setIsModalOpened(true);
   };
 
-  const messages = messagesProps.map((it) => (
+  const onMessageDelete = async (id: string) => {
+    setIsDeleteLoading(true);
+    const res = await onMessageDeleteProps(id);
+    if (res) {
+      onModalClose();
+      const index = messages.findIndex((it) => it.id === selectedMessage?.id);
+
+      setMessages((prev) => {
+        prev.splice(index, 1);
+        return prev;
+      });
+    }
+
+    setIsDeleteLoading(false);
+  };
+
+  const messageElements = messages.map((it) => (
     <MessageRow key={it.id} message={it} onRowClick={onRowClick} />
   ));
 
-  const content = messages.length > 0 ? messages : noMessages;
+  const content = messageElements.length > 0 ? messageElements : noMessages;
 
-  if (isLoading && messages.length === 0)
+  const deleteBtn = (
+    <Button
+      isLoading={isDeleteLoading}
+      onClick={() => onMessageDelete(selectedMessage?.id || '')}
+      className="text-white bg-red-400"
+    >
+      Delete
+    </Button>
+  );
+
+  useEffect(() => {
+    setMessages(messagesProps);
+  }, [messagesProps]);
+
+  if (isLoading && messageElements.length === 0)
     return <LoadingSpinner className="text-blue-600! border-4 size-14" />;
 
   return (
@@ -75,6 +109,7 @@ export const MessageTable: React.FC<TableProps> = ({
         title="Message Details"
         isOpened={isModalOpened}
         onClose={onModalClose}
+        footerElements={deleteBtn}
       >
         {selectedMessage && <MessageDetails message={selectedMessage} />}
       </Modal>
@@ -117,7 +152,7 @@ export const MessageTable: React.FC<TableProps> = ({
             </thead>
             <tbody className="border-t-1 border-gray-200">
               {content}
-              {addFillerRows(messages.length, limit)}
+              {messages.length >= 1 && addFillerRows(messages.length, limit)}
               <tr>
                 <td colSpan={4}>
                   <Pagination total={totalPages} onPageChange={onPageChange} />

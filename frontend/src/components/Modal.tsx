@@ -10,6 +10,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
   isOpened = false,
   onClose,
   title,
+  footerElements,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [className, setClassName] = useState('hidden');
@@ -52,6 +53,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
           </div>
           <div className="p-4 overflow-y-auto">{children}</div>
           <div className="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200">
+            {footerElements}
             <Button onClick={onClose}>Close</Button>
           </div>
         </div>

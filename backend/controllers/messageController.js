@@ -46,6 +46,22 @@ const messageController = {
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
+
+  async deleteMessage(req, res) {
+    const { id } = req.body;
+
+    try {
+      const message = await Message.deleteMessage(id);
+      if (message !== undefined) {
+        res.status(200).json({ message });
+      } else {
+        res.status(404).json({ message: backendErrorsMap.NOT_FOUND });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
+    }
+  },
 };
 
 module.exports = messageController;

@@ -2,7 +2,7 @@ import { Message } from '../../types/Message';
 
 export const MessageDetails: React.FC<{ message: Message }> = ({ message }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 break-all">
       <div className="flex flex-col md:flex-row md:gap-6">
         <div className="flex-1 border border-gray-300 rounded-xl p-4 shadow-md">
           <label className="block text-sm font-medium text-gray-500">

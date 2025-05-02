@@ -25,6 +25,15 @@ const Message = {
 
     return { messages: rows, total };
   },
+
+  async deleteMessage(id) {
+    let { rows } = await pool.query(
+      'DELETE FROM messages WHERE id = $1 RETURNING *',
+      [id],
+    );
+
+    return rows[0];
+  },
 };
 
 module.exports = Message;
