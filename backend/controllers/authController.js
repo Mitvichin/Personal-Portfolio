@@ -34,9 +34,14 @@ const authController = {
         Number(process.env.SALT_ROUNDS),
       );
 
-      await User.register(firstName, lastName, email, hashedPass);
+      const { role } = await User.register(
+        firstName,
+        lastName,
+        email,
+        hashedPass,
+      );
 
-      res.status(201).json({ firstName, lastName, email });
+      res.status(201).json({ firstName, lastName, email, role });
     } catch (error) {
       if (
         error.code &&
@@ -48,6 +53,7 @@ const authController = {
           .json({ message: dbErrorsMap[error.code], key: 'email' });
         return;
       }
+      console.log(error);
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
@@ -68,10 +74,10 @@ const authController = {
         dbResult &&
         (await bcryptjs.compare(body.password, dbResult.password))
       ) {
-        const { id, email, firstName, lastName } = dbResult;
+        const { id, email, firstName, lastName, role } = dbResult;
 
         const authToken = jwt.sign(
-          { id, email, firstName, lastName },
+          { id, email, firstName, lastName, role },
           process.env.JWT_SECRET,
           {
             expiresIn: '1m',
@@ -79,7 +85,7 @@ const authController = {
         );
 
         const authRefreshToken = jwt.sign(
-          { id, email, firstName, lastName },
+          { id, email, firstName, lastName, role },
           process.env.JWT_REFRESH_SECRET,
           {
             expiresIn: '5m',
@@ -94,7 +100,7 @@ const authController = {
           authCookiesOptions,
         );
 
-        res.status(200).json({ id, firstName, lastName, email });
+        res.status(200).json({ id, firstName, lastName, email, role });
         return;
       } else {
         res.status(400).json({ message: backendErrorsMap.INVALID_CREDENTIALS });
@@ -120,15 +126,19 @@ const authController = {
         .json({ message: backendErrorsMap.UNAUTHENTICATED });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res
-          .status(403)
-          .json({ message: backendErrorsMap.UNAUTHENTICATED });
-      }
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET,
+      (err, { id, firstName, lastName, email, role } = {}) => {
+        if (err || !id || !email || !firstName || !lastName || !role) {
+          return res
+            .status(401)
+            .json({ message: backendErrorsMap.UNAUTHENTICATED });
+        }
 
-      res.json(user);
-    });
+        res.json({ id, firstName, lastName, email, role });
+      },
+    );
   },
 
   async refreshAuthToken(req, res) {
@@ -143,15 +153,15 @@ const authController = {
     jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
-      (err, { id, email, firstName, lastName } = {}) => {
-        if (err || !id || !email || !firstName || !lastName) {
+      (err, { id, email, firstName, lastName, role } = {}) => {
+        if (err || !id || !email || !firstName || !lastName || !role) {
           return res
             .status(401)
             .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
         }
 
         const newAccessToken = jwt.sign(
-          { id, email, firstName, lastName },
+          { id, email, firstName, lastName, role },
           process.env.JWT_SECRET,
           {
             expiresIn: '10m',

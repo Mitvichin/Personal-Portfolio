@@ -20,3 +20,11 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply box-border;
+  }
+}

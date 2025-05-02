@@ -21,6 +21,10 @@ const createTables = async () => {
         email VARCHAR(100) NOT NULL UNIQUE,
         password TEXT NOT NULL
       );`,
+    `CREATE TABLE IF NOT EXISTS roles (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL UNIQUE
+    );`,
   ];
 
   try {
