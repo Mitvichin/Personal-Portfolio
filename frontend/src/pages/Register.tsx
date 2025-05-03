@@ -20,7 +20,7 @@ const intialFormState: RegisterForm = {
   password: '',
 };
 
-export const Register: React.FC<WithRedirectionToSourceFileProps> =
+const Register: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const { registerUser } = useAuthService();
     const navigate = useNavigate();
@@ -166,3 +166,5 @@ export const Register: React.FC<WithRedirectionToSourceFileProps> =
       </div>
     );
   });
+
+export default Register;

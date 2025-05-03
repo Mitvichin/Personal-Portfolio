@@ -10,7 +10,7 @@ import { UserTable } from '../components/user-table/UserTable';
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const USER_PER_PAGE_LIMIT = 5;
 
-export const Users: React.FC<WithRedirectionToSourceFileProps> =
+const Users: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const { getUsers, deleteUser } = useUserService();
     const [users, setUsers] = useState<User[]>([]);
@@ -83,3 +83,5 @@ export const Users: React.FC<WithRedirectionToSourceFileProps> =
       </div>
     );
   });
+
+export default Users;

@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const MESSAGE_PER_PAGE_LIMIT = 5;
 
-export const Messages: React.FC<WithRedirectionToSourceFileProps> =
+const Messages: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const { getMessages, deleteMessage } = useMessageService();
     const [messages, setMessages] = useState<Message[]>([]);
@@ -83,3 +83,5 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
       </div>
     );
   });
+
+export default Messages;

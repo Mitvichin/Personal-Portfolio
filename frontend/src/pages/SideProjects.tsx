@@ -3,7 +3,7 @@ import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSour
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
-export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
+const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => (
     <div
       className="flex w-full h-full flex-col text-[14px] sm:text-base"
@@ -66,3 +66,5 @@ export const SideProjects: React.FC<WithRedirectionToSourceFileProps> =
       />
     </div>
   ));
+
+export default SideProjects;

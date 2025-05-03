@@ -18,7 +18,7 @@ const intialFormState: ContactMeForm = {
   message: '',
 };
 
-export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
+const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const { sendMessage } = useMessageService();
     const [isLoading, setIsLoading] = useState(false);
@@ -153,3 +153,5 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
       </form>
     );
   });
+
+export default ContanctMe;

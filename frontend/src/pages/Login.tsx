@@ -19,7 +19,7 @@ const intialFormState: LoginForm = {
   password: '',
 };
 
-export const Login: React.FC<WithRedirectionToSourceFileProps> =
+const Login: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -132,3 +132,5 @@ export const Login: React.FC<WithRedirectionToSourceFileProps> =
       </div>
     );
   });
+
+export default Login;

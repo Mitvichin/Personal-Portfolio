@@ -3,7 +3,7 @@ import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSour
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 
-export const WorkExperience: React.FC<WithRedirectionToSourceFileProps> =
+const WorkExperience: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
     return (
       <ul
@@ -73,4 +73,4 @@ export const WorkExperience: React.FC<WithRedirectionToSourceFileProps> =
     );
   });
 
-WorkExperience.displayName = 'WorkExperience';
+export default WorkExperience;
