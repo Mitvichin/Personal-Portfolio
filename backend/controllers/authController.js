@@ -1,4 +1,4 @@
-const User = require('../models/authModel');
+const User = require('../models/userModel');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const csrf = require('../config/csrf');
@@ -179,7 +179,10 @@ const authController = {
     try {
       const csrfToken = csrf.generateToken(req, res);
       return res.json({ csrfToken });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
+    }
   },
 };
 

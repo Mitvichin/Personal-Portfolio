@@ -31,6 +31,23 @@ const User = {
     );
     return rows[0];
   },
+
+  async getUsers(page, limit) {
+    const offset = (page - 1) * limit;
+
+    const { rows } = await pool.query(
+      `SELECT users.*, roles.name as role 
+      FROM users 
+      LEFT JOIN roles on users."roleId" = roles.id
+      LIMIT $1 OFFSET $2`,
+      [limit, offset],
+    );
+
+    const countResult = await pool.query(`SELECT COUNT(*) AS total FROM users`);
+    const total = parseInt(countResult.rows[0].total);
+
+    return { users: rows, total };
+  },
 };
 
 module.exports = User;
