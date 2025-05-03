@@ -9,6 +9,7 @@ import LeftArrowIcon from '../../assets/left-arrow.svg?react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { AppNavLink } from '../AppNavLink';
+import { HasRole } from '../../decorators/HasRole';
 
 export const Sidebar: React.FC = () => {
   const { logout } = useAuthService();
@@ -73,6 +74,11 @@ export const Sidebar: React.FC = () => {
               <AppNavLink onClick={closeMenu} to={`/${routes.messages}`}>
                 Messages
               </AppNavLink>
+              <HasRole roles={['admin']}>
+                <AppNavLink onClick={closeMenu} to={`/${routes.users}`}>
+                  Users
+                </AppNavLink>
+              </HasRole>
 
               <Button className="mt-auto" onClick={onLogout}>
                 Log out

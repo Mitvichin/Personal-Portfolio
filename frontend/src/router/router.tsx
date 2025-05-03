@@ -12,6 +12,8 @@ import { SidebarLayout } from '../components/layouts/SidebarLayout';
 import { GlobalErorrBoundry } from '../pages/error-pages/GlobalErorrBoundry';
 import { NotFound } from '../pages/error-pages/NotFound';
 import { Forbidden } from '../pages/error-pages/Forbidden';
+import { Users } from '../pages/Users';
+import { RoleGuard } from './route-guards/RoleGuard';
 
 export const router = createBrowserRouter([
   {
@@ -26,16 +28,16 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'home',
+        path: routes.home,
         Component: Home,
         children: [
-          { path: routes.experience, Component: WorkExperience },
-          { path: routes.sideProject, Component: SideProjects },
-          { path: routes.contactMe, Component: ContanctMe },
           {
             index: true,
             element: <Navigate to={routes.experience} replace />,
           },
+          { path: routes.experience, Component: WorkExperience },
+          { path: routes.sideProject, Component: SideProjects },
+          { path: routes.contactMe, Component: ContanctMe },
         ],
       },
       {
@@ -49,12 +51,23 @@ export const router = createBrowserRouter([
 
       // Auth protected routes
       {
-        path: routes.messages,
+        path: '*',
         Component: AuthGuard,
         children: [
           {
-            path: '',
+            path: routes.messages,
             children: [{ path: '', Component: Messages }],
+          },
+          // Admin role protected
+          {
+            path: '*',
+            element: <RoleGuard allowedRoles={['admin']} />,
+            children: [
+              {
+                path: routes.users,
+                children: [{ path: '', Component: Users }],
+              },
+            ],
           },
         ],
       },

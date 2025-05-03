@@ -6,4 +6,5 @@ export const routes = {
   register: 'register',
   login: 'login',
   messages: 'messages',
+  users: 'users',
 };
