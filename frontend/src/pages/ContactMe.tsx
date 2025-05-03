@@ -4,12 +4,11 @@ import { useMessageService } from '../services/message';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 import { toast } from 'react-toastify';
 import { ContactMeForm } from '../types/Message';
-
-import { Button } from '../components/Button';
 import { AppError } from '../types/AppError';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { contactMeFormSchema } from '../utils/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../components/shared';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: ContactMeForm = {

@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { EntityTableProps } from '../../types/EntityTableProps';
-import { LoadingSpinner } from '../LoadingSpinner';
-import { Modal } from '../Modal';
 import { Pagination } from '../Pagination';
 import { Message } from '../../types/Message';
 import { MessageDetails } from './MessageDetails';
 import { MessageRow } from './MessageRow';
-import { Button } from '../Button';
 import { HasRole } from '../../decorators/HasRole';
-import { EmptyDataRow } from '../EmptyDataRow';
-import { FillerRow } from '../FillerRow';
+import {
+  Button,
+  EmptyDataRow,
+  FillerRow,
+  LoadingSpinner,
+  Modal,
+} from '../shared';
 
 export const MessageTable: React.FC<EntityTableProps<Message>> = ({
   data: messagesProps,

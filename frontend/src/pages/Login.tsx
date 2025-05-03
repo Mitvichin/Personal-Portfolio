@@ -3,7 +3,6 @@ import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSou
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 import { toast } from 'react-toastify';
 import { loginFormSchema } from '../utils/validation';
-import { Button } from '../components/Button';
 import { useAuthService } from '../services/auth';
 import { useLocation, useNavigate } from 'react-router';
 import { routes } from '../router';
@@ -12,6 +11,7 @@ import { useAuthContext } from '../providers/auth/AuthContext';
 import { AppError } from '../types/AppError';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../components/shared';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: LoginForm = {
