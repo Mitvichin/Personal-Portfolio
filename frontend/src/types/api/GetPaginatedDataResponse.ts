@@ -1,7 +1,5 @@
-import { Message } from '../Message';
-
-export type MessageResponse = {
-  messages: Message[];
+export type GetPaginatedDataResponse<T> = {
+  data: T[];
   pagination: {
     total: number;
     page: number;

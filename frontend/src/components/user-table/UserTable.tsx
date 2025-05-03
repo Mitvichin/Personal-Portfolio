@@ -3,35 +3,33 @@ import { EntityTableProps } from '../../types/EntityTableProps';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { Modal } from '../Modal';
 import { Pagination } from '../Pagination';
-import { Message } from '../../types/Message';
-import { MessageDetails } from './MessageDetails';
-import { MessageRow } from './MessageRow';
-import { Button } from '../Button';
-import { HasRole } from '../../decorators/HasRole';
-import { EmptyDataRow } from '../EmptyDataRow';
+import { User } from '../../types/User';
+import { UserRow } from './UserRow';
 import { FillerRow } from '../FillerRow';
+import { UserDetails } from './UserDetails';
+import { Button } from '../Button';
 
-export const MessageTable: React.FC<EntityTableProps<Message>> = ({
-  data: messagesProps,
+export const UserTable: React.FC<EntityTableProps<User>> = ({
+  data: userProps,
   onPageChange,
   onDelete,
   totalPages,
   limit,
   isLoading = true,
 }) => {
-  const [messages, setMessages] = useState<Message[]>(messagesProps);
-  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [users, setUsers] = useState<User[]>(userProps);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const onModalClose = () => {
     setIsModalOpened(false);
 
-    setTimeout(() => setSelectedMessage(null), 200);
+    setTimeout(() => setSelectedUser(null), 200);
   };
 
-  const onRowClick = (message: Message) => {
-    setSelectedMessage(message);
+  const onRowClick = (message: User) => {
+    setSelectedUser(message);
     setIsModalOpened(true);
   };
 
@@ -40,9 +38,9 @@ export const MessageTable: React.FC<EntityTableProps<Message>> = ({
     const res = await onDelete(id);
     if (res) {
       onModalClose();
-      const index = messages.findIndex((it) => it.id === selectedMessage?.id);
+      const index = users.findIndex((it) => it.id === selectedUser?.id);
 
-      setMessages((prev) => {
+      setUsers((prev) => {
         prev.splice(index, 1);
         return prev;
       });
@@ -51,36 +49,26 @@ export const MessageTable: React.FC<EntityTableProps<Message>> = ({
     setIsDeleteLoading(false);
   };
 
-  const messageElements = messages.map((it) => (
-    <MessageRow key={it.id} data={it} onRowClick={onRowClick} />
+  const userElements = users.map((it) => (
+    <UserRow key={it.id} data={it} onRowClick={onRowClick} />
   ));
 
-  const content =
-    messageElements.length > 0 ? (
-      messageElements
-    ) : (
-      <EmptyDataRow colSpan={4}>
-        <p>You don't have any messages yet!</p>
-      </EmptyDataRow>
-    );
-
   const deleteBtn = (
-    <HasRole roles={['admin']}>
-      <Button
-        isLoading={isDeleteLoading}
-        onClick={() => onMessageDelete(selectedMessage?.id || '')}
-        className="text-white bg-red-400"
-      >
-        Delete
-      </Button>
-    </HasRole>
+    <Button
+      isDisabled={selectedUser?.role === 'admin'}
+      isLoading={isDeleteLoading}
+      onClick={() => onMessageDelete(selectedUser?.id || '')}
+      className="text-white bg-red-400"
+    >
+      Delete
+    </Button>
   );
 
   useEffect(() => {
-    setMessages(messagesProps);
-  }, [messagesProps]);
+    setUsers(userProps);
+  }, [userProps]);
 
-  if (isLoading && messageElements.length === 0)
+  if (isLoading && userElements.length === 0)
     return <LoadingSpinner className="text-blue-600! border-4 size-14" />;
 
   return (
@@ -91,7 +79,7 @@ export const MessageTable: React.FC<EntityTableProps<Message>> = ({
         onClose={onModalClose}
         footerElements={deleteBtn}
       >
-        {selectedMessage && <MessageDetails message={selectedMessage} />}
+        {selectedUser && <UserDetails user={selectedUser} />}
       </Modal>
       <div className="p-1.5 w-full inline-block align-middle">
         <p className="text-xl font-medium mb-1">
@@ -106,41 +94,47 @@ export const MessageTable: React.FC<EntityTableProps<Message>> = ({
               <tr>
                 <th
                   scope="col"
-                  className="w-full xs:w-1/2 sm:w-1/3 md:w-1/4 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                  className="w-1/3 sm:w-1/5 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                >
+                  ID
+                </th>
+                <th
+                  scope="col"
+                  className="w-2/3 sm:w-1/5 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                 >
                   Email
                 </th>
                 <th
                   scope="col"
-                  className="hidden sm:table-cell w-1/4 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                  className="hidden sm:table-cell w-1/5 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                 >
                   First name
                 </th>
                 <th
                   scope="col"
-                  className="hidden sm:table-cell w-1/4 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                  className="hidden sm:table-cell w-1/5 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                 >
                   Last name
                 </th>
                 <th
                   scope="col"
-                  className="hidden xs:table-cell w-1/2 sm:w-1/4 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                  className="hidden sm:table-cell w-1/5 px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
                 >
-                  Message
+                  Role
                 </th>
               </tr>
             </thead>
             <tbody className="border-t-1 border-gray-200">
-              {content}
-              {messages.length >= 1 && (
+              {userElements}
+              {users.length >= 1 && (
                 <FillerRow
-                  dataLength={messages.length}
+                  dataLength={users.length}
                   limit={limit}
-                  colSpan={4}
+                  colSpan={5}
                 />
               )}
               <tr>
-                <td colSpan={4}>
+                <td colSpan={5}>
                   <Pagination total={totalPages} onPageChange={onPageChange} />
                 </td>
               </tr>

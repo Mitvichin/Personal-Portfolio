@@ -8,7 +8,7 @@ export const backendErrorsMap = {
   INTERNAL_SERVER_ERROR: () => 'Something went wrong, please try again later!',
   UNAUTHENTICATED: () => 'Please, login!',
   INVALID_INPUT: () => 'Invalid input, please try again!',
-  ACTION_FORBIDDEN: () => 'This acction is currently forbidden!',
+  ACTION_FORBIDDEN: () => 'This action is currently forbidden!',
   INVALID_QUERY_PARAMETERS: () =>
     'Something went wrong, please try again later!',
   NOT_FOUND: () => 'Resource not found!',

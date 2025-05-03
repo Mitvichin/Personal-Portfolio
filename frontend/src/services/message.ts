@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useAppFetch } from '../hooks/useAppFetch';
 import { ContactMeForm, Message } from '../types/Message';
 import { BASE_API_ULR } from '../utils/constants';
-import { MessageResponse } from '../types/api/MessagesResponse';
+import { GetPaginatedDataResponse } from '../types/api/GetPaginatedDataResponse';
 
 export const useMessageService = () => {
   const appFetch = useAppFetch();
@@ -29,18 +29,16 @@ export const useMessageService = () => {
       );
 
       const {
-        messages,
+        data,
         pagination: { totalPages },
-      }: MessageResponse = await res.json();
+      }: GetPaginatedDataResponse<Message> = await res.json();
 
-      return { messages, totalPages, limit };
+      return { messages: data, totalPages, limit };
     },
     [appFetch],
   );
 
-  const deleteMessage = async (
-    id: string,
-  ): Promise<{ messages: Message[]; totalPages: number; limit: number }> => {
+  const deleteMessage = async (id: string): Promise<{ message: Message }> => {
     const res = await appFetch(`${BASE_API_ULR}/message`, {
       method: 'DELETE',
       body: JSON.stringify({ id }),

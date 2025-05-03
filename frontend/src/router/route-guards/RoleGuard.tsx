@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router';
 import { useAuthContext } from '../../providers/auth/AuthContext';
 import { Role } from '../../types/Roles';
 
-export const AuthGuard: React.FC<{ allowedRoles: Role[] }> = ({
+export const RoleGuard: React.FC<{ allowedRoles: Role[] }> = ({
   allowedRoles,
 }) => {
   const { user, isLoading } = useAuthContext();

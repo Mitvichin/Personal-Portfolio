@@ -10,8 +10,7 @@ const User = {
     );
 
     const roles = await pool.query(
-      `
-      SELECT roles.name
+      `SELECT roles.name
       FROM roles
       WHERE id = $1
       `,
@@ -29,6 +28,27 @@ const User = {
       WHERE email=$1`,
       [email],
     );
+    return rows[0];
+  },
+
+  async getUserById(id) {
+    const { rows } = await pool.query(
+      `SELECT users.*, roles.name as role  
+      FROM users
+      LEFT JOIN roles ON users."roleId" = roles.id
+      WHERE users.id=$1`,
+      [id],
+    );
+    return rows[0];
+  },
+
+  async deleteUserById(id) {
+    const { rows } = await pool.query(
+      `DELETE FROM users
+      WHERE id=$1`,
+      [id],
+    );
+
     return rows[0];
   },
 

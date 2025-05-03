@@ -33,7 +33,7 @@ const messageController = {
     try {
       const { messages, total } = await Message.getMessages(page, limit);
       res.status(200).json({
-        messages,
+        data: messages,
         pagination: {
           total,
           page,

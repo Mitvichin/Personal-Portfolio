@@ -27,8 +27,8 @@ app.use(API_BASE_URL, rateLimitMiddleware);
 app.use(csrfErrorHandler);
 
 // API endpoint
-app.use(`${API_BASE_URL}/message`, csrf.doubleCsrfProtection, userRouter);
-app.use(`${API_BASE_URL}/user`, csrf.doubleCsrfProtection, messageRouter);
+app.use(`${API_BASE_URL}/message`, csrf.doubleCsrfProtection, messageRouter);
+app.use(`${API_BASE_URL}/user`, csrf.doubleCsrfProtection, userRouter);
 app.use(`${API_BASE_URL}/grid`, gridRouter);
 app.use(`${API_BASE_URL}/auth`, csrf.doubleCsrfProtection, authRouter);
 app.use(`${API_BASE_URL}/github`, csrf.doubleCsrfProtection, githubRouter);

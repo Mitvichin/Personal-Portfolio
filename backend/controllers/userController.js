@@ -9,7 +9,7 @@ const userController = {
     try {
       const { users, total } = await User.getUsers(page, limit);
       res.status(200).json({
-        users,
+        data: users,
         pagination: {
           total,
           page,
@@ -17,6 +17,31 @@ const userController = {
           totalPages: Math.ceil(total / limit),
         },
       });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
+    }
+  },
+
+  async deleteUser(req, res) {
+    const { id } = req.body;
+
+    try {
+      const user = await User.getUserById(id);
+
+      if (user.role === 'admin') {
+        return res
+          .status(403)
+          .json({ message: backendErrorsMap.ACTION_FORBIDDEN });
+      }
+
+      await deleteUserById(id);
+
+      if (user !== undefined) {
+        res.status(200).json({ user });
+      } else {
+        res.status(404).json({ message: backendErrorsMap.NOT_FOUND });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });

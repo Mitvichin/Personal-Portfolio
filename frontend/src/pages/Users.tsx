@@ -1,51 +1,51 @@
 import { useCallback, useEffect, useState } from 'react';
-import { MessageTable } from '../components/message-table/MessageTable';
 import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
-import { useMessageService } from '../services/message';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
-import { Message } from '../types/Message';
 import { AppError } from '../types/AppError';
 import { toast } from 'react-toastify';
+import { useUserService } from '../services/user';
+import { User } from '../types/User';
+import { UserTable } from '../components/user-table/UserTable';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
-const MESSAGE_PER_PAGE_LIMIT = 5;
+const USER_PER_PAGE_LIMIT = 5;
 
-export const Messages: React.FC<WithRedirectionToSourceFileProps> =
+export const Users: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
-    const { getMessages, deleteMessage } = useMessageService();
-    const [messages, setMessages] = useState<Message[]>([]);
+    const { getUsers, deleteUser } = useUserService();
+    const [users, setUsers] = useState<User[]>([]);
     const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const onDeleteMessage = async (id: string) => {
+    const onDeleteUser = async (id: string) => {
       try {
-        await deleteMessage(id);
-        loadMessages(currentPage, MESSAGE_PER_PAGE_LIMIT);
-        toast.success('Message deleted!');
+        await deleteUser(id);
+        loadUsers(currentPage, USER_PER_PAGE_LIMIT);
+        toast.success('User deleted!');
         return true;
       } catch (err: unknown) {
         if (err instanceof AppError) {
           if (err.code === 404) {
-            toast.error("We cound't find this message!");
+            toast.error("We cound't find this user!");
           } else {
             toast.error(err.message);
           }
         } else {
-          toast.error('Deleting message failed!');
+          toast.error('Deleting user failed!');
         }
 
         return false;
       }
     };
 
-    const loadMessages = useCallback(
+    const loadUsers = useCallback(
       async (page: number, limit: number) => {
         setCurrentPage(page);
         try {
           setIsLoading(true);
-          const { messages, totalPages } = await getMessages(page, limit);
-          setMessages(messages);
+          const { users, totalPages } = await getUsers(page, limit);
+          setUsers(users);
           setTotalPages(totalPages);
         } catch (err: unknown) {
           if (err instanceof AppError) {
@@ -53,17 +53,17 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
             return;
           }
 
-          toast.error('Loading messages failed!');
+          toast.error('Loading users failed!');
         } finally {
           setIsLoading(false);
         }
       },
-      [getMessages],
+      [getUsers],
     );
 
     useEffect(() => {
-      loadMessages(1, MESSAGE_PER_PAGE_LIMIT);
-    }, [loadMessages]);
+      loadUsers(1, USER_PER_PAGE_LIMIT);
+    }, [loadUsers]);
 
     return (
       <div
@@ -72,13 +72,13 @@ export const Messages: React.FC<WithRedirectionToSourceFileProps> =
           redirectToLineInSourceFile?.(e, CURRENT_FILE_PATH)
         }
       >
-        <MessageTable
-          data={messages}
+        <UserTable
+          data={users}
           totalPages={totalPages}
-          limit={MESSAGE_PER_PAGE_LIMIT}
+          limit={USER_PER_PAGE_LIMIT}
           isLoading={isLoading}
-          onPageChange={(page) => loadMessages(page, MESSAGE_PER_PAGE_LIMIT)}
-          onDelete={onDeleteMessage}
+          onPageChange={(page) => loadUsers(page, USER_PER_PAGE_LIMIT)}
+          onDelete={onDeleteUser}
         />
       </div>
     );
