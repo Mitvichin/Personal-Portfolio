@@ -8,6 +8,8 @@ const backendErrorsMap = require('../utils/errorNames');
 const {
   JWT_TOKEN_NAME,
   JWT_REFRESH_TOKEN_NAME,
+  CSRF_TOKEN_NAME,
+  VISITOR_ID_NAME,
 } = require('../utils/constants');
 
 const authCookiesOptions = {
@@ -16,6 +18,8 @@ const authCookiesOptions = {
   secure: process.env.NODE_ENV === 'production',
   maxAge: 3600000,
 };
+
+const AUTH_TOKEN_DURATION = '30m';
 
 const authController = {
   async register(req, res) {
@@ -75,20 +79,17 @@ const authController = {
         (await bcryptjs.compare(body.password, dbResult.password))
       ) {
         const { id, email, firstName, lastName, role } = dbResult;
+        const tokenInfo = { user: { id, email, firstName, lastName, role } };
 
-        const authToken = jwt.sign(
-          { id, email, firstName, lastName, role },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: '1m',
-          },
-        );
+        const authToken = jwt.sign(tokenInfo, process.env.JWT_SECRET, {
+          expiresIn: AUTH_TOKEN_DURATION,
+        });
 
         const authRefreshToken = jwt.sign(
-          { id, email, firstName, lastName, role },
+          tokenInfo,
           process.env.JWT_REFRESH_SECRET,
           {
-            expiresIn: '5m',
+            expiresIn: '1d',
           },
         );
 
@@ -100,7 +101,8 @@ const authController = {
           authCookiesOptions,
         );
 
-        res.status(200).json({ id, firstName, lastName, email, role });
+        res.clearCookie(CSRF_TOKEN_NAME);
+        res.status(200).json(tokenInfo.user);
         return;
       } else {
         res.status(400).json({ message: backendErrorsMap.INVALID_CREDENTIALS });
@@ -114,6 +116,7 @@ const authController = {
   async logout(_, res) {
     res.clearCookie(JWT_TOKEN_NAME);
     res.clearCookie(JWT_REFRESH_TOKEN_NAME);
+    res.clearCookie(CSRF_TOKEN_NAME);
     res.status(204).send();
   },
 
@@ -126,19 +129,15 @@ const authController = {
         .json({ message: backendErrorsMap.UNAUTHENTICATED });
     }
 
-    jwt.verify(
-      token,
-      process.env.JWT_SECRET,
-      (err, { id, firstName, lastName, email, role } = {}) => {
-        if (err || !id || !email || !firstName || !lastName || !role) {
-          return res
-            .status(401)
-            .json({ message: backendErrorsMap.UNAUTHENTICATED });
-        }
+    jwt.verify(token, process.env.JWT_SECRET, (err, { user } = {}) => {
+      if (err || !user) {
+        return res
+          .status(401)
+          .json({ message: backendErrorsMap.UNAUTHENTICATED });
+      }
 
-        res.json({ id, firstName, lastName, email, role });
-      },
-    );
+      res.json(user);
+    });
   },
 
   async refreshAuthToken(req, res) {
@@ -153,22 +152,19 @@ const authController = {
     jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
-      (err, { id, email, firstName, lastName, role } = {}) => {
-        if (err || !id || !email || !firstName || !lastName || !role) {
+      (err, { user } = {}) => {
+        if (err || !user) {
           return res
             .status(401)
             .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
         }
 
-        const newAccessToken = jwt.sign(
-          { id, email, firstName, lastName, role },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: '10m',
-          },
-        );
+        const newAccessToken = jwt.sign({ user }, process.env.JWT_SECRET, {
+          expiresIn: AUTH_TOKEN_DURATION,
+        });
 
         res.cookie(JWT_TOKEN_NAME, newAccessToken, authCookiesOptions);
+        res.clearCookie(CSRF_TOKEN_NAME);
 
         return res.status(200).json();
       },
@@ -177,11 +173,20 @@ const authController = {
 
   async getCSRF(req, res) {
     try {
+      const token = req.cookies[JWT_TOKEN_NAME];
+      const visitor = req.cookies[VISITOR_ID_NAME];
+
+      if (!token && !visitor) {
+        const id = crypto.randomUUID();
+        res.cookie(VISITOR_ID_NAME, id, authCookiesOptions);
+        req.cookies[VISITOR_ID_NAME] = id;
+      }
+
       const csrfToken = csrf.generateToken(req, res);
       return res.json({ csrfToken });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
+      res.status(403).json({ message: backendErrorsMap.CSRF_INVALID_TOKEN });
     }
   },
 };
