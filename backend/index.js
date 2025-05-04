@@ -1,3 +1,5 @@
+require('dotenv').config({ path: './.env' });
+require('./cleanup.js');
 const { API_BASE_URL } = require('./utils/constants.js');
 const backendErrorsMap = require('./utils/errorNames');
 const express = require('express');
@@ -10,10 +12,11 @@ const userRouter = require('./routes/User.route.js');
 const gridRouter = require('./routes/Grid.route.js');
 const authRouter = require('./routes/Auth.route.js');
 const githubRouter = require('./routes/Github.route.js');
-const rateLimitMiddleware = require('./middlewares/rateLimit.js');
-const cookieParser = require('cookie-parser');
 const csrf = require('./config/csrf.js');
-const csrfErrorHandler = require('./middlewares/csrfErrorHandler.js');
+const rateLimitMiddleware = require('./middlewares/rateLimit.js');
+const cookieParserMiddleware = require('cookie-parser');
+const csrfErrorMiddleware = require('./middlewares/csrfErrorHandler.js');
+const loggingMiddleware = require('./middlewares/logging.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,7 +24,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(helmet());
 app.use(cors(corsConfig));
-app.use(cookieParser());
+app.use(cookieParserMiddleware());
 app.use(express.json());
 app.use(API_BASE_URL, rateLimitMiddleware);
 
@@ -36,7 +39,8 @@ app.use(`${API_BASE_URL}/*`, (req, res) => {
   return;
 });
 
-app.use(csrfErrorHandler);
+app.use(csrfErrorMiddleware);
+app.use(loggingMiddleware);
 
 app.use(express.static(path.join(__dirname, 'public')));
 

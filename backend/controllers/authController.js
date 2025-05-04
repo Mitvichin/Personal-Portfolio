@@ -11,6 +11,7 @@ const {
   CSRF_TOKEN_NAME,
   VISITOR_ID_NAME,
 } = require('../utils/constants');
+const { logger } = require('../logger/winston');
 
 const authCookiesOptions = {
   httpOnly: true,
@@ -63,7 +64,7 @@ const authController = {
           .json({ message: dbErrorsMap[error.code], key: 'email' });
         return;
       }
-      console.log(error);
+      logger.log(error);
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
@@ -94,7 +95,6 @@ const authController = {
             expiresIn: '1d',
           },
         );
-
         res.cookie(JWT_TOKEN_NAME, authToken, authCookiesOptions);
 
         res.cookie(
@@ -110,7 +110,8 @@ const authController = {
         res.status(400).json({ message: backendErrorsMap.INVALID_CREDENTIALS });
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
+
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
@@ -139,7 +140,9 @@ const authController = {
 
         try {
           user = await User.getUserById(id);
-        } catch (error) {}
+        } catch (error) {
+          logger.error(error);
+        }
 
         if (err || !user) {
           return res
@@ -170,7 +173,9 @@ const authController = {
 
         try {
           user = await User.getUserById(id);
-        } catch (error) {}
+        } catch (error) {
+          logger.error(error);
+        }
 
         if (err || !user) {
           return res
@@ -211,7 +216,9 @@ const authController = {
       res.set(authRequestCacheHeaders);
       return res.json({ csrfToken });
     } catch (error) {
-      console.error(error);
+      error.message = backendErrorsMap.INTERNAL_SERVER_ERROR;
+      logger.error(error);
+
       res.status(403).json({ message: backendErrorsMap.CSRF_INVALID_TOKEN });
     }
   },

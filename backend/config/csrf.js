@@ -3,9 +3,8 @@ const {
   JWT_TOKEN_NAME,
   CSRF_TOKEN_NAME,
   VISITOR_ID_NAME,
+  IS_PROD,
 } = require('../utils/constants');
-
-const isProd = process.env.NODE_ENV === 'production';
 
 const doubleCsrfOptions = {
   getSecret: () => process.env.CSRF_SECRET || 'default_secret',
@@ -13,7 +12,7 @@ const doubleCsrfOptions = {
   cookieOptions: {
     httpOnly: true,
     sameSite: 'Strict',
-    secure: isProd,
+    secure: IS_PROD,
   },
   getSessionIdentifier: (req) =>
     req.cookies[JWT_TOKEN_NAME] || req.cookies[VISITOR_ID_NAME],
