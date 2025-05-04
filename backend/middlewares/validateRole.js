@@ -5,7 +5,9 @@ const requireRole = (allowedRoles) => {
     const user = req.user;
 
     if (!user) {
-      return res.status(401).json({ message: backendErrorsMap.UNAUTHENTICATED});
+      return res
+        .status(401)
+        .json({ message: backendErrorsMap.UNAUTHENTICATED });
     }
 
     if (!allowedRoles.includes(user.role)) {

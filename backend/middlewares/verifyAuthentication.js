@@ -8,7 +8,7 @@ const verifyAuthentication = (req, res, next) => {
   if (!token)
     return res.status(401).json({ message: backendErrorsMap.UNAUTHENTICATED });
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, { user }) => {
     if (err) {
       return res
         .status(401)
