@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { Button } from '../../components/Button';
+import { Button } from '../../components/shared';
 
-export const NotFound: React.FC = () => {
+const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -30,3 +30,5 @@ export const NotFound: React.FC = () => {
     </div>
   );
 };
+
+export default NotFound;

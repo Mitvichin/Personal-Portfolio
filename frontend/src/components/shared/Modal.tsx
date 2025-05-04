@@ -1,9 +1,9 @@
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { APP_CONTAINER_ID } from '../utils/constants';
+import { APP_CONTAINER_ID } from '../../utils/constants';
 import ReactDOM from 'react-dom';
-import { ModalProps } from '../types/ModalProps';
+import { ModalProps } from '../../types/ModalProps';
 import { Button } from './Button';
-import XIcon from '../assets/x-icon.svg?react';
+import XIcon from '../../assets/x-icon.svg?react';
 
 export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
   children,

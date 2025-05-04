@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { Button } from '../../components/Button';
+import { Button } from '../../components/shared';
 
-export const Forbidden: React.FC = () => {
+const Forbidden: React.FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -30,3 +30,5 @@ export const Forbidden: React.FC = () => {
     </div>
   );
 };
+
+export default Forbidden;

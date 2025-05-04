@@ -10,7 +10,7 @@ const userRouter = require('./routes/User.route.js');
 const gridRouter = require('./routes/Grid.route.js');
 const authRouter = require('./routes/Auth.route.js');
 const githubRouter = require('./routes/Github.route.js');
-const rateLimitMiddleware = require('./middlewares/rate-limit.js');
+const rateLimitMiddleware = require('./middlewares/rateLimit.js');
 const cookieParser = require('cookie-parser');
 const csrf = require('./config/csrf.js');
 const csrfErrorHandler = require('./middlewares/csrfErrorHandler.js');
@@ -24,7 +24,6 @@ app.use(cors(corsConfig));
 app.use(cookieParser());
 app.use(express.json());
 app.use(API_BASE_URL, rateLimitMiddleware);
-app.use(csrfErrorHandler);
 
 // API endpoint
 app.use(`${API_BASE_URL}/message`, csrf.doubleCsrfProtection, messageRouter);
@@ -37,6 +36,8 @@ app.use(`${API_BASE_URL}/*`, (req, res) => {
   return;
 });
 
+app.use(csrfErrorHandler);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle requests by serving index.html for all routes
@@ -44,7 +45,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log('Server is running on port ' + PORT);
 });

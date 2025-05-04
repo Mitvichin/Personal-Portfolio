@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { EntityTableProps } from '../../types/EntityTableProps';
-import { LoadingSpinner } from '../LoadingSpinner';
-import { Modal } from '../Modal';
 import { Pagination } from '../Pagination';
 import { User } from '../../types/User';
 import { UserRow } from './UserRow';
-import { FillerRow } from '../FillerRow';
 import { UserDetails } from './UserDetails';
-import { Button } from '../Button';
+import { Button, LoadingSpinner, Modal, FillerRow } from '../shared';
 
 export const UserTable: React.FC<EntityTableProps<User>> = ({
   data: userProps,

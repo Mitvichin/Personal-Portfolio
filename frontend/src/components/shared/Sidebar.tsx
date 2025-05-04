@@ -8,7 +8,8 @@ import LeftArrowIcon from '../../assets/left-arrow.svg?react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { HasRole } from '../../decorators/HasRole';
-import { AppNavLink, Button } from '../shared';
+import { AppNavLink } from './AppNavLink';
+import { Button } from './Button';
 
 export const Sidebar: React.FC = () => {
   const { logout } = useAuthService();

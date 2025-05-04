@@ -1,5 +1,5 @@
 import { NavLink, NavLinkProps } from 'react-router';
-import { GET_BUTTON_CLASS_NAME } from '../utils/constants';
+import { GET_BUTTON_CLASS_NAME } from '../../utils/constants';
 
 export const AppNavLink: React.FC<
   Omit<NavLinkProps, 'className' | 'viewTransition'> & { className?: string }

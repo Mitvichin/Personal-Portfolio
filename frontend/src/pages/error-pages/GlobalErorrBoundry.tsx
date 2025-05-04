@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { Button } from '../../components/Button';
+import { Button } from '../../components/shared';
 
-export const GlobalErorrBoundry: React.FC = () => {
+const GlobalErorrBoundry: React.FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -31,3 +31,5 @@ export const GlobalErorrBoundry: React.FC = () => {
     </div>
   );
 };
+
+export default GlobalErorrBoundry;

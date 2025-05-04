@@ -2,17 +2,19 @@ import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { User } from '../../types/User';
 import { useAuthService } from '../../services/auth';
+import { getCSRFToken } from '../../services/getCSRFToken';
+import { toast } from 'react-toastify';
+import { AppError } from '../../types/AppError';
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { verifyAuth, getCSRF } = useAuthService();
+  const { verifyAuth } = useAuthService();
   const [user, setUser] = useState<User | null>(null);
-  const [csrfToken, setCSRFToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const deleteUser = useMemo(() => () => setUser(null), []);
 
   useEffect(() => {
-    const verifyAth = async () => {
+    const verifyAuthentication = async () => {
       try {
         setIsLoading(true);
         const user = await verifyAuth();
@@ -24,26 +26,28 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }
     };
 
-    verifyAth();
+    verifyAuthentication();
   }, [verifyAuth]);
 
   useEffect(() => {
-    const getCSRFToken = async () => {
+    const retrieveCSRFToken = async () => {
       try {
-        const data = await getCSRF();
-        setCSRFToken(data.csrfToken);
-      } catch {
-        console.error('CSRF token retrieval failed');
+        await getCSRFToken();
+      } catch (err: unknown) {
+        if (err instanceof AppError) {
+          toast.error(err.message);
+          return;
+        }
+
+        toast.error('Something went wrong! Please try again later!');
       }
     };
 
-    getCSRFToken();
-  }, [getCSRF]);
+    retrieveCSRFToken();
+  }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, deleteUser, csrfToken, isLoading }}
-    >
+    <AuthContext.Provider value={{ user, setUser, deleteUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

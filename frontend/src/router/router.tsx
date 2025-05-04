@@ -1,25 +1,31 @@
 import { createBrowserRouter, Navigate } from 'react-router';
-import { ContanctMe } from '../pages/ContactMe';
-import { SideProjects } from '../pages/SideProjects';
-import { WorkExperience } from '../pages/WorkExperience';
 import { routes } from './routes';
-import { Register } from '../pages/Register';
-import { Home } from '../pages/Home';
-import { Login } from '../pages/Login';
-import { Messages } from '../pages/Messages';
 import { AuthGuard } from './route-guards/AuthGuard';
 import { SidebarLayout } from '../components/layouts/SidebarLayout';
-import { GlobalErorrBoundry } from '../pages/error-pages/GlobalErorrBoundry';
-import { NotFound } from '../pages/error-pages/NotFound';
-import { Forbidden } from '../pages/error-pages/Forbidden';
-import { Users } from '../pages/Users';
 import { RoleGuard } from './route-guards/RoleGuard';
+import { lazy, ReactNode, Suspense } from 'react';
+
+const ContanctMe = lazy(() => import('../pages/ContactMe'));
+const SideProjects = lazy(() => import('../pages/SideProjects'));
+const WorkExperience = lazy(() => import('../pages/WorkExperience'));
+const Forbidden = lazy(() => import('../pages/error-pages/Forbidden'));
+const NotFound = lazy(() => import('../pages/error-pages/NotFound'));
+const Users = lazy(() => import('../pages/Users'));
+const Messages = lazy(() => import('../pages/Messages'));
+const Login = lazy(() => import('../pages/Login'));
+const Register = lazy(() => import('../pages/Register'));
+const Home = lazy(() => import('../pages/Home'));
+const GlobalErorrBoundry = lazy(
+  () => import('../pages/error-pages/GlobalErorrBoundry'),
+);
+
+const withSuspense = (component: ReactNode) => <Suspense>{component}</Suspense>;
 
 export const router = createBrowserRouter([
   {
     path: '/',
     Component: SidebarLayout,
-    errorElement: <GlobalErorrBoundry />,
+    errorElement: withSuspense(<GlobalErorrBoundry />),
     children: [
       {
         index: true,
