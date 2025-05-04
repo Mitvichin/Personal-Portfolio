@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.use(verifyAuthentication, validateRole('admin'));
 router.get('/', userController.getUsers);
-router.delete('/', userController.deleteUser);
+router.delete('/', userController.deleteUserById);
 
 module.exports = router;

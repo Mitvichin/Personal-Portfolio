@@ -22,7 +22,7 @@ const User = {
 
   async getUserByEmail(email) {
     const { rows } = await pool.query(
-      `SELECT users.*, roles.name as role  
+      `SELECT users.id, users."firstName", users."lastName", users.email, users.password, roles.name as role  
       FROM users
       LEFT JOIN roles ON users."roleId" = roles.id
       WHERE email=$1`,
@@ -33,7 +33,7 @@ const User = {
 
   async getUserById(id) {
     const { rows } = await pool.query(
-      `SELECT users.*, roles.name as role  
+      `SELECT users.id, users."firstName", users."lastName", users.email, roles.name as role  
       FROM users
       LEFT JOIN roles ON users."roleId" = roles.id
       WHERE users.id=$1`,
@@ -56,7 +56,7 @@ const User = {
     const offset = (page - 1) * limit;
 
     const { rows } = await pool.query(
-      `SELECT users.*, roles.name as role 
+      `SELECT users.id, users."firstName", users."lastName", users.email, roles.name as role 
       FROM users 
       LEFT JOIN roles on users."roleId" = roles.id
       LIMIT $1 OFFSET $2`,

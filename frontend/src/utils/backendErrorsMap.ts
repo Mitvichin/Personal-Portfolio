@@ -14,6 +14,7 @@ export const backendErrorsMap = {
   NOT_FOUND: () => 'Resource not found!',
   CSRF_INVALID_TOKEN: () =>
     'Your session may have expired! Please, refresh the page!',
+  INSUFFICIENT_ROLE: () => "You don't have the required access level!",
 };
 
 export const backendErrorsNames = {
@@ -28,4 +29,5 @@ export const backendErrorsNames = {
   NOT_FOUND: 'NOT_FOUND',
   INVALID_REFRESH_TOKEN: 'INVALID_REFRESH_TOKEN',
   CSRF_INVALID_TOKEN: 'CSRF_INVALID_TOKEN',
+  INSUFFICIENT_ROLE: 'INSUFFICIENT_ROLE',
 };

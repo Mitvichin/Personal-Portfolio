@@ -19,6 +19,12 @@ const authCookiesOptions = {
   maxAge: 3600000,
 };
 
+const authRequestCacheHeaders = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate',
+  Pragma: 'no-cache',
+  Expires: '0',
+};
+
 const AUTH_TOKEN_DURATION = '30m';
 
 const authController = {
@@ -72,14 +78,10 @@ const authController = {
     }
 
     try {
-      const dbResult = await User.getUserByEmail(body.email);
+      const { password, ...user } = await User.getUserByEmail(body.email);
 
-      if (
-        dbResult &&
-        (await bcryptjs.compare(body.password, dbResult.password))
-      ) {
-        const { id, email, firstName, lastName, role } = dbResult;
-        const tokenInfo = { user: { id, email, firstName, lastName, role } };
+      if (user && (await bcryptjs.compare(body.password, password))) {
+        const tokenInfo = { user: { id: user.id, role: user.role } };
 
         const authToken = jwt.sign(tokenInfo, process.env.JWT_SECRET, {
           expiresIn: AUTH_TOKEN_DURATION,
@@ -102,7 +104,7 @@ const authController = {
         );
 
         res.clearCookie(CSRF_TOKEN_NAME);
-        res.status(200).json(tokenInfo.user);
+        res.status(200).json(user);
         return;
       } else {
         res.status(400).json({ message: backendErrorsMap.INVALID_CREDENTIALS });
@@ -129,15 +131,26 @@ const authController = {
         .json({ message: backendErrorsMap.UNAUTHENTICATED });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, { user } = {}) => {
-      if (err || !user) {
-        return res
-          .status(401)
-          .json({ message: backendErrorsMap.UNAUTHENTICATED });
-      }
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET,
+      async (err, { user: { id } } = {}) => {
+        let user = undefined;
 
-      res.json(user);
-    });
+        try {
+          user = await User.getUserById(id);
+        } catch (error) {}
+
+        if (err || !user) {
+          return res
+            .status(401)
+            .json({ message: backendErrorsMap.UNAUTHENTICATED });
+        }
+
+        res.set(authRequestCacheHeaders);
+        res.json(user);
+      },
+    );
   },
 
   async refreshAuthToken(req, res) {
@@ -152,17 +165,28 @@ const authController = {
     jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
-      (err, { user } = {}) => {
+      async (err, { user: { id } } = {}) => {
+        let user = undefined;
+
+        try {
+          user = await User.getUserById(id);
+        } catch (error) {}
+
         if (err || !user) {
           return res
             .status(401)
             .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
         }
 
-        const newAccessToken = jwt.sign({ user }, process.env.JWT_SECRET, {
-          expiresIn: AUTH_TOKEN_DURATION,
-        });
+        const newAccessToken = jwt.sign(
+          { user: { id, role: user.role } },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: AUTH_TOKEN_DURATION,
+          },
+        );
 
+        res.set(authRequestCacheHeaders);
         res.cookie(JWT_TOKEN_NAME, newAccessToken, authCookiesOptions);
         res.clearCookie(CSRF_TOKEN_NAME);
 
@@ -183,6 +207,8 @@ const authController = {
       }
 
       const csrfToken = csrf.generateToken(req, res);
+
+      res.set(authRequestCacheHeaders);
       return res.json({ csrfToken });
     } catch (error) {
       console.error(error);
