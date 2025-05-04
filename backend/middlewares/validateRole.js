@@ -13,7 +13,7 @@ const requireRole = (allowedRoles) => {
     if (!allowedRoles.includes(user.role)) {
       return res
         .status(403)
-        .json({ message: backendErrorsMap.ACTION_FORBIDDEN });
+        .json({ message: backendErrorsMap.INSUFFICIENT_ROLE });
     }
 
     next();

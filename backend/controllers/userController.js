@@ -23,7 +23,7 @@ const userController = {
     }
   },
 
-  async deleteUser(req, res) {
+  async deleteUserById(req, res) {
     const { id } = req.body;
 
     try {
@@ -35,7 +35,7 @@ const userController = {
           .json({ message: backendErrorsMap.ACTION_FORBIDDEN });
       }
 
-      await deleteUserById(id);
+      await User.deleteUserById(id);
 
       if (user !== undefined) {
         res.status(200).json({ user });
