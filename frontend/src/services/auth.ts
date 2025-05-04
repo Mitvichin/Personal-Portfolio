@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { useAppFetch } from '../hooks/useAppFetch';
 import { LoginForm } from '../types/LoginForm';
 import { RegisterForm } from '../types/RegisterForm';
 import { User } from '../types/User';
 import { BASE_API_ULR } from '../utils/constants';
+import { getCSRFToken } from './getCSRFToken';
 
 export const useAuthService = () => {
   const appFetch = useAppFetch();
@@ -23,6 +24,8 @@ export const useAuthService = () => {
       body: JSON.stringify(data),
     });
 
+    await getCSRFToken();
+
     return res.json();
   };
 
@@ -30,29 +33,17 @@ export const useAuthService = () => {
     await appFetch(`${BASE_API_ULR}/auth/logout`, {
       method: 'GET',
     });
+
+    await getCSRFToken();
   };
 
-  const verifyAuth = useMemo(
-    () => async (): Promise<User> => {
-      const res = await appFetch(`${BASE_API_ULR}/auth/verify-authentication`, {
-        method: 'GET',
-      });
+  const verifyAuth = useCallback(async (): Promise<User> => {
+    const res = await appFetch(`${BASE_API_ULR}/auth/verify-authentication`, {
+      method: 'GET',
+    });
 
-      return res.json();
-    },
-    [appFetch],
-  );
+    return res.json();
+  }, [appFetch]);
 
-  const getCSRF = useMemo(
-    () => async (): Promise<{ csrfToken: string }> => {
-      const res = await appFetch(`${BASE_API_ULR}/auth/csrf-token`, {
-        method: 'GET',
-      });
-
-      return res.json();
-    },
-    [appFetch],
-  );
-
-  return { registerUser, login, logout, verifyAuth, getCSRF };
+  return { registerUser, login, logout, verifyAuth };
 };

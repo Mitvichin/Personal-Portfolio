@@ -7,12 +7,15 @@ import {
 import { useAuthContext } from '../providers/auth/AuthContext';
 import { AppError } from '../types/AppError';
 import { csrfProtectedMethods } from '../config';
-import { BASE_API_ULR } from '../utils/constants';
+import {
+  BASE_API_ULR,
+  CSRF_TOKEN_COOKIE_NAME,
+  UNKNOW_ERROR_MESSAGE,
+} from '../utils/constants';
+import { getCSRFToken } from '../services/getCSRFToken';
 
 export const useAppFetch = () => {
-  const { deleteUser, csrfToken } = useAuthContext();
-  const unknownErrorMsg = 'Something went wrong! Try again later!';
-
+  const { deleteUser } = useAuthContext();
   const appFetch = useCallback(
     async (
       url: string,
@@ -26,7 +29,7 @@ export const useAppFetch = () => {
       }
 
       if (csrfProtectedMethods[init.method || '']) {
-        headers.set('x-csrf-token', csrfToken);
+        headers.set('x-csrf-token', window[CSRF_TOKEN_COOKIE_NAME] || '');
       }
 
       try {
@@ -51,6 +54,8 @@ export const useAppFetch = () => {
                     res.status,
                     backendErrorsMap.UNAUTHENTICATED(),
                   );
+                } else {
+                  await getCSRFToken();
                 }
 
                 return appFetch(url, init, true);
@@ -65,7 +70,7 @@ export const useAppFetch = () => {
             );
           }
 
-          throw new AppError(res.status, unknownErrorMsg);
+          throw new AppError(res.status, UNKNOW_ERROR_MESSAGE);
         }
 
         return res;
@@ -74,10 +79,10 @@ export const useAppFetch = () => {
           throw error;
         }
 
-        throw new AppError(500, unknownErrorMsg);
+        throw new AppError(500, UNKNOW_ERROR_MESSAGE);
       }
     },
-    [csrfToken, deleteUser],
+    [deleteUser],
   );
 
   return appFetch;

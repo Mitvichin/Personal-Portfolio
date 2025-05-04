@@ -1,4 +1,7 @@
 /// <reference types="vite/client" />
+
+import { CSRF_TOKEN_COOKIE_NAME } from './utils/constants';
+
 declare module '*.svg?react' {
   import * as React from 'react';
   const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -8,4 +11,10 @@ declare module '*.svg?react' {
 declare module '*.svg' {
   const content: string;
   export default content;
+}
+
+declare global {
+  interface Window {
+    [CSRF_TOKEN_COOKIE_NAME]?: string;
+  }
 }

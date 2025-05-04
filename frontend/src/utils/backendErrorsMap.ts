@@ -12,6 +12,8 @@ export const backendErrorsMap = {
   INVALID_QUERY_PARAMETERS: () =>
     'Something went wrong, please try again later!',
   NOT_FOUND: () => 'Resource not found!',
+  CSRF_INVALID_TOKEN: () =>
+    'Your session may have expired! Please, refresh the page!',
 };
 
 export const backendErrorsNames = {
@@ -25,4 +27,5 @@ export const backendErrorsNames = {
   INVALID_QUERY_PARAMETERS: 'INVALID_QUERY_PARAMETERS',
   NOT_FOUND: 'NOT_FOUND',
   INVALID_REFRESH_TOKEN: 'INVALID_REFRESH_TOKEN',
+  CSRF_INVALID_TOKEN: 'CSRF_INVALID_TOKEN',
 };
