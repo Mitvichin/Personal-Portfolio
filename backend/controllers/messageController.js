@@ -28,8 +28,8 @@ const messageController = {
   },
 
   async getMessages(req, res) {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query?.page) || 1;
+    const limit = parseInt(req.query?.limit) || 10;
 
     try {
       const { messages, total } = await Message.getMessages(page, limit);

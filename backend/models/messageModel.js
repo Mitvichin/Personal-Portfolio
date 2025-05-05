@@ -10,7 +10,7 @@ const Message = {
     return rows[0];
   },
 
-  async getMessages(page, limit) {
+  async getMessages(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
 
     const { rows } = await pool.query(

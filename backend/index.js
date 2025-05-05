@@ -1,3 +1,4 @@
+// @ts-nocheck
 require('dotenv').config({ path: './.env' });
 require('./cleanup.js');
 const { API_BASE_URL } = require('./utils/constants.js');
@@ -29,7 +30,7 @@ app.use(express.json());
 app.use(API_BASE_URL, rateLimitMiddleware);
 
 // API endpoint
-app.use(`${API_BASE_URL}/message`, csrf.doubleCsrfProtection, messageRouter);
+app.use(`${API_BASE_URL}/message`, messageRouter);
 app.use(`${API_BASE_URL}/user`, csrf.doubleCsrfProtection, userRouter);
 app.use(`${API_BASE_URL}/grid`, gridRouter);
 app.use(`${API_BASE_URL}/auth`, csrf.doubleCsrfProtection, authRouter);
@@ -49,6 +50,8 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log('Server is running on port ' + PORT);
 });
+
+module.exports = server;

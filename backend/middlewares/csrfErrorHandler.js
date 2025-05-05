@@ -1,6 +1,8 @@
 const backendErrorsMap = require('../utils/errorNames');
 
 const { invalidCsrfTokenError } = require('../config/csrf');
+const { CSRF_TOKEN_NAME } = require('../utils/constants');
+
 const csrfErrorHandler = (error, req, res, next) => {
   if (error === invalidCsrfTokenError) {
     res.clearCookie(CSRF_TOKEN_NAME);
