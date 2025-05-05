@@ -1,3 +1,4 @@
+const { logger, getLogMetaData } = require('../logger/winston');
 const backendErrorsMap = require('../utils/errorNames');
 const ROOT_FOLDER_NAME = 'frontend';
 
@@ -63,7 +64,7 @@ const githubController = {
 
       res.status(201).json(newGrid);
     } catch (error) {
-      console.error(error);
+      logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },

@@ -1,11 +1,9 @@
 /// <reference types="vite/client" />
-declare module '*.svg?react' {
-  import * as React from 'react';
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+/// <reference types="vite-plugin-svgr/client" />
 
-declare module '*.svg' {
-  const content: string;
-  export default content;
+import { CSRF_TOKEN_COOKIE_NAME } from './utils/constants';
+declare global {
+  interface Window {
+    [CSRF_TOKEN_COOKIE_NAME]?: string;
+  }
 }

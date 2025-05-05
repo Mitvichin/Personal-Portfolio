@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { withRedirectionToSourceFiles } from '../decorators/withRedirectionToSourceFile';
-import { useContactMeService } from '../services/contact-me';
+import { useMessageService } from '../services/message';
 import { WithRedirectionToSourceFileProps } from '../types/WithRedirectionToSourceFileProps';
 import { toast } from 'react-toastify';
-import { ContactMeForm } from '../types/ContactMeForm';
-
-import { Button } from '../components/Button';
+import { ContactMeForm } from '../types/Message';
 import { AppError } from '../types/AppError';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { contactMeFormSchema } from '../utils/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../components/shared';
 
 const CURRENT_FILE_PATH = new URL(import.meta.url).pathname;
 const intialFormState: ContactMeForm = {
@@ -19,9 +18,9 @@ const intialFormState: ContactMeForm = {
   message: '',
 };
 
-export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
+const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
   withRedirectionToSourceFiles(({ redirectToLineInSourceFile }) => {
-    const { sendMessage } = useContactMeService();
+    const { sendMessage } = useMessageService();
     const [isLoading, setIsLoading] = useState(false);
 
     const {
@@ -71,7 +70,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('firstName')}
                 type="text"
                 id="firstName"
-                className={`bg-gray-50 border border-gray-500 ${errors.firstName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.firstName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="John"
               />
               {errors.firstName && (
@@ -91,7 +90,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
                 {...register('lastName')}
                 type="text"
                 id="lastName"
-                className={`bg-gray-50 border border-gray-500 ${errors.lastName?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
+                className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.lastName?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="Doe"
               />
               {errors.lastName && (
@@ -112,7 +111,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
               {...register('email')}
               type="email"
               id="email"
-              className={`bg-gray-50 border border-gray-500 ${errors.email?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 `}
+              className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.email?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 `}
               placeholder="john.doe@company.com"
             />
             {errors.email && (
@@ -131,7 +130,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
             <textarea
               {...register('message')}
               id="message"
-              className={`bg-gray-50 border border-gray-500 ${errors.message?.message ? 'outline-red-400 border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 resize-none h-50 max-h-[150px] `}
+              className={`bg-white border border-gray-300 focus-visible:outline-blue-600 ${errors.message?.message ? 'focus-visible:outline-none border-red-400' : ''} text-gray-900 text-sm rounded-lg block w-full p-2.5 resize-none h-50 max-h-[150px] `}
               placeholder="Message to Ilia Mitvichin"
             />
             {errors.message && (
@@ -145,7 +144,7 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
           <Button
             isDisabled={!isFormValid}
             onClick={handleSubmit(onSubmit)}
-            className="self-start px-5 py-2.5 bg-blue-700 hover:bg-blue-800 text-white focus:ring-blue-300"
+            className="self-start px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-300"
           >
             Submit
           </Button>
@@ -154,3 +153,5 @@ export const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
       </form>
     );
   });
+
+export default ContanctMe;

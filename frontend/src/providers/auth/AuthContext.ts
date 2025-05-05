@@ -3,7 +3,7 @@ import { AuthContextProps } from '../../types/AuthContextProps';
 
 export const AuthContext = createContext<AuthContextProps>({
   user: null,
-  csrfToken: '',
+  isLoading: true,
   setUser: () => {},
   deleteUser: () => {},
 });

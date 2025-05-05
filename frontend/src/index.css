@@ -1,5 +1,15 @@
 @import 'tailwindcss';
 
+@theme {
+  --breakpoint-xs: 25rem;
+}
+
+@layer utilities {
+  .hide-children > * {
+    @apply invisible;
+  }
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -9,4 +19,12 @@
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply box-border;
+  }
 }

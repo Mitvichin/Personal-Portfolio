@@ -2,7 +2,7 @@ import { User } from './User';
 
 export type AuthContextProps = {
   user: User | null;
-  csrfToken: string;
+  isLoading: boolean;
   setUser: (user: User) => void;
   deleteUser: () => void;
 };
