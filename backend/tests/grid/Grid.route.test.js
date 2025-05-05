@@ -1,5 +1,5 @@
 const request = require('supertest');
-const server = require('../../');
+const app = require('../../app');
 const pool = require('../../config/db');
 const createTables = require('../../migrations/init_db');
 const { API_BASE_URL } = require('../../utils/constants');
@@ -12,7 +12,6 @@ describe('Grid route', () => {
 
   afterAll(async () => {
     await pool.end();
-    server.close();
   });
 
   it('should save gird into db', async () => {
@@ -21,9 +20,7 @@ describe('Grid route', () => {
       ['', 'e', '', ''],
     ];
 
-    const res = await request(server)
-      .post(`${API_BASE_URL}/grid`)
-      .send({ grid });
+    const res = await request(app).post(`${API_BASE_URL}/grid`).send({ grid });
 
     expect(res.status).toBe(201);
 
@@ -42,7 +39,7 @@ describe('Grid route', () => {
   it('should return 400 for invalid grid', async () => {
     const invalidGrid = [];
 
-    const res = await request(server)
+    const res = await request(app)
       .post(`${API_BASE_URL}/grid`)
       .send({ grid: invalidGrid });
 

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const server = require('../../');
+const app = require('../../app');
 const pool = require('../../config/db');
 const jwt = require('jsonwebtoken');
 const createTables = require('../../migrations/init_db');
@@ -24,7 +24,6 @@ describe('Message route', () => {
   afterAll(async () => {
     await deleteUsersAndRoles(pool);
     await pool.end();
-    server.close();
   });
 
   it('should create a new message and return 201', async () => {
@@ -35,7 +34,7 @@ describe('Message route', () => {
       message: 'Hello, world!',
     };
 
-    const res = await request(server)
+    const res = await request(app)
       .post(`${API_BASE_URL}/message`)
       .set('Cookie', `${JWT_TOKEN_NAME}=${adminToken}`)
       .send(newMessage);
@@ -55,7 +54,7 @@ describe('Message route', () => {
   it('should return 400 for invalid message input', async () => {
     const invalidMessage = {};
 
-    const res = await request(server)
+    const res = await request(app)
       .post(`${API_BASE_URL}/message`)
       .set('Cookie', `${JWT_TOKEN_NAME}=${adminToken}`)
       .send(invalidMessage);
@@ -65,7 +64,7 @@ describe('Message route', () => {
   });
 
   it('should return 404 if message is not found for deletion', async () => {
-    const res = await request(server)
+    const res = await request(app)
       .delete(`${API_BASE_URL}/message`)
       .set('Cookie', `${JWT_TOKEN_NAME}=${adminToken}`)
       .send({ id: 999 });
@@ -83,14 +82,14 @@ describe('Message route', () => {
       message: 'Delete me',
     };
 
-    const createRes = await request(server)
+    const createRes = await request(app)
       .post(`${API_BASE_URL}/message`)
       .set('Cookie', `${JWT_TOKEN_NAME}=${adminToken}`)
       .send(messageToDelete);
 
     const messageId = createRes.body.id;
 
-    const res = await request(server)
+    const res = await request(app)
       .delete(`${API_BASE_URL}/message`)
       .set('Cookie', `${JWT_TOKEN_NAME}=${adminToken}`)
       .send({ id: messageId });
@@ -115,14 +114,14 @@ describe('Message route', () => {
       },
     );
 
-    const createRes = await request(server)
+    const createRes = await request(app)
       .post(`${API_BASE_URL}/message`)
       .set('Cookie', `${JWT_TOKEN_NAME}=${userToken}`)
       .send(messageToDelete);
 
     const messageId = createRes.body.id;
 
-    const res = await request(server)
+    const res = await request(app)
       .delete(`${API_BASE_URL}/message`)
       .set('Cookie', `${JWT_TOKEN_NAME}=${userToken}`)
       .send({ id: messageId });
