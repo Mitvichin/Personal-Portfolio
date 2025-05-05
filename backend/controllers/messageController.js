@@ -1,3 +1,4 @@
+const { logger, getLogMetaData } = require('../logger/winston');
 const Message = require('../models/messageModel');
 const backendErrorsMap = require('../utils/errorNames');
 const { isMessageFormValid } = require('../utils/validationUtils');
@@ -21,7 +22,7 @@ const messageController = {
       );
       res.status(201).json(newMessage);
     } catch (error) {
-      console.error(error);
+      logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
@@ -42,7 +43,7 @@ const messageController = {
         },
       });
     } catch (error) {
-      console.error(error);
+      logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
@@ -58,7 +59,7 @@ const messageController = {
         res.status(404).json({ message: backendErrorsMap.NOT_FOUND });
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },

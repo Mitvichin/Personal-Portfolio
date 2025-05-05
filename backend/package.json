@@ -33,7 +33,9 @@
     "jsonwebtoken": "^9.0.2",
     "path": "^0.12.7",
     "pg": "^8.14.0",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "winston": "^3.17.0",
+    "winston-mongodb": "^6.0.0"
   },
   "devDependencies": {
     "eslint": "^9.25.1",
