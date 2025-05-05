@@ -11,7 +11,7 @@ const {
   CSRF_TOKEN_NAME,
   VISITOR_ID_NAME,
 } = require('../utils/constants');
-const { logger } = require('../logger/winston');
+const { logger, getLogMetaData } = require('../logger/winston');
 
 const authCookiesOptions = {
   httpOnly: true,
@@ -64,7 +64,7 @@ const authController = {
           .json({ message: dbErrorsMap[error.code], key: 'email' });
         return;
       }
-      logger.log(error);
+      logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
@@ -79,9 +79,10 @@ const authController = {
     }
 
     try {
-      const { password, ...user } = await User.getUserByEmail(body.email);
+      const { password, ...user } =
+        (await User.getUserByEmail(body.email)) || {};
 
-      if (user && (await bcryptjs.compare(body.password, password))) {
+      if (user.id && (await bcryptjs.compare(body.password, password))) {
         const tokenInfo = { user: { id: user.id, role: user.role } };
 
         const authToken = jwt.sign(tokenInfo, process.env.JWT_SECRET, {
@@ -110,7 +111,8 @@ const authController = {
         res.status(400).json({ message: backendErrorsMap.INVALID_CREDENTIALS });
       }
     } catch (error) {
-      logger.error(error);
+      console.log(error);
+      logger.error(error, getLogMetaData(req, error));
 
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
@@ -141,7 +143,7 @@ const authController = {
         try {
           user = await User.getUserById(id);
         } catch (error) {
-          logger.error(error);
+          logger.error(error, getLogMetaData(req, error));
         }
 
         if (err || !user) {
@@ -174,7 +176,7 @@ const authController = {
         try {
           user = await User.getUserById(id);
         } catch (error) {
-          logger.error(error);
+          logger.error(error, getLogMetaData(req, error));
         }
 
         if (err || !user) {
@@ -217,8 +219,9 @@ const authController = {
       return res.json({ csrfToken });
     } catch (error) {
       error.message = backendErrorsMap.INTERNAL_SERVER_ERROR;
-      logger.error(error);
+      logger.error(error, getLogMetaData(req, error));
 
+      res.clearCookie(CSRF_TOKEN_NAME);
       res.status(403).json({ message: backendErrorsMap.CSRF_INVALID_TOKEN });
     }
   },

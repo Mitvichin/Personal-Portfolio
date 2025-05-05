@@ -13,6 +13,7 @@ const doubleCsrfOptions = {
     httpOnly: true,
     sameSite: 'Strict',
     secure: IS_PROD,
+    maxAge: 3600000,
   },
   getSessionIdentifier: (req) =>
     req.cookies[JWT_TOKEN_NAME] || req.cookies[VISITOR_ID_NAME],

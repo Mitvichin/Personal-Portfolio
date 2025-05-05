@@ -5,6 +5,26 @@ require('winston-mongodb');
 const mongoURI = process.env.LOGGER_DATABASE_URL;
 let mongoLoggerTransport = undefined;
 
+const sensitiveDataProps = {
+  password: true,
+};
+
+const getLogMetaData = (req, error) => {
+  for (let key in req.body) {
+    if (sensitiveDataProps[key]) {
+      req.body[key] = '****';
+    }
+  }
+
+  return {
+    stack: error.stack,
+    path: req.path,
+    method: req.method,
+    body: req.body,
+    query: req.query,
+  };
+};
+
 const logger = winston.createLogger({
   level: 'info',
   transports: [],
@@ -38,4 +58,4 @@ if (IS_DEV) {
   );
 }
 
-module.exports = { logger, mongoLoggerTransport };
+module.exports = { logger, mongoLoggerTransport, getLogMetaData };
