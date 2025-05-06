@@ -28,12 +28,11 @@ app.use(express.json());
 app.use(API_BASE_URL, rateLimitMiddleware);
 
 // API endpoint
-// TODO: Place csrf after tests are figured out
-app.use(`${API_BASE_URL}/message`, messageRouter);
+app.use(`${API_BASE_URL}/message`, csrf.doubleCsrfProtection, messageRouter);
 app.use(`${API_BASE_URL}/user`, csrf.doubleCsrfProtection, userRouter);
 app.use(`${API_BASE_URL}/grid`, gridRouter);
 app.use(`${API_BASE_URL}/auth`, csrf.doubleCsrfProtection, authRouter);
-app.use(`${API_BASE_URL}/github`, githubRouter);
+app.use(`${API_BASE_URL}/github`, csrf.doubleCsrfProtection, githubRouter);
 app.use(`${API_BASE_URL}/*`, (req, res) => {
   res.status(404).json({ message: backendErrorsMap.NOT_FOUND });
   return;

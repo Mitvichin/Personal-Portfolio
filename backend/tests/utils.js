@@ -1,3 +1,5 @@
+const { API_BASE_URL } = require('../utils/constants');
+
 const bcryptjs = require('bcryptjs');
 
 const adminTestUser = {
@@ -10,7 +12,7 @@ const testUser = {
   email: 'user@example.com',
 };
 
-const deleteUsersAndRoles = async (pool) => {
+const deleteFromAllTables = async (pool) => {
   try {
     await pool.query('DELETE FROM users');
     await pool.query('DELETE FROM roles');
@@ -66,9 +68,30 @@ const populateUsers = async (pool) => {
   }
 };
 
+const getCSRFToken = async (agent) => {
+  let csrf = await agent.get(`${API_BASE_URL}/auth/csrf-token`).expect(200);
+  agent.set({ 'x-csrf-token': csrf.body.csrfToken });
+};
+
+const login = async (agent, user) => {
+  await getCSRFToken(agent);
+
+  await agent
+    .post(`${API_BASE_URL}/auth/login`)
+    .send({
+      password: user.password,
+      email: user.email,
+    })
+    .expect(200);
+
+  await getCSRFToken(agent);
+};
+
 module.exports = {
   populateUsers,
-  deleteUsersAndRoles,
+  deleteFromAllTables,
   adminUser: adminTestUser,
   user: testUser,
+  login,
+  getCSRFToken,
 };
