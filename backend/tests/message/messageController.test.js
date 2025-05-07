@@ -1,11 +1,12 @@
 // @ts-nocheck
+
+jest.mock('../../models/messageModel');
+jest.mock('../../utils/validationUtils');
+
 const messageController = require('../../controllers/messageController');
 const Message = require('../../models/messageModel');
 const backendErrorsMap = require('../../utils/errorNames');
 const { isMessageFormValid } = require('../../utils/validationUtils');
-
-jest.mock('../../models/messageModel');
-jest.mock('../../utils/validationUtils');
 
 describe('messageController', () => {
   let req, res;

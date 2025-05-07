@@ -112,7 +112,6 @@ const authController = {
         res.status(400).json({ message: backendErrorsMap.INVALID_CREDENTIALS });
       }
     } catch (error) {
-      console.log(error);
       logger.error(error, getLogMetaData(req, error));
 
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
@@ -138,8 +137,14 @@ const authController = {
     jwt.verify(
       token,
       process.env.JWT_SECRET,
-      async (err, { user: { id } } = {}) => {
+      async (err, { user: { id } } = { user: { id: null } }) => {
         let user = undefined;
+
+        if (err || !id) {
+          return res
+            .status(401)
+            .json({ message: backendErrorsMap.UNAUTHENTICATED });
+        }
 
         try {
           user = await User.getUserById(id);
@@ -147,14 +152,14 @@ const authController = {
           logger.error(error, getLogMetaData(req, error));
         }
 
-        if (err || !user) {
+        if (!user) {
           return res
             .status(401)
             .json({ message: backendErrorsMap.UNAUTHENTICATED });
         }
 
         res.set(authRequestCacheHeaders);
-        res.json(user);
+        return res.status(200).json(user);
       },
     );
   },
@@ -171,8 +176,14 @@ const authController = {
     jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
-      async (err, { user: { id } } = {}) => {
+      async (err, { user: { id } } = { user: { id: null } }) => {
         let user = undefined;
+
+        if (err || !id) {
+          return res
+            .status(401)
+            .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
+        }
 
         try {
           user = await User.getUserById(id);
@@ -180,7 +191,7 @@ const authController = {
           logger.error(error, getLogMetaData(req, error));
         }
 
-        if (err || !user) {
+        if (!user) {
           return res
             .status(401)
             .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
@@ -198,7 +209,7 @@ const authController = {
         res.cookie(JWT_TOKEN_NAME, newAccessToken, authCookiesOptions);
         res.clearCookie(CSRF_TOKEN_NAME);
 
-        return res.status(200).json();
+        return res.status(200).json(user);
       },
     );
   },
@@ -217,9 +228,8 @@ const authController = {
       const csrfToken = csrf.generateToken(req, res);
 
       res.set(authRequestCacheHeaders);
-      return res.json({ csrfToken });
+      return res.status(200).json({ csrfToken });
     } catch (error) {
-      error.message = backendErrorsMap.INTERNAL_SERVER_ERROR;
       logger.error(error, getLogMetaData(req, error));
 
       res.clearCookie(CSRF_TOKEN_NAME);
