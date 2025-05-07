@@ -172,8 +172,8 @@ describe('User model', () => {
       const mockCount = [{ total: '1' }];
 
       pool.query
-        .mockResolvedValueOnce({ rows: mockUsers }) // users list
-        .mockResolvedValueOnce({ rows: mockCount }); // total count
+        .mockResolvedValueOnce({ rows: mockUsers })
+        .mockResolvedValueOnce({ rows: mockCount });
 
       const result = await User.getUsers(1, 10);
 
