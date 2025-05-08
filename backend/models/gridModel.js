@@ -1,5 +1,4 @@
 const pool = require('../config/db');
-const format = require('pg-format');
 
 const Grid = {
   async createGrid(grid) {

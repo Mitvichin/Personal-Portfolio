@@ -1,3 +1,4 @@
+// @ts-nocheck
 const User = require('../models/userModel');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -44,7 +45,6 @@ const authController = {
         password,
         Number(process.env.SALT_ROUNDS),
       );
-
       const { role } = await User.register(
         firstName,
         lastName,
@@ -54,11 +54,7 @@ const authController = {
 
       res.status(201).json({ firstName, lastName, email, role });
     } catch (error) {
-      if (
-        error.code &&
-        dbErrorsMap[error.code] &&
-        error.constraint.includes('email')
-      ) {
+      if (error.code && dbErrorsMap[error.code]) {
         res
           .status(400)
           .json({ message: dbErrorsMap[error.code], key: 'email' });
@@ -111,7 +107,6 @@ const authController = {
         res.status(400).json({ message: backendErrorsMap.INVALID_CREDENTIALS });
       }
     } catch (error) {
-      console.log(error);
       logger.error(error, getLogMetaData(req, error));
 
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
@@ -137,8 +132,14 @@ const authController = {
     jwt.verify(
       token,
       process.env.JWT_SECRET,
-      async (err, { user: { id } } = {}) => {
+      async (err, { user: { id } } = { user: { id: null } }) => {
         let user = undefined;
+
+        if (err || !id) {
+          return res
+            .status(401)
+            .json({ message: backendErrorsMap.UNAUTHENTICATED });
+        }
 
         try {
           user = await User.getUserById(id);
@@ -146,14 +147,14 @@ const authController = {
           logger.error(error, getLogMetaData(req, error));
         }
 
-        if (err || !user) {
+        if (!user) {
           return res
             .status(401)
             .json({ message: backendErrorsMap.UNAUTHENTICATED });
         }
 
         res.set(authRequestCacheHeaders);
-        res.json(user);
+        return res.status(200).json(user);
       },
     );
   },
@@ -170,8 +171,14 @@ const authController = {
     jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
-      async (err, { user: { id } } = {}) => {
+      async (err, { user: { id } } = { user: { id: null } }) => {
         let user = undefined;
+
+        if (err || !id) {
+          return res
+            .status(401)
+            .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
+        }
 
         try {
           user = await User.getUserById(id);
@@ -179,7 +186,7 @@ const authController = {
           logger.error(error, getLogMetaData(req, error));
         }
 
-        if (err || !user) {
+        if (!user) {
           return res
             .status(401)
             .json({ message: backendErrorsMap.INVALID_REFRESH_TOKEN });
@@ -197,7 +204,7 @@ const authController = {
         res.cookie(JWT_TOKEN_NAME, newAccessToken, authCookiesOptions);
         res.clearCookie(CSRF_TOKEN_NAME);
 
-        return res.status(200).json();
+        return res.status(200).json(user);
       },
     );
   },
@@ -216,9 +223,8 @@ const authController = {
       const csrfToken = csrf.generateToken(req, res);
 
       res.set(authRequestCacheHeaders);
-      return res.json({ csrfToken });
+      return res.status(200).json({ csrfToken });
     } catch (error) {
-      error.message = backendErrorsMap.INTERNAL_SERVER_ERROR;
       logger.error(error, getLogMetaData(req, error));
 
       res.clearCookie(CSRF_TOKEN_NAME);

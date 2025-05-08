@@ -1,5 +1,6 @@
+const server = require('.');
 const pool = require('./config/db');
-const { mongoLoggerTransport } = require('./logger/winston');
+const { mongoLoggerTransport, logger } = require('./logger/winston');
 
 const closeConnections = async () => {
   await pool.end();
@@ -24,7 +25,11 @@ process.on('uncaughtException', async (err) => {
     });
   }
 
-  process.exit(1);
+  server.close();
+
+  setTimeout(() => {
+    process.exit(1);
+  }, 10000);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
@@ -33,7 +38,11 @@ process.on('unhandledRejection', (reason, promise) => {
     stack: reason instanceof Error ? reason.stack : undefined,
   });
 
-  process.exit(1);
+  server.close();
+
+  setTimeout(() => {
+    process.exit(1);
+  }, 10000);
 });
 
 process.on('SIGINT', async () => {
@@ -46,7 +55,11 @@ process.on('SIGINT', async () => {
     });
   }
 
-  process.exit(0);
+  server.close();
+
+  setTimeout(() => {
+    process.exit(0);
+  }, 10000);
 });
 
 process.on('SIGTERM', async () => {
@@ -58,5 +71,9 @@ process.on('SIGTERM', async () => {
       stack: error.stack,
     });
   }
-  process.exit(0);
+  server.close();
+
+  setTimeout(() => {
+    process.exit(0);
+  }, 10000);
 });

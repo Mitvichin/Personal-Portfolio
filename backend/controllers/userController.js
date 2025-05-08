@@ -30,7 +30,7 @@ const userController = {
     try {
       const user = await User.getUserById(id);
 
-      if (user.role === 'admin') {
+      if (user && user.role === 'admin') {
         return res
           .status(403)
           .json({ message: backendErrorsMap.ACTION_FORBIDDEN });

@@ -2,22 +2,20 @@ const pool = require('../config/db');
 
 const User = {
   async register(firstName, lastName, email, password) {
-    const users = await pool.query(
-      `INSERT INTO users ("firstName", "lastName",email,password) 
-      VALUES ($1, $2, $3, $4) 
-      RETURNING users."roleId"`,
-      [firstName, lastName, email, password],
-    );
-
-    const roles = await pool.query(
-      `SELECT roles.name
+    const { rows } = await pool.query(
+      `SELECT *
       FROM roles
-      WHERE id = $1
+      WHERE name = 'user'
       `,
-      [users.rows[0].roleId],
     );
 
-    return { role: roles.rows[0].name };
+    await pool.query(
+      `INSERT INTO users ("firstName", "lastName", email, password, "roleId") 
+      VALUES ($1, $2, $3, $4, $5)`,
+      [firstName, lastName, email, password, rows[0].id],
+    );
+
+    return { role: rows[0].name };
   },
 
   async getUserByEmail(email) {

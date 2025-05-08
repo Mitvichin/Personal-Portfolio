@@ -19,7 +19,7 @@ const gridController = {
 
       res.status(201).json(newGrid);
     } catch (error) {
-      logger.error(error,getLogMetaData(req, error));
+      logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },

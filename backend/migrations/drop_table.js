@@ -1,6 +1,6 @@
 const pool = require('../config/db');
 
-const createTables = async () => {
+const dropTables = async () => {
   const tables = [`DROP TABLE IF EXISTS grids;`];
 
   try {
@@ -14,4 +14,4 @@ const createTables = async () => {
 };
 
 // Run script
-createTables();
+dropTables();
