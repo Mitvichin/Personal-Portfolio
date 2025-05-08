@@ -11,7 +11,7 @@ const {
   user,
   login,
   getCSRFToken,
-} = require('../utils');
+} = require('../testUtils');
 const { API_BASE_URL, JWT_TOKEN_NAME } = require('../../utils/constants');
 const backendErrorsMap = require('../../utils/errorNames');
 

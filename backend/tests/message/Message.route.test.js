@@ -11,7 +11,7 @@ const {
   adminUser,
   user,
   login,
-} = require('../utils');
+} = require('../testUtils');
 
 const agent = request.agent(app);
 

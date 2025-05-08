@@ -11,7 +11,7 @@ const {
   getCSRFToken,
   login,
   getCookieDetails,
-} = require('../utils');
+} = require('../testUtils');
 const {
   API_BASE_URL,
   VISITOR_ID_NAME,

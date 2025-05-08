@@ -12,7 +12,7 @@ const {
   populateUsers,
   deleteFromAllTables,
   getCSRFToken,
-} = require('../utils');
+} = require('../testUtils');
 
 const agent = request.agent(app);
 

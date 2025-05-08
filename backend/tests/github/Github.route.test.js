@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../../app');
 const { API_BASE_URL } = require('../../utils/constants');
 const backendErrorsMap = require('../../utils/errorNames');
-const { getCSRFToken } = require('../utils');
+const { getCSRFToken } = require('../testUtils');
 
 jest.mock('../../middlewares/rateLimit', () =>
   jest.fn((req, res, next) => next()),
