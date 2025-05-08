@@ -21,9 +21,9 @@ describe('User model', () => {
       const mockRoleId = 2;
       const mockRoleName = 'user';
 
-      pool.query
-        .mockResolvedValueOnce({ rows: [{ roleId: mockRoleId }] }) // insert
-        .mockResolvedValueOnce({ rows: [{ name: mockRoleName }] }); // select role
+      pool.query.mockResolvedValueOnce({
+        rows: [{ name: 'user', id: mockRoleId }],
+      });
 
       const result = await User.register(
         mockUser.firstName,
@@ -34,24 +34,23 @@ describe('User model', () => {
 
       expect(pool.query).toHaveBeenNthCalledWith(
         1,
-        `INSERT INTO users ("firstName", "lastName",email,password) 
-      VALUES ($1, $2, $3, $4) 
-      RETURNING users."roleId"`,
+        `SELECT *
+      FROM roles
+      WHERE name = 'user'
+      `,
+      );
+
+      expect(pool.query).toHaveBeenNthCalledWith(
+        2,
+        `INSERT INTO users ("firstName", "lastName", email, password, "roleId") 
+      VALUES ($1, $2, $3, $4, $5)`,
         [
           mockUser.firstName,
           mockUser.lastName,
           mockUser.email,
           mockUser.password,
+          mockRoleId,
         ],
-      );
-
-      expect(pool.query).toHaveBeenNthCalledWith(
-        2,
-        `SELECT roles.name
-      FROM roles
-      WHERE id = $1
-      `,
-        [mockRoleId],
       );
 
       expect(result).toEqual({ role: mockRoleName });

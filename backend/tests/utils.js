@@ -12,6 +12,36 @@ const testUser = {
   email: 'user@example.com',
 };
 
+const getCookieDetails = (cookies, name) => {
+  for (const cookie of cookies) {
+    const [cookiePair, ...attributes] = cookie
+      .split(';')
+      .map((part) => part.trim());
+
+    const [cookieName, value] = cookiePair.split('=');
+    if (cookieName === name) {
+      const cookieInfo = {
+        name: cookieName,
+        value,
+        attributes: {},
+      };
+
+      attributes.forEach((attr) => {
+        const [key, val] = attr.split('=');
+        if (typeof val === 'undefined') {
+          cookieInfo.attributes[key] = true;
+        } else {
+          cookieInfo.attributes[key] = val;
+        }
+      });
+
+      return cookieInfo;
+    }
+  }
+
+  return null;
+};
+
 const deleteFromAllTables = async (pool) => {
   try {
     await pool.query('DELETE FROM users');
@@ -94,4 +124,5 @@ module.exports = {
   user: testUser,
   login,
   getCSRFToken,
+  getCookieDetails,
 };

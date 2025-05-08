@@ -20,7 +20,7 @@ const createTables = async (pool = defaultPool) => {
       "lastName" VARCHAR(100) NOT NULL,
       email VARCHAR(100) NOT NULL UNIQUE,
       password TEXT NOT NULL,
-      "roleId" INTEGER NOT NULL
+      "roleId" INTEGER
     );`,
     `CREATE TABLE IF NOT EXISTS roles (
       id SERIAL PRIMARY KEY,

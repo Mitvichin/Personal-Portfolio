@@ -45,7 +45,6 @@ const authController = {
         password,
         Number(process.env.SALT_ROUNDS),
       );
-
       const { role } = await User.register(
         firstName,
         lastName,
@@ -55,11 +54,7 @@ const authController = {
 
       res.status(201).json({ firstName, lastName, email, role });
     } catch (error) {
-      if (
-        error.code &&
-        dbErrorsMap[error.code] &&
-        error.constraint.includes('email')
-      ) {
+      if (error.code && dbErrorsMap[error.code]) {
         res
           .status(400)
           .json({ message: dbErrorsMap[error.code], key: 'email' });
