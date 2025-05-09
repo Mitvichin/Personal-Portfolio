@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PaginationProps } from '../types/PaginationProps';
+import { PaginationProps } from '../../types/PaginationProps';
 import LeftChevron from '../assets/left-chevron.svg?react';
 import RightChevron from '../assets/right-chevron.svg?react';
 
