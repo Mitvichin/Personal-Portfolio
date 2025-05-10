@@ -78,7 +78,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: '/forbidden',
+        path: routes.forbidden,
         Component: Forbidden,
       },
       // catch all

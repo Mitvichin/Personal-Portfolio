@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { EntityTableProps } from '../../types/EntityTableProps';
-import { Pagination } from '../Pagination';
+import { Pagination } from '../shared/Pagination';
 import { User } from '../../types/User';
 import { UserRow } from './UserRow';
 import { UserDetails } from './UserDetails';

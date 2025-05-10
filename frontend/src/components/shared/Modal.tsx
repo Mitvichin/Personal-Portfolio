@@ -38,6 +38,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
 
   return ReactDOM.createPortal(
     <div
+      data-testid="modal"
       ref={modalRef}
       className={`${className} z-50 size-full absolute top-0 start-0 transition-all duration-300 overflow-y-auto bg-black/70 pointer-events-auto`}
       tabIndex={-1}
