@@ -46,6 +46,7 @@ export const Sidebar: React.FC = () => {
   return (
     <div className="p-1.5 sticky top-1 bg-white left-0.5 width-[100%] mt-2 rounded-xl shadow-md mb-1 flex justify-between md:shadow-none md:rounded-none md:absolute md:width-auto md:bg-transparent md:mt-0">
       <Button
+        data-testid="sidebar-btn"
         onClick={() => setIsMenuOpened((prev) => !prev)}
         className="px-2 py-1 md:border-1 bg-white md:border-gray-200 md:shadow-md hover:scale-110"
       >
@@ -58,9 +59,11 @@ export const Sidebar: React.FC = () => {
 
       {ReactDOM.createPortal(
         <div
+          data-testid="sidebar"
           className={`${isMenuOpened ? 'left-0' : 'left-[-101%] md:left-[-201px]'} absolute flex inset-0 flex-col bg-white top-0 gap-3 focus:outline-none min-w-[200px] w-[100%] md:w-[200px] border border-gray-200 shadow-md px-4 pb-4 rounded-md transition-all z-50`}
         >
           <LeftArrowIcon
+            data-testid="left-arrow"
             width="32"
             height="32"
             className="self-end hover:scale-110 hover:cursor-pointer"

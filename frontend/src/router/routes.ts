@@ -7,4 +7,5 @@ export const routes = {
   login: 'login',
   messages: 'messages',
   users: 'users',
+  forbidden: 'forbidden',
 };
