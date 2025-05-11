@@ -37,7 +37,6 @@ const Register: React.FC<WithRedirectionToSourceFileProps> =
     });
 
     const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
-      console.log(data);
       try {
         setIsLoading(true);
         await registerUser(data);

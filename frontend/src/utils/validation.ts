@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const getMinLengthValidationMsg = (min: number, field: string) =>
-  `${field} must be at least ${min} charactes.`;
+  `${field} must be at least ${min} characters.`;
 const getMaxLengthValidationMsg = (max: number, field: string) =>
   `${field} cannot exceed ${max} characters.`;
 

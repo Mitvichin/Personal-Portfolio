@@ -20,8 +20,7 @@ const GlobalErorrBoundry = lazy(
 );
 
 const withSuspense = (component: ReactNode) => <Suspense>{component}</Suspense>;
-
-export const router = createBrowserRouter([
+export const routesDefinition = [
   {
     path: '/',
     Component: SidebarLayout,
@@ -57,7 +56,7 @@ export const router = createBrowserRouter([
 
       // Auth protected routes
       {
-        path: '*',
+        path: '/',
         Component: AuthGuard,
         children: [
           {
@@ -66,7 +65,7 @@ export const router = createBrowserRouter([
           },
           // Admin role protected
           {
-            path: '*',
+            path: '',
             element: <RoleGuard allowedRoles={['admin']} />,
             children: [
               {
@@ -88,4 +87,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(routesDefinition);
