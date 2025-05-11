@@ -84,7 +84,6 @@ const authController = {
         const authToken = jwt.sign(tokenInfo, process.env.JWT_SECRET, {
           expiresIn: AUTH_TOKEN_DURATION,
         });
-
         const authRefreshToken = jwt.sign(
           tokenInfo,
           process.env.JWT_REFRESH_SECRET,
@@ -108,7 +107,6 @@ const authController = {
       }
     } catch (error) {
       logger.error(error, getLogMetaData(req, error));
-
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },

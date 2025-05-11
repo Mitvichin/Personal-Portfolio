@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "lint-and-format": "npm run lint && npm run format",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "test:ci": "vitest run --coverage --reporter=default --reporter=verbose"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
