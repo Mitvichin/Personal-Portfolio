@@ -1,6 +1,7 @@
 // @ts-nocheck
-require('./cleanup.js');
+require('dotenv').config({ path: './.env' });
 const app = require('./app.js');
+require('./cleanup.js');
 
 const PORT = process.env.PORT || 5000;
 

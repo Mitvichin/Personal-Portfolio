@@ -1,5 +1,4 @@
 // @ts-nocheck
-require('dotenv').config({ path: './.env' });
 const { API_BASE_URL } = require('./utils/constants.js');
 const backendErrorsMap = require('./utils/errorNames');
 const express = require('express');
