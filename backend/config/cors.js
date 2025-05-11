@@ -7,7 +7,7 @@ const corsConfig = {
     if ((!origin && IS_DEV) || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(null, true);
+      callback(null, false);
     }
   },
 };
