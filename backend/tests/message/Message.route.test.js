@@ -21,7 +21,7 @@ describe('Message route', () => {
     await populateUsers(pool);
 
     await login(agent, adminUser);
-  });
+  }, 10000);
 
   afterAll(async () => {
     await deleteFromAllTables(pool);

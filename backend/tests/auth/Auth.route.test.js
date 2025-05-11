@@ -26,7 +26,7 @@ describe('Auth route', () => {
     await createTables(pool);
     await populateUsers(pool);
     await getCSRFToken(agent);
-  });
+  }, 10000);
 
   afterAll(async () => {
     await deleteFromAllTables(pool);

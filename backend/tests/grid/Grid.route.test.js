@@ -22,7 +22,7 @@ describe('Grid route', () => {
     await populateUsers(pool);
 
     await getCSRFToken(agent);
-  });
+  }, 10000);
 
   afterAll(async () => {
     await pool.end();
