@@ -51,8 +51,7 @@ jobs:
   test-be-dev:
     runs-on: ubuntu-latest
     env:
-      VITE_API_BASE_URL:/api
-
+      VITE_API_BASE_URL: /api
 
     steps:
       - name: Checkout repository
@@ -71,9 +70,10 @@ jobs:
 
   build-and-push-dev:
     runs-on: ubuntu-latest
-    env: JWT_SECRET:test-auth
-      JWT_REFRESH_SECRET:test-refresh
-      CSRF_SECRET:test-csrf
+    env:
+      JWT_SECRET: test-auth
+      JWT_REFRESH_SECRET: test-refresh
+      CSRF_SECRET: test-csrf
     needs: [test-fe-dev, test-be-dev, lint-dev]
 
     steps:
