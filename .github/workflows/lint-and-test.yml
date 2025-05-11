@@ -1,0 +1,73 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+
+      - name: Install FE dependencies
+        run: cd frontend && npm ci
+
+      - name: Install BE dependencies
+        run: cd backend && npm ci
+
+      - name: Run FE linter
+        run: cd frontend && npm run lint
+
+      - name: Run BE linter and format
+        run: cd backend && npm run lint
+
+    test-fe:
+    runs-on: ubuntu-latest
+    env:
+      VITE_API_BASE_URL: /api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+
+      - name: Install FE dependencies
+        run: cd frontend && npm ci
+
+      - name: Run FE tests
+        run: cd frontend && npm run test:ci
+
+  test-be:
+    runs-on: ubuntu-latest
+    env:
+      JWT_SECRET: test-auth
+      JWT_REFRESH_SECRET: test-refresh
+      CSRF_SECRET: test-csrf
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+
+      - name: Install BE dependencies
+        run: cd backend && npm ci
+
+      - name: Run BE tests
+        run: cd backend && npm run test:ci
