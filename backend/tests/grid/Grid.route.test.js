@@ -27,7 +27,7 @@ describe('Grid route', () => {
       console.log('!!!!!!!!!!!!!!!', error);
       throw error;
     }
-  }, 10000);
+  });
 
   afterAll(async () => {
     await pool.end();
