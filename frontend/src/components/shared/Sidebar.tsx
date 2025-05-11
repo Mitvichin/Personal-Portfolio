@@ -43,6 +43,8 @@ export const Sidebar: React.FC = () => {
     }
   };
 
+  const rootElement = document.getElementById('root');
+
   return (
     <div className="p-1.5 sticky top-1 bg-white left-0.5 width-[100%] mt-2 rounded-xl shadow-md mb-1 flex justify-between md:shadow-none md:rounded-none md:absolute md:width-auto md:bg-transparent md:mt-0">
       <Button
@@ -57,50 +59,51 @@ export const Sidebar: React.FC = () => {
         <p className="p-1 self-end block md:hidden font-medium">{`Hello, ${user.firstName} ${user.lastName}!`}</p>
       )}
 
-      {ReactDOM.createPortal(
-        <div
-          data-testid="sidebar"
-          className={`${isMenuOpened ? 'left-0' : 'left-[-101%] md:left-[-201px]'} absolute flex inset-0 flex-col bg-white top-0 gap-3 focus:outline-none min-w-[200px] w-[100%] md:w-[200px] border border-gray-200 shadow-md px-4 pb-4 rounded-md transition-all z-50`}
-        >
-          <LeftArrowIcon
-            data-testid="left-arrow"
-            width="32"
-            height="32"
-            className="self-end hover:scale-110 hover:cursor-pointer"
-            onClick={() => setIsMenuOpened((prev) => !prev)}
-          />
+      {rootElement &&
+        ReactDOM.createPortal(
+          <div
+            data-testid="sidebar"
+            className={`${isMenuOpened ? 'left-0' : 'left-[-101%] md:left-[-201px]'} absolute flex inset-0 flex-col bg-white top-0 gap-3 focus:outline-none min-w-[200px] w-[100%] md:w-[200px] border border-gray-200 shadow-md px-4 pb-4 rounded-md transition-all z-50`}
+          >
+            <LeftArrowIcon
+              data-testid="left-arrow"
+              width="32"
+              height="32"
+              className="self-end hover:scale-110 hover:cursor-pointer"
+              onClick={() => setIsMenuOpened((prev) => !prev)}
+            />
 
-          {user ? (
-            <>
-              <p className="p-1 self-center hidden md:block font-medium">{`Hello, ${user.firstName} ${user.lastName}!`}</p>
-              {alwaysAvailablePages}
-              <AppNavLink onClick={closeMenu} to={`/${routes.messages}`}>
-                Messages
-              </AppNavLink>
-              <HasRole roles={['admin']}>
-                <AppNavLink onClick={closeMenu} to={`/${routes.users}`}>
-                  Users
+            {user ? (
+              <>
+                <p className="p-1 self-center hidden md:block font-medium">{`Hello, ${user.firstName} ${user.lastName}!`}</p>
+                {alwaysAvailablePages}
+                <AppNavLink onClick={closeMenu} to={`/${routes.messages}`}>
+                  Messages
                 </AppNavLink>
-              </HasRole>
+                <HasRole roles={['admin']}>
+                  <AppNavLink onClick={closeMenu} to={`/${routes.users}`}>
+                    Users
+                  </AppNavLink>
+                </HasRole>
 
-              <Button className="mt-auto" onClick={onLogout}>
-                Log out
-              </Button>
-            </>
-          ) : (
-            <>
-              {alwaysAvailablePages}
-              <AppNavLink onClick={closeMenu} to={`/${routes.login}`}>
-                Log in
-              </AppNavLink>
-              <AppNavLink onClick={closeMenu} to={`/${routes.register}`}>
-                Register
-              </AppNavLink>
-            </>
-          )}
-        </div>,
-        document.getElementById('root')!,
-      )}
+                <Button className="mt-auto" onClick={onLogout}>
+                  Log out
+                </Button>
+              </>
+            ) : (
+              <>
+                {alwaysAvailablePages}
+                <AppNavLink onClick={closeMenu} to={`/${routes.login}`}>
+                  Log in
+                </AppNavLink>
+                <AppNavLink onClick={closeMenu} to={`/${routes.register}`}>
+                  Register
+                </AppNavLink>
+              </>
+            )}
+          </div>,
+          rootElement,
+        )}
     </div>
   );
 };

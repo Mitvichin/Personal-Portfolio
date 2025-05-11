@@ -56,7 +56,6 @@ const Login: React.FC<WithRedirectionToSourceFileProps> =
           toast.error(err.message);
           return;
         }
-
         toast.error('Login failed. Please try again!');
       } finally {
         setIsLoading(false);
@@ -120,6 +119,7 @@ const Login: React.FC<WithRedirectionToSourceFileProps> =
           </div>
           <div className="flex flex-row justify-between">
             <Button
+              data-testid="login-submit-btn"
               isDisabled={!isFormValid}
               type="submit"
               isLoading={isLoading}
