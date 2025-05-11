@@ -8,6 +8,10 @@ const isEmailValid = (email) => {
 };
 
 const isNameValid = (name) => {
+  if (typeof name !== 'string') {
+    return false;
+  }
+
   if (name.length > 100 || name.length < 2) {
     return false;
   }
@@ -16,6 +20,10 @@ const isNameValid = (name) => {
 };
 
 const isPasswordValid = (pass) => {
+  if (typeof pass !== 'string') {
+    return false;
+  }
+
   if (pass.length > 100 || pass.length < 4) {
     return false;
   }
@@ -24,6 +32,10 @@ const isPasswordValid = (pass) => {
 };
 
 const isMessageValid = (message) => {
+  if (typeof message !== 'string') {
+    return false;
+  }
+
   if (message.length > 1024 || message.length < 2) {
     return false;
   }
@@ -39,22 +51,22 @@ const isMessageFormValid = ({ firstName, lastName, email, message }) =>
 
 const isGridValid = (grid) => {
   const isArray = Array.isArray(grid);
+
+  if (!isArray || !Array.isArray(grid[0])) {
+    return false;
+  }
   const rows = grid.length;
   const cols = grid[0]?.length;
 
-  if (isArray && !Array.isArray(grid[0])) {
-    return true;
-  }
-
   if (rows * cols > 2056) {
-    return true;
+    return false;
   }
 
   if (rows * cols === 0) {
-    return true;
+    return false;
   }
 
-  return false;
+  return true;
 };
 
 const isUserValid = ({ firstName, lastName, email, password }) =>

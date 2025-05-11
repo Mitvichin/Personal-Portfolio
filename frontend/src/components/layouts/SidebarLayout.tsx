@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import { Sidebar } from '../nav/Sidebar';
+import { Sidebar } from '../shared/Sidebar';
 
 export const SidebarLayout: React.FC = () => {
   return (

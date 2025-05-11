@@ -5,7 +5,6 @@ const ROOT_FOLDER_NAME = 'frontend';
 const githubController = {
   async getFileContent(req, res) {
     const { searchWord, filePath } = req.query;
-
     if (!searchWord || !filePath) {
       res
         .status(400)
@@ -48,23 +47,6 @@ const githubController = {
 
       res.json({ content, url: targetFile.html_url });
     } catch {
-      res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
-    }
-  },
-
-  async findWord(req, res) {
-    if (isInvalid) {
-      res.status(400).json({ message: backendErrorsMap.INVALID_INPUT });
-      return;
-    }
-
-    try {
-      const { grid } = req.body;
-      const newGrid = await Grid.createGrid(grid);
-
-      res.status(201).json(newGrid);
-    } catch (error) {
-      logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },

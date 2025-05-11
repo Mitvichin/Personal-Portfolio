@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { EntityTableProps } from '../../types/EntityTableProps';
-import { Pagination } from '../Pagination';
+import { Pagination } from '../shared/Pagination';
 import { User } from '../../types/User';
 import { UserRow } from './UserRow';
 import { UserDetails } from './UserDetails';
@@ -71,7 +71,7 @@ export const UserTable: React.FC<EntityTableProps<User>> = ({
   return (
     <div className="flex flex-col w-full md:w-6/7">
       <Modal
-        title="Message Details"
+        title="User Details"
         isOpened={isModalOpened}
         onClose={onModalClose}
         footerElements={deleteBtn}
@@ -80,7 +80,7 @@ export const UserTable: React.FC<EntityTableProps<User>> = ({
       </Modal>
       <div className="p-1.5 w-full inline-block align-middle">
         <p className="text-xl font-medium mb-1">
-          Messages
+          Users
           {isLoading && (
             <LoadingSpinner className="text-blue-600! ml-2 size-3! border-2!" />
           )}

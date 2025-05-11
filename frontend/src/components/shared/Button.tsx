@@ -10,12 +10,15 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   isDisabled = false,
   className: classNameProp = '',
   isLoading = false,
+  ...rest
 }) => {
   const className = GET_BUTTON_CLASS_NAME(classNameProp);
 
   return (
     <button
+      {...rest}
       type={type}
+      role="button"
       disabled={isDisabled}
       onClick={onClick}
       className={className}

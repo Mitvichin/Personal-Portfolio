@@ -66,7 +66,8 @@ export const useAppFetch = () => {
 
             throw new AppError(
               res.status,
-              backendErrorsMap[error.message]?.(error.key),
+              backendErrorsMap[error.message]?.(error.key) ||
+                UNKNOW_ERROR_MESSAGE,
             );
           }
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { doubleCsrf } = require('csrf-csrf');
 const {
   JWT_TOKEN_NAME,
