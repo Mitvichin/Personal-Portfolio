@@ -52,10 +52,6 @@ jobs:
 
   test-be-dev:
     runs-on: ubuntu-latest
-    env:
-      JWT_SECRET: test-auth
-      JWT_REFRESH_SECRET: test-refresh
-      CSRF_SECRET: test-csrf
 
     steps:
       - name: Checkout repository
