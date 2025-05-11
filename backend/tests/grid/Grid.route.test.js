@@ -16,14 +16,24 @@ const {
 
 const agent = request.agent(app);
 
+jest.mock('@upstash/ratelimit', () => {
+  return {
+    Ratelimit: class {
+      static fixedWindow() {
+        return {};
+      }
+      constructor() {}
+      limit() {
+        return Promise.resolve({ success: true });
+      }
+    },
+  };
+});
+
 describe('Grid route', () => {
   beforeAll(async () => {
-    console.log('test 1');
     await createTables(pool);
-    console.log('test 2');
-
     await populateUsers(pool);
-    console.log('test 3');
 
     await getCSRFToken(agent);
   });
