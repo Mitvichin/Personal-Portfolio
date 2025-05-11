@@ -19,6 +19,10 @@ const {
 } = require('../../utils/constants');
 const backendErrorsMap = require('../../utils/errorNames');
 
+jest.mock('../../middlewares/rateLimit', () =>
+  jest.fn((req, res, next) => next()),
+);
+
 const agent = request.agent(app);
 
 describe('Auth route', () => {

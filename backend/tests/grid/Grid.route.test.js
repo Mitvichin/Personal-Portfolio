@@ -2,17 +2,17 @@ const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db');
 const createTables = require('../../migrations/init_db');
-const {
-  API_BASE_URL,
-  CSRF_TOKEN_NAME,
-  VISITOR_ID_NAME,
-} = require('../../utils/constants');
+const { API_BASE_URL } = require('../../utils/constants');
 const backendErrorsMap = require('../../utils/errorNames');
 const {
   populateUsers,
   deleteFromAllTables,
   getCSRFToken,
 } = require('../testUtils');
+
+jest.mock('../../middlewares/rateLimit', () =>
+  jest.fn((req, res, next) => next()),
+);
 
 const agent = request.agent(app);
 

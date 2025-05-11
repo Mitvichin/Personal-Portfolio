@@ -3,7 +3,7 @@ const app = require('../../app');
 const pool = require('../../config/db');
 const jwt = require('jsonwebtoken');
 const createTables = require('../../migrations/init_db');
-const { API_BASE_URL, JWT_TOKEN_NAME } = require('../../utils/constants');
+const { API_BASE_URL } = require('../../utils/constants');
 const backendErrorsMap = require('../../utils/errorNames');
 const {
   populateUsers,
@@ -12,6 +12,10 @@ const {
   user,
   login,
 } = require('../testUtils');
+
+jest.mock('../../middlewares/rateLimit', () =>
+  jest.fn((req, res, next) => next()),
+);
 
 const agent = request.agent(app);
 
