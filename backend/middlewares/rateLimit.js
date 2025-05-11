@@ -15,12 +15,6 @@ const ratelimit = new Ratelimit({
 async function rateLimitMiddleware(req, res, next) {
   const ip = req.ip || 'anonymous';
 
-  console.log(
-    '!!!!!!!!!!!!!!!!!!!',
-    process.env.UPSTASH_REDIS_REST_TOKEN,
-    process.env.UPSTASH_REDIS_REST_URL,
-  );
-
   const { success } = await ratelimit.limit(ip);
 
   if (!success) {

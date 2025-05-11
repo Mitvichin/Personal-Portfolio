@@ -16,20 +16,6 @@ const {
 
 const agent = request.agent(app);
 
-jest.mock('@upstash/ratelimit', () => {
-  return {
-    Ratelimit: class {
-      static fixedWindow() {
-        return {};
-      }
-      constructor() {}
-      limit() {
-        return Promise.resolve({ success: true });
-      }
-    },
-  };
-});
-
 describe('Grid route', () => {
   beforeAll(async () => {
     await createTables(pool);

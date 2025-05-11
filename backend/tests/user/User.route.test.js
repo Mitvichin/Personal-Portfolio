@@ -23,7 +23,7 @@ describe('User route', () => {
     await populateUsers(pool);
 
     await login(agent, adminUser);
-  },10000);
+  });
 
   afterAll(async () => {
     await deleteUsersAndRoles(pool);

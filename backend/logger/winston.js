@@ -5,8 +5,6 @@ require('winston-mongodb');
 const mongoURI = process.env.LOGGER_DATABASE_URL;
 let mongoLoggerTransport = undefined;
 
-console.log('111111111111', process.env.LOGGER_DATABASE_URL);
-
 const sensitiveDataProps = {
   password: true,
 };
