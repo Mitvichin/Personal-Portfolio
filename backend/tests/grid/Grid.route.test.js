@@ -18,15 +18,14 @@ const agent = request.agent(app);
 
 describe('Grid route', () => {
   beforeAll(async () => {
-    try {
-      await createTables(pool);
-      await populateUsers(pool);
+    console.log('test 1');
+    await createTables(pool);
+    console.log('test 2');
 
-      await getCSRFToken(agent);
-    } catch (error) {
-      console.log('!!!!!!!!!!!!!!!', error);
-      throw error;
-    }
+    await populateUsers(pool);
+    console.log('test 3');
+
+    await getCSRFToken(agent);
   });
 
   afterAll(async () => {
