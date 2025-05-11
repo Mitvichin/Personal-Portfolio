@@ -84,7 +84,7 @@ const authController = {
         const authToken = jwt.sign(tokenInfo, process.env.JWT_SECRET, {
           expiresIn: AUTH_TOKEN_DURATION,
         });
-
+        console.log('11', process.env.JWT_REFRESH_SECRET);
         const authRefreshToken = jwt.sign(
           tokenInfo,
           process.env.JWT_REFRESH_SECRET,
