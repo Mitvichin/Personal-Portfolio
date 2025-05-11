@@ -108,7 +108,7 @@ const authController = {
       }
     } catch (error) {
       logger.error(error, getLogMetaData(req, error));
-
+      console.log('!!!!!!!!!!!', error);
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
     }
   },
