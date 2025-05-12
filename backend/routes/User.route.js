@@ -2,6 +2,7 @@ const express = require('express');
 const userController = require('../controllers/userController');
 const verifyAuthentication = require('../middlewares/verifyAuthentication');
 const validateRole = require('../middlewares/validateRole');
+const redisCache = require('../middlewares/redisCache');
 
 const router = express.Router();
 
@@ -48,7 +49,7 @@ router.use(verifyAuthentication, validateRole('admin'));
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.get('/', userController.getUsers);
+router.get('/', redisCache, userController.getUsers);
 /**
  * @swagger
  * /api/users:
