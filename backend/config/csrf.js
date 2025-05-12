@@ -5,6 +5,7 @@ const {
   CSRF_TOKEN_NAME,
   VISITOR_ID_NAME,
   IS_PROD,
+  CSRF_HEADER_NAME,
 } = require('../utils/constants');
 
 const doubleCsrfOptions = {
@@ -18,7 +19,7 @@ const doubleCsrfOptions = {
   },
   getSessionIdentifier: (req) =>
     req.cookies[JWT_TOKEN_NAME] || req.cookies[VISITOR_ID_NAME],
-  getTokenFromRequest: (req) => req.headers['x-csrf-token'],
+  getTokenFromRequest: (req) => req.headers[CSRF_HEADER_NAME],
 };
 
 module.exports = doubleCsrf(doubleCsrfOptions);
