@@ -2,6 +2,7 @@ const express = require('express');
 const messageController = require('../controllers/messageController');
 const verifyAuthentication = require('../middlewares/verifyAuthentication');
 const validateRole = require('../middlewares/validateRole');
+const redisCache = require('../middlewares/redisCache');
 
 const router = express.Router();
 
@@ -77,7 +78,7 @@ router.post('/', messageController.createMessage);
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
-router.get('/', messageController.getMessages);
+router.get('/', redisCache, messageController.getMessages);
 /**
  * @swagger
  * /api/messages:

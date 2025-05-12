@@ -1,5 +1,8 @@
+const redis = require('../config/redis');
 const { logger, getLogMetaData } = require('../logger/winston');
+const redisCache = require('../middlewares/redisCache');
 const Message = require('../models/messageModel');
+const { CACHE_TIME } = require('../utils/constants');
 const backendErrorsMap = require('../utils/errorNames');
 const { isMessageFormValid } = require('../utils/validationUtils');
 
@@ -33,7 +36,7 @@ const messageController = {
 
     try {
       const { messages, total } = await Message.getMessages(page, limit);
-      res.status(200).json({
+      const resData = {
         data: messages,
         pagination: {
           total,
@@ -41,7 +44,13 @@ const messageController = {
           limit,
           totalPages: Math.ceil(total / limit),
         },
-      });
+      };
+
+      redis
+        .setex(req.originalUrl, CACHE_TIME, JSON.stringify(resData))
+        .catch(logger.error);
+
+      res.status(200).json(resData);
     } catch (error) {
       logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
