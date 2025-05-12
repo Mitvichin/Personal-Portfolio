@@ -1,10 +1,11 @@
+// @ts-nocheck
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db');
-const jwt = require('jsonwebtoken');
 const createTables = require('../../migrations/init_db');
 const { API_BASE_URL } = require('../../utils/constants');
 const backendErrorsMap = require('../../utils/errorNames');
+const redis = require('../../config/redis');
 const {
   populateUsers,
   deleteFromAllTables,
@@ -16,6 +17,8 @@ const {
 jest.mock('../../middlewares/rateLimit', () =>
   jest.fn((req, res, next) => next()),
 );
+
+jest.mock('../../config/redis');
 
 const agent = request.agent(app);
 
@@ -48,6 +51,22 @@ describe('Message route', () => {
       const res = await request(app).get(`${API_BASE_URL}/message`);
       expect(res.status).toBe(401);
       expect(res.body.message).toBe(backendErrorsMap.UNAUTHENTICATED);
+    });
+
+    it('should cache the result', async () => {
+      const res = await agent.get(`${API_BASE_URL}/message?page=1&limit=10`);
+
+      expect(res.status).toBe(200);
+      expect(redis.setex).toHaveBeenCalled();
+    });
+
+    it('should return result from cache', async () => {
+      const data = 'test value';
+      redis.get.mockReturnValue(data);
+      const res = await agent.get(`${API_BASE_URL}/message?page=1&limit=10`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toBe(data);
     });
   });
 

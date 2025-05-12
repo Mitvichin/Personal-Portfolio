@@ -4,6 +4,7 @@ const app = require('../../app');
 const pool = require('../../config/db');
 const jwt = require('jsonwebtoken');
 const createTables = require('../../migrations/init_db');
+const redis = require('../../config/redis');
 const {
   populateUsers,
   deleteFromAllTables: deleteUsersAndRoles,
@@ -50,6 +51,22 @@ describe('User route', () => {
       const res = await request(app).get(`${API_BASE_URL}/user`);
       expect(res.status).toBe(401);
       expect(res.body.message).toBe(backendErrorsMap.UNAUTHENTICATED);
+    });
+
+    it('should cache the result', async () => {
+      const res = await agent.get(`${API_BASE_URL}/message?page=1&limit=10`);
+
+      expect(res.status).toBe(200);
+      expect(redis.setex).toHaveBeenCalled();
+    });
+
+    it('should return result from cache', async () => {
+      const data = 'test value';
+      redis.get.mockReturnValue(data);
+      const res = await agent.get(`${API_BASE_URL}/message?page=1&limit=10`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toBe(data);
     });
   });
 

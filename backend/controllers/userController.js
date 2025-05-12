@@ -1,5 +1,7 @@
+const redis = require('../config/redis');
 const { logger, getLogMetaData } = require('../logger/winston');
 const User = require('../models/userModel');
+const { CACHE_TIME } = require('../utils/constants');
 const backendErrorsMap = require('../utils/errorNames');
 
 const userController = {
@@ -9,7 +11,8 @@ const userController = {
 
     try {
       const { users, total } = await User.getUsers(page, limit);
-      res.status(200).json({
+
+      const resData = {
         data: users,
         pagination: {
           total,
@@ -17,7 +20,11 @@ const userController = {
           limit,
           totalPages: Math.ceil(total / limit),
         },
-      });
+      };
+      redis
+        .setex(req.originalUrl, CACHE_TIME, JSON.stringify(resData))
+        .catch(logger.error);
+      res.status(200).json(resData);
     } catch (error) {
       logger.error(error, getLogMetaData(req, error));
       res.status(500).json({ message: backendErrorsMap.INTERNAL_SERVER_ERROR });
