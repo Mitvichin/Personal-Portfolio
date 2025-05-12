@@ -16,6 +16,7 @@ const rateLimitMiddleware = require('./middlewares/rateLimit.js');
 const cookieParserMiddleware = require('cookie-parser');
 const csrfErrorMiddleware = require('./middlewares/csrfErrorHandler.js');
 const loggingMiddleware = require('./middlewares/logging.js');
+const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
 
@@ -39,6 +40,8 @@ app.use(`${API_BASE_URL}/*`, (req, res) => {
 
 app.use(csrfErrorMiddleware);
 app.use(loggingMiddleware);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(express.static(path.join(__dirname, 'public')));
 

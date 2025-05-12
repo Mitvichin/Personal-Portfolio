@@ -37,6 +37,8 @@
     "pg": "^8.14.0",
     "pg-format": "^1.0.4",
     "pg-mem": "^3.0.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0",
     "winston-mongodb": "^6.0.0"
   },
