@@ -1,0 +1,111 @@
+# Personal-Portfolio
+
+A full-stack web application built with **Vite + React** on the frontend and **Node.js + Express** on the backend.
+
+## Tech Stack
+
+- **Frontend:** React, Vite, JavaScript/TypeScript
+- **Backend:** Node.js, Express
+- **Package Manager:** npm
+- **Testing:** Vitest, React Testing Library, Supertest, Jest
+- **Tooling:** ESLint, Prettier, dotenv
+- **Deployment:** Docker, Github Actions, Render
+
+## Prerequisites
+
+Ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v20 or higher recommended)
+- npm
+- Git
+- Docker
+- Redis key-value store from upstash https://console.upstash.com/
+- Postgres db from https://console.neon.tech/
+- Mongodb from https://cloud.mongodb.com/
+
+## Setup
+
+- clone the project https://github.com/Mitvichin/Personal-Portfolio.git
+- enable the IDE to format on save
+- cd backend and ```npm i```
+- cd front and ```npm i```
+
+### Environment variables
+
+#### Frontend
+
+ Create .env file in **frontend/.env** and add:
+- **VITE_API_BASE_URL**=/api
+
+#### Backend
+
+Create .env file in backend/.env and add:
+- **DATABASE_URL**="connection string for postgres db from neon"
+- **GITHUB_ACCESS_TOKEN**="github access token for https://github.com/Mitvichin/Personal-Portfolio.git"
+- **UPSTASH_REDIS_REST_URL**="connection string for the redis store"
+- **UPSTASH_REDIS_REST_TOKEN**="auth token for the redis store"
+- **JWT_SECRET**="secret that will be used to sign the application JWT auth token"
+- **JWT_REFRESH_SECRET**="secret that will be used to sign the application JWT refresh token"
+- **CSRF_SECRET**="secret used for the csrf protection"
+- **SALT_ROUNDS**="salt that will be used during password hashing"
+- **CROSSWORD_GENERATOR_URL**="url to the Crossword generation application"
+- **LOGGER_DATABASE_URL**="connection string for the mongodb"
+- **LOGGER_DEV_COLLECTION**="name of the collection where the dev errors should be logged"
+- **LOGGER_COLLECTION**="name of the collection where the prod errors should be logged"
+- **SWAGGER_BASE_URL**="url to be displayed in the swagger ui"
+- **NODE_ENV**='local'
+
+## Starting the application
+
+### With docker
+
+- Run ``` docker-compose -f docker-compose.dev.yml up ``` in the root directory of the application. Docker images should be created and after that the containers will be started.
+- In your browser open localhost:5173
+
+### Without docker
+
+- Open frontend/vite.config.ts and change the proxy target to ```http://localhost:5000```
+- Run ```npm run dev``` in /frontend
+- Run ``` npm run dev``` in /backend
+- In your browser open localhost:5173
+
+## Testing
+
+### Backend
+
+- The backend uses jest + supertest for unit and integration tests
+Run the following commands in **/backend**
+- To run test during development run ```npm run test```
+- To run test in ci mode run ```npm run test:ci```
+
+### Frontend
+
+- The front end uses vitest + react testing library for unit and integration tests
+Run the following commands in **/frontend**
+- To run test during development run ```npm run test```
+- To run test in ci mode run  ```npm run test:ci```
+
+## Deployment
+
+The deployment process is automated with **Github Actions**.
+
+- On every PR to develop **5 jobs** must pass before we are able to merge.
+    - Linting and formatting of the backend and frontend
+    - Frotend tests must run and pass
+    - Backend tests must run and pass
+    - Docker image should be build and pushed to Docker hub
+    - The build images should be successfully deployed to Render through the Render api
+
+- On every PR to main **3 jobs** must pass before we are able to merge.
+    - Linting and formatting of the backend and frontend
+    - Frontend tests must run and pass
+    - Backend tests must run and pass
+- After ever PR to main **2 jobs** will run
+    - Docker image should be build and pushed to Docker hub
+    - The build images should be successfully deployed to Render through the Render api
+
+
+### There are two environments
+
+- Develop - https://personal-portfolio-develop.onrender.com
+- Production - https://personal-portfolio-latest-wfpj.onrender.com

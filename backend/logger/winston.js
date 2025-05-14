@@ -1,5 +1,5 @@
 const winston = require('winston');
-const { IS_PROD, IS_DEV } = require('../utils/constants');
+const { IS_PROD, IS_DEV, IS_LOCAL } = require('../utils/constants');
 require('winston-mongodb');
 
 const mongoURI = process.env.LOGGER_DATABASE_URL;
@@ -42,7 +42,7 @@ if (IS_PROD || IS_DEV) {
   logger.add(mongoLoggerTransport);
 }
 
-if (IS_DEV) {
+if (IS_LOCAL) {
   logger.add(
     new winston.transports.Console({
       format: winston.format.combine(

@@ -56,6 +56,7 @@ jobs:
       JWT_SECRET: test-auth
       JWT_REFRESH_SECRET: test-refresh
       CSRF_SECRET: test-csrf
+      NODE_ENV: test
 
     steps:
       - name: Checkout repository
