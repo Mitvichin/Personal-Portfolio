@@ -27,6 +27,7 @@ const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
       register,
       handleSubmit,
       formState: { errors, isValid: isFormValid },
+      reset,
     } = useForm<ContactMeForm>({
       defaultValues: intialFormState,
       mode: 'onChange',
@@ -38,6 +39,7 @@ const ContanctMe: React.FC<WithRedirectionToSourceFileProps> =
         setIsLoading(true);
         await sendMessage(data);
         toast.success('Your message was sent successfully!');
+        reset();
       } catch (err: unknown) {
         if (err instanceof AppError) {
           toast.error(err.message);
