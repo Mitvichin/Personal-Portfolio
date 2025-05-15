@@ -109,3 +109,16 @@ The deployment process is automated with **Github Actions**.
 
 - Develop - https://personal-portfolio-develop.onrender.com
 - Production - https://personal-portfolio-latest-wfpj.onrender.com
+
+- For admin access to the application please use email: admin@abv.bg password: admin1234
+
+## Database Setup
+
+If you are connection to newly created data base you must run in /backend:
+
+- Before runnung **init_db.js** open the file and call the function at the end of the file. Remove the call after the creation.
+- Create the tables by running ```node migrations/init_db.js```.
+- Populate roles by running ```node migrations/populate_roles.js```.
+- Ensure that admin has id **1** and user has id **2**.
+- By default users will be created with **roleId = 2**.
+- You must promote manually users to admins from the database.
